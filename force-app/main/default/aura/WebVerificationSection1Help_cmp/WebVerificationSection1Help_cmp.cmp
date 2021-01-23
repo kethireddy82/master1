@@ -1,0 +1,45 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <div class="slds-grid">
+        <table class="slds-table slds-no-row-hover slds-table_cell-buffer slds-table_bordered slds-table_col-bordered ">
+            <thead>
+                <tr class="mainheader">
+                    <td class="slds-cell-wrap" scope="col">
+                        <div style="color:white;" class="slds-align_absolute-center">Section 1: Targeted Military Advertising</div>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="headers">
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap"><b>Purpose</b></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap">The purpose of this section is to determine if the institution uses inappropriate marketing or content on their website to recruit military students.</div>
+                    </td>
+                </tr>
+                <tr class="headers">
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap"><b>Where to look</b></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap">Targeted military advertising is often under the admissions section of an institution’s website and is usually listed as a page for military students and veterans. This section usually contains multiple web pages with information pertinent to potential military students including military student pricing, financial aid, and credit awarded for prior military experience and education. These pages may also contain promotional material geared toward Service members.</div>
+                    </td>
+                </tr>
+                <tr class="headers">
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap"><b>What to look for</b></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap">You should look for content that suggests a special relationship between the Military Services or DoD and the institution. The institution may imply a special relationship by using certain phrases or images that suggest an endorsement from the Military Services or the DoD. The institution is not permitted to use the Military Services’ or the DoD’s seals, logos, or imagery without permission. The institution is permitted to show Service members in uniform, so long as the Service members do not have their rank, unit, or their Service’s insignia visible. Military student testimonials are permitted so long as the testimonials do not imply Service endorsement or feature the Service members in uniform with their rank or other insignia visible. </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</aura:component>

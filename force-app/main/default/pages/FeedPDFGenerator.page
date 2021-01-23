@@ -1,0 +1,195 @@
+<apex:page standardController="Case" extensions="Feed_PDFGenerator" renderAs="pdf" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+    <html>
+        <head>
+            <style type="text/css">
+                @page {
+                size: letter;
+                margin: 10mm;
+                @top-center {
+                content: "Feed Item of Case :" '{!Case.CaseNumber}';
+                font-size: 6mm;
+                font-style: italic;
+                text-decoration: underline;
+                }
+                @bottom-center {
+                content: "Page " counter(page) " of " counter(pages);
+                }
+                }
+                .page-break {
+                display:block;
+                page-break-after:always;
+                }
+                body {
+                font-family: Arial Unicode MS;
+                }
+                .headersec{
+                background: #b1b1b1;
+                padding: 2mm;
+                }
+                .mainsec{
+                border-top : 1px solid black;
+                padding: 8mm 1mm;
+                }
+                .contentsec{
+                padding: 6mm;
+                }
+                .subjectsec{
+                padding: 5mm 0;
+                font-weight: 10mm;
+                font-style: oblique;
+                }
+                .italicText {
+                font-style: italic; 
+                font-weight: bold
+                }
+                .gmail_comment{
+                background: #fafaf9;
+                border: .2mm solid #636261;
+                margin-bottom: 1mm;
+                padding:1mm;
+                }
+            </style>
+        </head>
+        <body>
+        <apex:form >
+          
+        <apex:outputPanel rendered="{!wrapMainList.size == 0}">
+            
+        No Communication item found !
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!wrapMainList.size > 0}">
+            <apex:repeat value="{!wrapMainList}" var="item">
+                {!item.typeFeed}
+                <apex:outputPanel rendered="{!item.typeFeed == 'ListEmail Message'}">
+                    <div class="mainsec" >
+                        <div class="headersec">
+                            <span><b><apex:outputText value="From : {!item.lstListEmailMessages.FromName}"/></b></span>
+                            <span><b><!--<apex:outputText value="To : {!item.lstListEmailMessages.ToAddress}"/>--></b></span>
+                            <span style="float: right;"><apex:outputText value="{0,date,MMMMM,dd yyyy 'at' h:mm a}" > 
+                                <apex:param value="{!item.lstListEmailMessages.MessageDate}" /> 
+                                </apex:outputText></span>
+                        </div>
+                        <div class="contentsec">
+                            <div class="subjectsec" >
+                                <div class="italicText">Related To : <apex:outputText value="{!item.lstListEmailMessages.relatedTo}" /></div>
+                                <div class="italicText">Account : <apex:outputText value="{!item.lstListEmailMessages.AccountName}" /></div>
+                                <div class="italicText">Subject : <apex:outputText value="{!item.lstListEmailMessages.Subject}" /></div>
+                            </div>
+                            <div class="gmail_body">
+                                <apex:outputText value="{!item.lstListEmailMessages.HTMLBody}" escape="false" ></apex:outputText>
+                            </div>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!item.typeFeed == 'Email Message Event'}">
+                    <div class="mainsec" >
+                        <div class="headersec">
+                            <span><b><apex:outputText value="From : {!item.lstEmailMessages.FromName}"/></b></span>
+                            <br />
+                            <span><b><apex:outputText value="To : {!item.lstEmailMessages.ToAddress}"/></b></span>
+                            <span style="float: right;"><apex:outputText value="{0,date,MMMMM,dd yyyy 'at' h:mm a}" > 
+                                <apex:param value="{!item.lstEmailMessages.MessageDate}" /> 
+                                </apex:outputText></span>
+                        </div>
+                        <div class="contentsec">
+                            <div class="subjectsec" >
+                                <div class="italicText">Related To : <apex:outputText value="{!item.lstEmailMessages.CseNumber}" /></div>
+                                <div class="italicText">Subject : <apex:outputText value="{!item.lstEmailMessages.Subject}" /></div>
+                            </div>
+                            <div class="gmail_body">
+                                <apex:outputText value="{!item.lstEmailMessages.HTMLBody}" escape="false" ></apex:outputText>
+                            </div>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!item.typeFeed == 'Case Comment Post'}">
+                    <div class="mainsec" >
+                        <div class="headersec">
+                            <span><b><apex:outputText value="Created By : {!item.createdByUser}"/></b></span>
+                            <span style="float: right;"><apex:outputText value="{0,date,MMMMM,dd yyyy 'at' h:mm a}" > 
+                                <apex:param value="{!item.createdDate}" /> 
+                                </apex:outputText></span>
+                        </div>
+                        <div class="contentsec">
+                            <div class="gmail_body">
+                                <span><b><apex:outputText value="Comment : {!item.lstCaseComments.cseComment}"/></b></span>
+                            </div>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!item.typeFeed == 'Case Task' || item.typeFeed == 'Case Log'}">
+                    <div class="mainsec" >
+                        <div class="headersec">
+                            <span><b><apex:outputText value="Created By : {!item.createdByUser}"/></b></span>
+                            <span style="float: right;"><apex:outputText value="{0,date,MMMMM,dd yyyy 'at' h:mm a}" > 
+                                <apex:param value="{!item.createdDate}" /> 
+                                </apex:outputText></span>
+                        </div>
+                        <div class="contentsec">
+                            <div class="gmail_body">
+                                
+                                <span><b><apex:outputText value="Subject : {!item.lstCaseTasks.subjectTask}"/></b></span><br/>
+                                <span><b><apex:outputText value="Name : {!item.lstCaseTasks.nameTask}"/></b></span><br/>
+                                <span><b><apex:outputText value="Related To : {!item.lstCaseTasks.relatedTask}"/></b></span><br/>
+                                <span><b><apex:outputText value="Description : {!item.lstCaseTasks.DescriptionTask}"/></b></span>
+                            </div>
+                            Comments :
+                            <apex:repeat value="{!item.lstCaseTasks.commentsTask}" var="com">
+                                <div class="gmail_comment">
+                                    <span><apex:outputText value="{!com.InsertedBy.Name}" /></span><br/>
+                                    <span><apex:outputText value="{!com.CommentBody}" escape="false" /></span><br/>
+                                    
+                                    <span ><apex:outputText value="{0,date,MMMMM,dd yyyy}" > 
+                                        <apex:param value="{!com.createdDate}" /> 
+                                        </apex:outputText></span><br/>
+                                </div>
+                            </apex:repeat>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!item.typeFeed == 'Case Event'}">
+                    <div class="mainsec" >
+                        <div class="headersec">
+                            <span><b><apex:outputText value="Created By : {!item.createdByUser}"/></b></span>
+                            <span style="float: right;"><apex:outputText value="{0,date,MMMMM,dd yyyy 'at' h:mm a}" > 
+                                <apex:param value="{!item.createdDate}" /> 
+                                </apex:outputText></span>
+                        </div>
+                        <div class="contentsec">
+                            <div class="gmail_body">
+                                <span><b><apex:outputText value="Name: {!item.lstCaseEvents.nameEvt}"/></b></span><br/>
+                                <span><b><apex:outputText value="Related To: {!item.lstCaseEvents.relatedEvt}"/></b></span><br/>
+                                <span><b><apex:outputText value="Subject : {!item.lstCaseEvents.SubjectEvt}"/></b></span><br/>
+                                <span><b><apex:outputText value="Location : {!item.lstCaseEvents.locationEvt}"/></b></span><br/>
+                                <span><b><apex:outputText value="Start Date : {!item.lstCaseEvents.startTask}"/></b></span><br/>
+                                <span><b><apex:outputText value="End Date : {!item.lstCaseEvents.endTask}"/></b></span><br/>
+                                <span><b><apex:outputText value="Description : {!item.lstCaseEvents.descriptionEvt}"/></b></span>
+                            </div>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!item.typeFeed == 'Attachments'}">
+                    <div class="mainsec" >
+                        <div class="headersec">
+                            <span><b><apex:outputText value="Created By : {!item.createdByUser}"/></b></span>
+                            <span style="float: right;"><apex:outputText value="{0,date,MMMMM,dd yyyy 'at' h:mm a}" > 
+                                <apex:param value="{!item.createdDate}" /> 
+                                </apex:outputText></span>
+                        </div>
+                        <div class="contentsec">
+                            <div class="gmail_body">
+                                <span><b><apex:outputText value="Name: {!item.lstAttachWraps.nameAttach}"/></b></span><br/>
+                                <span><b><apex:outputText value="Related To : {!item.lstAttachWraps.relatedTo}"/></b></span><br/>
+                                <span><b>Output Link :<apex:outputLink value="/{!item.lstAttachWraps.attachLink}" target="_blank">Click here</apex:outputLink></b>
+                            	
+                                    </span><br/>
+                            </div>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+            </apex:repeat>
+        </apex:outputPanel>
+        </apex:form>
+        </body>
+    </html>
+</apex:page>

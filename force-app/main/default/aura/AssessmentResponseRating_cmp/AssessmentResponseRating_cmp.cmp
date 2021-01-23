@@ -1,0 +1,227 @@
+<aura:component controller="AssessmentResponseRating_Controller" implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    <aura:attribute name="printURL" type="string" />
+    <aura:attribute name="reviewTableValues" type="List" default="[]"/>
+    <aura:attribute name="printDataValue" type="AssessmentResponseRating_Controller.PrintData"/>
+    <aura:attribute name="printDataResult" type="AssessmentResponseRating_Controller.PrintResults"/>
+    <aura:attribute name="assessmentQuestions" type="AssessmentResponseRating_Controller.WrapperClass[]" default="[]"/>
+    <aura:attribute name="ratings" type="AssessmentResponseRating_Controller.ratingsWrapper[]" default="[]"/>
+    <aura:attribute name="currentQuestion" type="Integer" default="1"/>
+    <aura:attribute name="lastQuestion" type="Integer" default="1"/>
+    <aura:attribute name="progressIndicator" type="Aura.Component" />
+    <aura:attribute name="surveyAnswer" type="Assessment_Question__c"/>
+    <aura:attribute name="ratingValues" type="String[]" default="[]"/>
+    <aura:attribute name="showError" type="Boolean" default="false"/>
+    <aura:attribute name="showFrame" type="Boolean" default="false"/>
+    <aura:attribute name="readOnlyField" type="Boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="String" default=""/>
+    <aura:attribute name="mainResponseWrapper" type="AssessmentResponseRating_Controller.MainRatingsWrapper"/>
+    <aura:attribute name="rating" type="String"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="true"/>
+    <aura:attribute name="assessmentRecord" type="Assessment__c"/>
+    <aura:attribute name="simpleRecord" type="Assessment__c"/>
+    <force:recordData recordId="{!v.recordId}"
+          targetRecord ="{!v.assessmentRecord}"
+          targetFields ="{!v.simpleRecord}"
+          fields="Id, Name" />
+    <aura:if isTrue="{!v.showFrame}">
+        <iframe src="{!v.printURL}" frameborder="0" height="1px" width="1px"></iframe> 
+    </aura:if>
+    <aura:if isTrue="{!v.showSpinner}"> 
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!v.showError}">
+        <div class="slds-text-title_bold slds-text-color_destructive">{!v.errorMessage}</div>
+        <aura:set attribute="else">
+            <div>
+                <div class="container">
+                    <div class="slds-page-header">
+                        <div class="slds-grid">
+                            <div class="slds-col slds-has-flexi-truncate">
+                                <div class="slds-media slds-no-space slds-grow">
+                                    <div class="slds-media__figure">
+                                        <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+                                            <lightning:icon iconName="standard:feed" size="small" alternativeText="Indicates approval"/>
+                                        </span>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <nav>
+                                            <ol class="slds-breadcrumb slds-line-height_reset">
+                                                <li class="slds-breadcrumb__item">
+                                                    <span>Survey</span>
+                                                </li>
+                                            </ol>
+                                        </nav>
+                                        <h1 class="slds-page-header__title slds-m-right_small slds-align-middle slds-truncate" title="">
+                                            Ratings
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                                <div class="slds-button-group" role="group">
+                                    <aura:if isTrue="{!and(equals(v.currentQuestion,v.lastQuestion),not(v.readOnlyField))}">
+                                        <lightning:button variant="brand" label="Submit" onclick="{!c.finalSubmit }" />
+                                    </aura:if>
+                                    <aura:if isTrue="{!equals(v.currentQuestion,1)}">
+                                        <lightning:button variant="brand" label="Previous" disabled="true" />
+                                        <aura:set attribute="else">
+                                            <lightning:button variant="brand" label="Previous" onclick="{!c.goToPrevious}" />
+                                        </aura:set>
+                                    </aura:if>
+                                    <aura:if isTrue="{!lessthanorequal(v.lastQuestion,v.currentQuestion)}">
+                                        <lightning:button variant="brand" label="Next" disabled="true" />
+                                        <aura:set attribute="else">
+                                            <lightning:button variant="brand" label="Next" onclick="{!c.goToNext}"/>
+                                        </aura:set>
+                                    </aura:if>
+                                    <aura:if isTrue="{!equals(v.currentQuestion,v.lastQuestion)}">
+                                        <lightning:button variant="brand" label="Export as PDF" onclick="{!c.printTableData }" />
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <lightning:overlayLibrary aura:id="overlayLib"/>
+                        <div class="slds-page-header__detail-row">
+                            <div>
+                                {!v.progressIndicator}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="demo-only">
+                        <div class="slds-form slds-form_compound">
+                            <aura:if isTrue="{!equals(v.currentQuestion,v.lastQuestion)}">
+                                <div id="printContent">
+                                    <table class="slds-table_bordered slds-table_cell-buffer table">
+                                        <thead>
+                                            <tr >
+                                                <th scope="col">
+                                                    <div  title="No">No</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div  title="Question">Question</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div  title="Response">Response</div>
+                                                </th>
+                                                <th scope="col">
+                                                    <div  title="Rating">Rating</div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <aura:iteration items="{!v.reviewTableValues}" var="ques" indexVar="index">
+                                                <tr>
+                                                    <td data-label="No">
+                                                        <div  title="No">{!ques.no}</div>
+                                                    </td>
+                                                    <td data-label="Question">
+                                                        <div  title="Question">{!ques.question}</div>
+                                                    </td>
+                                                    <td data-label="Response">
+                                                        <aura:if isTrue="{!ques.multipleChoice}">
+                                                            <div style="padding-left: 5px;">
+                                                                <p>
+                                                                    <ul style="list-style-type: circle;">
+                                                                        <aura:iteration items="{!ques.responses}" var="item" >
+                                                                            <li >{!item}</li>
+                                                                        </aura:iteration>
+                                                                    </ul>
+                                                                </p>
+                                                            </div>
+                                                            <aura:set attribute = "else">
+                                                                <div  title="Response">{!ques.response}</div>
+                                                            </aura:set>
+                                                        </aura:if>
+                                                    </td>
+                                                    <td data-label="Rating" style="text-align: center;">
+                                                        <div  title="Rating">{!ques.rating}</div>
+                                                    </td>
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <aura:set attribute="else">
+                                    <aura:iteration items="{!v.assessmentQuestions}" var="ques" indexVar="index">
+                                        <aura:if isTrue="{!equals(v.currentQuestion,ques.questionNo)}">
+                                            <fieldset class="slds-form-element fieldClass">
+                                                <div class="slds-form-element__group">
+                                                    <div class="slds-form-element__row">
+                                                       <!-- <div class="slds-form-element slds-size_1-of-1">
+                                                            <label class="slds-form-element__label" for="{!v.currentQuestion}" style="font-weight: bold;font-size: 1.1em;">
+																 {!ques.questionNo }. {!ques.assessmentQuestion.Question__c}
+                                                            </label>
+                                                        </div> -->
+                                                        <fieldset class="slds-form-element fieldClass">
+                                                            <ui:outputRichText class="slds-text-longform" value="{!ques.assessmentQuestion.Question__c}"/>
+                                                        </fieldset> 
+                                                    </div>
+                                                    <div class="slds-form-element__row">
+                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                            <div>
+                                                                <aura:if isTrue="{!ques.assessmentQuestion.Type__c == 'Free Text'}">
+                                                                    
+                                                                    <aura:if isTrue ="{!(ques.assessmentResponse!=null) &amp;&amp; (ques.assessmentResponse.length > 0) &amp;&amp; (ques.assessmentResponse[0].Response__c!=null)}">
+                                                                        <!--  <aura:if isTrue="{!and(ques.assessmentResponse!=null,ques.assessmentResponse.length > 0, ques.assessmentResponse[0].Response__c!=null)}">-->
+                                                                        <lightning:textarea value="{!ques.assessmentResponse[0].Response__c}" 
+                                                                                            
+                                                                                            label="Response :" rows="3" readonly="true"/>
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:textarea  value="" 
+                                                                                                label="Response :" rows="3" readonly="true"/>
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                    <aura:set attribute="else">
+                                                                        <label>Response :</label>
+                                                                        <div class="slds-box">
+                                                                            <p><ul style="list-style-type: circle;">
+                                                                                
+                                                                                <aura:iteration items="{!ques.assessmentResponse}" var="item" >
+                                                                                 <!--   <aura:iteration items="{!ques.surveyQuesChoice}" var="item" >-->
+                                                                                    <div style="padding-left: 5px;">{!item.Response__c}
+                                                                                        <!--<aura:if isTrue="{!item.Checked}">{!item.label}
+                                                                                            
+                       <li><span><i><b>{!item.label}</b></i></span></li>
+                       <aura:set attribute="else">
+                        <li>{!item.label}</li>
+                       </aura:set>
+                      </aura:if>-->
+                                                                                    </div>
+                                                                                </aura:iteration>
+                                                                                </ul></p>
+                                                                        </div>
+                                                                    </aura:set>
+                                                                </aura:if>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-form-element__row">
+                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                            <lightning:select aura:id="ratingsPicklistValues" value="{!v.rating}" name="select" label="Rating" required="true" disabled="{!v.readOnlyField}" onchange="{!c.checkRating}">
+                                                                <aura:iteration items="{!ques.ratingValues}" var="rating">
+                                                                    <option text="{!rating.label}" value="{!rating.value}" selected="{!rating.Checked}"></option>
+                                                                </aura:iteration>
+                                                            </lightning:select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aura:set>
+    </aura:if>
+</aura:component>

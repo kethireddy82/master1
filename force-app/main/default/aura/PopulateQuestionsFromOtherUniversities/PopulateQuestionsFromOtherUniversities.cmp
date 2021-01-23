@@ -1,0 +1,179 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="PopulateQuestionsToUniversities">
+    <ltng:require styles="/resource/SLDS0122/assets/styles/salesforce-lightning-design-system.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <ltng:require styles="{!$Resource.CSSFile}"/>    
+    <aura:html tag="style">
+        .showTSpace { 
+        display: none;
+        }
+        .showTHeader {
+        display: none;
+        } 
+        
+        /* Responsive Table */
+        @media only screen and (max-width: 968px) {
+        
+        .showTSpace {
+        display: block;
+        }
+        .showTHeader {
+        display: block;
+        }
+        
+        /* Force table to not be like tables anymore */
+        table.policyTableCSS,
+        tbody.policyBodyCSS,
+        td.policyTdCSS,
+        th.policyThCSS,
+        thead.policyHeadCSS,
+        tr.policyTrCSS {
+        display: block;
+        }
+        
+        /* Hide table headers (but not display: none;, for accessibility) */
+        thead.policyHeadCSS tr.policyTrCSS {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        }
+        
+        tr.policyTrCSS {
+        border: 1px solid #ccc;
+        }
+        
+        td.policyTdCSS {
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        white-space: normal;
+        }
+        td.policyTdCSS:before {
+        /* Now like a table header */
+        position: absolute;
+        /* Top/left values mimic padding */
+        top: 6px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        }
+        
+        /*Label the data*/
+        td.policyTdCSS:nth-of-type(1):before {
+        content: "";
+        }
+        td.policyTdCSS:nth-of-type(2):before {
+        content: "Policy Code - ";
+        }
+        td.policyTdCSS:nth-of-type(3):before {
+        content: "Type - ";
+        }
+        td.policyTdCSS:nth-of-type(4):before {
+        content: "Sub Type - ";
+        }
+        td.policyTdCSS:nth-of-type(5):before {
+        content: "Policy Active From - ";
+        }
+        td.policyTdCSS:nth-of-type(6):before {
+        content: "Policy Active Until - ";
+        }
+        td.policyTdCSS:nth-of-type(7):before {
+        content: "Priority - ";
+        }
+        td.policyTdCSS:nth-of-type(8):before {
+        content: "ESP Value for Customer - ";
+        }
+        
+        td.mobileCSS {
+        padding-top: 20px !important;
+        }
+        
+        td.TdCSS {
+        height: 60px !important;
+        }
+        
+        td.actionCSS {
+        height: 40px !important;
+        text-align: center !important;
+        }
+        }
+        tr.policyTrCSS1:nth-child(2n+1) {
+        background: #EAEDED;
+        }
+    </aura:html>
+    <aura:attribute name="DefaultUniversity" type="Account" />
+    <aura:attribute name="AllUniversities" type="list" />
+    <aura:attribute name="AllQuestions" type="list" />
+    <aura:attribute name="ICPSelected" type="boolean" />
+    <aura:attribute name="ICPYears" type="list" />
+    <aura:attribute name="SelectedICPYear" type="string" />
+     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+            
+       
+    <lightning:card  class="accordion-body" title="">
+       <aura:set attribute="actions">
+            <lightning:button label="Submit" onclick="{! c.submit }"/>
+        </aura:set>
+    <div>    
+            <h3 class="slds-section__title slds-text-heading--medium agco-red fnt-weight-500 pad-left-rgt8">
+                <button aria-controls="section1" aria-expanded="false" class="slds-button slds-section__title-action">
+                    <span class="slds-truncate_Ship" title="Assessment Questions">Assessment Questions</span>
+                </button>
+            </h3>
+            
+        </div>
+        <div class="slds-grid slds-wrap slds-grid">
+            <div class="slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--6-of-12 slds-p-around--large">
+                <ui:inputText value="DC University" class="slds-input output" disabled="true" label="University Name"/>
+            </div>
+            <div class="slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--6-of-12 slds-p-around--large">
+                <lightning:select  name="ICPYears" label="ICP Years" value="{!v.SelectedICPYear}" aura:id="statusPicklist" onchange="{!c.getQuestions}" required="true">
+                    <aura:iteration items="{!v.ICPYears}" var="ICP" >
+                        <option value="{!ICP}">{!ICP}</option>
+                    </aura:iteration>
+                </lightning:select>
+            </div> 
+        </div>
+        Universities List- Please uncheck if you don't want the questions to be copied.
+        <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+    <thead>
+        <tr class="slds-text-title--caps">
+            <th scope="col">
+                <lightning:input type="checkbox" label="" name="" checked="true" onchange="{!c.handleSelectAllContact}" aura:id="selectAll"/>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="First Name">Name</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Last Name">Type</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Email">Website</div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <aura:iteration items="{!v.AllUniversities}" var="ct">
+            <tr>
+                <th scope="col">
+                <lightning:input type="checkbox" label="" name="" checked="{!ct.isSelected}" />
+            	</th>
+                <th scope="row" data-label="Name">
+                    <div class="slds-truncate" title="{! ct.Name }">{! ct.acct.Name }</div>
+                </th>
+                <td data-label="Type">
+                    <div class="slds-truncate" title="{! ct.Type }">{! ct.acct.Type }</div>
+                </td>
+                <td data-label="Website">
+                    <div class="slds-truncate" title="{! ct.Website }">{! ct.acct.Website }</div>
+                </td>
+            </tr>
+        </aura:iteration>
+    </tbody>
+</table>
+         
+
+    </lightning:card>
+</aura:component>

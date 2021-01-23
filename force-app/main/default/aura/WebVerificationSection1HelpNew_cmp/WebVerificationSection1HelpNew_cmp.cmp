@@ -1,0 +1,112 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <div class="slds-grid">
+        <table class="slds-table slds-no-row-hover slds-table_cell-buffer slds-table_bordered slds-table_col-bordered ">
+            <thead>
+                <tr class="mainheader">
+                    <td class="slds-cell-wrap" scope="col">
+                        <div style="color:white;" class="slds-align_absolute-center">Section 1: Recruiting, Marketing, &amp; Advertising </div>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="headers">
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap"><b>Purpose</b></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap">The purpose of this section is to determine if the institution uses inappropriate marketing or content on their website to recruit military students and determine if the institution provides accurate information on military TA benefits. The institution is not required to have a page dedicated to TA.</div>
+                    </td>
+                </tr>
+                <tr class="headers">
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap"><b>Where to look</b></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap">
+							<p>Targeted military advertising is often under the admissions section of an institution’s website and is usually listed as a page for military students and veterans. This section usually contains multiple web pages with information pertinent to potential military students including military student pricing, financial aid, and credit awarded for prior military experience and education. These pages may also contain promotional material geared toward Service members.</p>
+							<br/>
+							<p>The TA information is often linked to the military student section. If the institution does not have a section on their website targeted at military students, use the search bar on the institution’s website to see if there is a page explaining TA.</p>
+						</div>
+                    </td>
+                </tr>
+                <tr class="headers">
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap"><b>What to look for</b></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="slds-cell-wrap" scope="col">
+                        <div class="slds-wrap">
+							<p>You should look for content that suggests a special relationship between the Military Services or DoD and the institution. The institution may imply a special relationship by using certain phrases or images that suggest an endorsement from the Military Services or the DoD. The institution is not permitted to use the Military Services’ or the DoD’s seals, logos, or imagery without permission. The institution is permitted to show Service members in uniform, so long as the Service members do not have their rank, unit, or their Service’s insignia visible. Military student testimonials are permitted so long as the testimonials do not imply Service endorsement or feature the Service members in uniform with their rank or other insignia visible.</p>
+							<br/>
+							<p>If the school has a TA page, it is preferable the institution provide a link directing military students to their Services’ respective TA web portal. The web portals for the Services are included in Table 1. The information provided on the page should be accurate. The web page should also direct students to speak with their Educational Services Officer, or another suitable representative from their Service. Some institutions may only interact with one Military Service. In this case, there may only be TA information related to one Service.</p>
+                            <br/>
+                            <br/>
+                                <div class="slds-align_absolute-center">
+                                    Table 1: TA Program by Service
+                                    <table class="slds-table slds-no-row-hover slds-table_cell-buffer slds-table_bordered slds-table_col-bordered " style="width:50%">
+                                        <thead>
+                                            <tr class="mainheader">
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div style="color:white;">Service</div>
+                                                </td>
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div style="color:white;">Web Portal</div>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-wrap">U.S. Air Force</div>
+                                                </td>
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-wrap">AF Portal</div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-wrap">U.S. Army</div>
+                                                </td>
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-wrap">GoArmyEd</div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-wrap">U.S. Navy</div>
+                                                </td>
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-wrap">Navy College Program</div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-wrap">U.S. Marines Corp.</div>
+                                                </td>
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-wrap">Marforres</div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-wrap">U.S. Coast Guard</div>
+                                                </td>
+                                                <td class="slds-cell-wrap" scope="col">
+                                                    <div class="slds-wrap">Coast Guard Initiative</div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+						</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</aura:component>

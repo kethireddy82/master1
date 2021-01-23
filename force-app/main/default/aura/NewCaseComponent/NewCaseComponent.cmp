@@ -1,0 +1,245 @@
+<aura:component controller="NewCaseCreationController" implements="flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,lightning:actionOverride" access="global">
+    <aura:attribute name="options" type="List" />
+    <aura:attribute name="Statusoptions" type="List" />
+    <aura:attribute name="selectedStatus" type="string" default="New" />
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default=""/>
+    <aura:attribute name="selectedContactLookUpRecord" type="sObject" default=""/>
+    <aura:attribute name="Originoptions" type="List" />
+    <aura:attribute name="selectedOrigin" type="string" default="email`" />
+    <aura:attribute name="ICPYearOptions" type="List" />
+    <aura:attribute name="selectedICPYear" type="string" />
+    <aura:attribute name="loggedInAccountName" type="string" />
+    <aura:attribute name="loggedInContactName" type="string" />
+    <aura:attribute name="selectedCategory" type="string"  />
+    <aura:attribute name="selectedSubCategory" type="string"  />
+    <aura:attribute name="CategoryOptions" type="List" />
+    <aura:attribute name="PriorityOptions" type="List" />
+    <aura:attribute name="selectedPriority" type="string" default="Medium" />
+    <aura:attribute name="TypesOption" type="List" />
+    <aura:attribute name="selectedType" type="string"  />
+    <aura:attribute name="selectedvalue" type="String" default="Voled_Unrestricted_Access"/>
+    <aura:attribute name="CaseDescription" type="String" default=""/>
+    <aura:attribute name="CaseSubject" type="String" default=""/>
+    <aura:attribute name="isRecordTypeModalOpen" type="boolean" default="false" />
+    <aura:attribute name="isCaseModalOpen" type="boolean" default="true"/>
+    <aura:attribute name="TypeSelected" type="boolean" default ="false"/>
+    <aura:attribute name="TypeDescription" type="string" />
+    <aura:attribute name="CategorySelected" type="boolean" default ="false"/>
+    <aura:attribute name="CategoryDescription" type="string" />
+    <aura:attribute name="IsSubjectNotFilled" type="boolean" default ="false"/>
+    <aura:attribute name="IsDescriptionNotFilled" type="boolean" default ="false"/>
+    <aura:attribute name="IsTypeNotFilled" type="boolean" default ="false"/>
+    <aura:attribute name="IsCategoryNotFilled" type="boolean" default ="false"/>
+    <aura:attribute name="cCase" type="Case" />
+    <aura:attribute name="showLoadingSpinner" type="boolean" default="false" />
+ <!-- 'fileName' attribute for display the selected file name -->  
+   <aura:attribute name="fileName" type="String" default="No File Selected.." />
+    <aura:attribute name="parentId" type="Id" default="" />
+    <aura:attribute name="IsSpinner" type="boolean" default ="false"/>
+ <!-- Lightning Input with file type and on file change call the 'handleFilesChange' controller --> 
+ 
+   
+   <div class="slds-text-body_small slds-text-color_error">{!v.fileName} </div>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="onChange" event="c:DependentControllingEvent" action="{!c.getCategory}"/>
+    <aura:handler name="onChangeDependent" event="c:DependentPickListEvent" action="{!c.getSubCategory}"/>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <aura:if isTrue="{!v.isRecordTypeModalOpen}">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                        
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <div data-aura-rendered-by="25:617;a">
+                                <h3 class="slds-section__title Center" data-aura-rendered-by="26:617;a">
+                                    <button class="slds-button slds-section__title-action" aria-expanded="false" aria-controls="section1" data-aura-rendered-by="27:617;a">
+                                        <span class="slds-align_absolute-center" title="New Case" data-aura-rendered-by="28:617;a">New Case</span>
+                                    </button>
+                                </h3>
+                            </div>
+                    
+                </header>
+                <div class="page-spinner-container">
+                <aura:if isTrue="{!v.IsSpinner}">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner--brand slds-spinner slds-spinner--medium" role="alert">
+                            <span class="slds-assistive-text"></span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+            </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:radioGroup name="radioGroup"
+                                          label="Select a record type"
+                                          options="{! v.options }"
+                                          value="{!v.selectedvalue}"
+                                          type="radio"/>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button  
+                                      label="Cancel"
+                                      title="Cancel"
+                                      onclick="{! c.closeModel }"/>
+                    <lightning:button variant="brand" 
+                                      label="Next"
+                                      title="Next"
+                                      onclick="{! c.clickNext }"/>
+                </footer>
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.isCaseModalOpen}">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                        
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <div data-aura-rendered-by="25:617;a">
+                                <h3 class="slds-section__title Center" data-aura-rendered-by="26:617;a">
+                                    <button class="slds-button slds-section__title-action" aria-expanded="false" aria-controls="section1" data-aura-rendered-by="27:617;a">
+                                        <span class="slds-align_absolute-center" title="New Case" data-aura-rendered-by="28:617;a">New Case</span>
+                                    </button>
+                                </h3>
+                            </div>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-p-around_medium">
+                        <div class="slds-section slds-is-open">
+                            <div data-aura-rendered-by="25:617;a">
+                                <h3 class="slds-section__title Center" data-aura-rendered-by="26:617;a">
+                                    <button class="slds-button slds-section__title-action" aria-expanded="false" aria-controls="section1" data-aura-rendered-by="27:617;a">
+                                        <span class="slds-align_absolute-center" title="Case Subject Information" data-aura-rendered-by="28:617;a">Case Subject Information</span>
+                                    </button>
+                                </h3>
+                            </div>
+                            <lightning:input name="Subject" fieldLevelHelp="Subject" value="{!v.CaseSubject}" label="Subject" placeholder="Please enter your subject here..." required="true" onchange="{!c.onSubjectChange}"/>
+                            <aura:if isTrue="{!v.IsSubjectNotFilled}">
+                                <div style="color:red;float: left">
+                                    Please fill the subject
+                                </div>
+                                <br/>
+                            </aura:if>
+                            <span class="floatToRight" style="float: right;">{!255-v.CaseSubject.length} characters remaining</span>
+                            <lightning:textarea name="Description" fieldLevelHelp="Description" value="{!v.CaseDescription}" label="Description" required="true" placeholder="Please enter your description here" onchange="{!c.onDescriptionChange}"/>
+                            <aura:if isTrue="{!v.IsDescriptionNotFilled}">
+                                <div style="color:red;float: left">
+                                    Please fill the Description
+                                </div>
+                                <br/>
+                            </aura:if>
+                            <span class="floatToRight" style="float: right;">{!32000-v.CaseDescription.length} characters remaining</span>
+                            <br/>
+                            <div data-aura-rendered-by="25:617;a">
+                                <h3 class="slds-section__title Center" data-aura-rendered-by="26:617;a">
+                                    <button class="slds-button slds-section__title-action" aria-expanded="false" aria-controls="section1" data-aura-rendered-by="27:617;a">
+                                        <span class="slds-align_absolute-center" title="Case Information" data-aura-rendered-by="28:617;a">Case Information</span>
+                                    </button>
+                                </h3>
+                            </div>
+                            
+                            <lightning:input name="Account Name" disabled="true" fieldLevelHelp="Account Name" value="{!v.loggedInAccountName}" label="Account" placeholder="Please enter your subject here..." />
+                            <lightning:input name="Contact Name" disabled="true" fieldLevelHelp="Contact Name" value="{!v.loggedInContactName}" label="Contact" placeholder="Please enter your subject here..." required="true"/>
+                            <!--label class="slds-form-element__label" for="select-01">Account Name :</label>
+                             <ui:outputText title="Account Name" value="{!v.loggedInAccountName}" class="blue"/><br/>
+                            <label class="slds-form-element__label" for="select-01">Contact Name :</label>
+                            <ui:outputText title="Contact Name" value="{!v.loggedInContactName}" class="blue"/><br/-->
+                            <!--c:customLookup objectAPIName="account" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}" label="Account Name"/>
+                            <c:customLookup objectAPIName="contact" IconName="standard:contact" selectedRecord="{!v.selectedContactLookUpRecord}" label="Contact Name"/-->
+                            <!--lightning:helptext content="The tooltip displays on the lower left of the icon or above the icon if space is available. It automatically adjusts its position according to the viewport."/-->
+                            <lightning:select name="select" title="Status" disabled="true" label="Status" value="{!v.selectedStatus}" >
+                                 
+                                <aura:iteration items="{!v.Statusoptions}" var="status">
+                                    <option value="{!status}" text="{!status}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                            <!--lightning:select name="select" title="Priority" label="Priority" value="{!v.selectedPriority}" >
+                                
+                                <aura:iteration items="{!v.PriorityOptions}" var="origin">
+                                    <option value="{!origin}" text="{!origin}"></option>
+                                </aura:iteration>
+                            </lightning:select-->
+                            <lightning:select name="select" title="Origin" disabled="true" label="Origin" value="{!v.selectedOrigin}" >
+                                
+                                <aura:iteration items="{!v.Originoptions}" var="origin">
+                                    <option value="{!origin}" text="{!origin}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                            
+                            <!--lightning:select name="select" title="ICP Year" label="ICP Year" value="{!v.selectedICPYear}" >
+                                <option value=""> None </option>
+                                <aura:iteration items="{!v.ICPYearOptions}" var="origin">
+                                    <option value="{!origin}" text="{!origin}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                            <br/-->
+                            <div data-aura-rendered-by="25:617;a">
+                                <h3 class="slds-section__title Center" data-aura-rendered-by="26:617;a">
+                                    <button class="slds-button slds-section__title-action" aria-expanded="false" aria-controls="section1" data-aura-rendered-by="27:617;a">
+                                        <span class="slds-align_absolute-center" title="Case Category" data-aura-rendered-by="28:617;a">Case Category</span>
+                                    </button>
+                                </h3>
+                            </div>
+                            
+                            <br/>
+                            <aura:if isTrue="{!v.TypeSelected}">
+                                <div style="color:red">
+                                    {!v.TypeDescription}
+                                </div>
+                            </aura:if>
+                            <lightning:select name="select" title="Type" label="Type" value="{!v.selectedType}" onchange="{!c.typeChange}" required="true">
+                                <option value="">-- None --</option>
+                                <aura:iteration items="{!v.TypesOption}" var="origin">
+                                    <option value="{!origin}" text="{!origin}"></option>
+                                </aura:iteration>
+                            </lightning:select>
+                            <aura:if isTrue="{!v.IsTypeNotFilled}">
+                                <div style="color:red;float: left">
+                                    Please select the type
+                                </div>
+                                <br/>
+                            </aura:if>
+                             <c:DependentPicklist aura:id="cComp"/>
+                            <br/>
+                            <div data-aura-rendered-by="25:617;a">
+                                <h3 class="slds-section__title Center" data-aura-rendered-by="26:617;a">
+                                    <button class="slds-button slds-section__title-action" aria-expanded="false" aria-controls="section1" data-aura-rendered-by="27:617;a">
+                                        <span class="slds-align_absolute-center" title="Add Attachment" data-aura-rendered-by="28:617;a">Case Attachment</span>
+                                    </button>
+                                </h3>
+                            </div>
+                            <br/>
+                            <lightning:input aura:id="fileId" onchange="{!c.handleFilesChange}" type="file" name="file" label="Upload Attachment" multiple="false"/>
+                            <!--c:DependentPicklistMilitaryBranch/-->
+                            <!--c:customLookup objectAPIName="account" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}" label="Account Name"/>
+                            <c:customLookup objectAPIName="account" IconName="standard:contact" selectedRecord="{!v.selectedContactLookUpRecord}" label="Contact Name"/-->
+                        </div>
+                    </div>
+                </div>
+                
+                <footer class="slds-modal__footer">
+                    <lightning:button 
+                                      label="Cancel"
+                                      title="Cancel"
+                                      onclick="{! c.closeCaseModel }"/>
+                    <aura:if isTrue="{!v.isRecordTypeModalOpen}">
+                    <lightning:button variant="brand-outline" 
+                                      label="Next"
+                                      title="Next"
+                                      onclick="{! c.clickNext }"/>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isCaseModalOpen}">
+                    <lightning:button variant="brand" 
+                                      label="Save"
+                                      title="Save"
+                                      onclick="{! c.Save }"/>
+                    </aura:if>
+                </footer>
+            </div>
+        </aura:if>
+    </section>
+    
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</aura:component>

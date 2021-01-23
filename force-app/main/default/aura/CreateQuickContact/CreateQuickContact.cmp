@@ -1,0 +1,29 @@
+<aura:component controller="QuickContactController" 
+                implements="force:lightningQuickActionWithoutHeader,force:hasRecordId">
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="newContact" type="Contact"
+                    default="{ 'sobjectType': 'Contact' }" /> <!-- default to empty record -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <lightning:workspaceAPI aura:id="workspace" />
+
+    <!-- Display the new contact form -->
+    <lightning:input aura:id="contactField2" name="firstName" label="First Name"
+                     value="{!v.newContact.FirstName}"/>
+    
+    <lightning:input aura:id="contactField" name="lastname" label="Last Name"
+                     value="{!v.newContact.LastName}" required="true"  />
+    
+    <lightning:input aura:id="contactField3" type="email" name="email" label="Email"
+                     value="{!v.newContact.Email}" />
+
+    
+    <c:customLookup aura:id="lookupField" objectAPIName="account" 
+                    IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}" 
+                    label="Account Name"/>
+    
+    <lightning:button label="Cancel" onclick="{!c.handleCancel}" class="slds-m-top_medium" />
+    <lightning:button label="Save Contact" onclick="{!c.handleSaveContact}"
+                      variant="brand" class="slds-m-top_medium"/>
+    
+</aura:component>

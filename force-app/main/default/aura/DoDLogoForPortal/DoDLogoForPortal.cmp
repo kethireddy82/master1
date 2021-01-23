@@ -1,0 +1,5 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes">
+    <div class="slds-align_absolute-center">
+        <img src="{!$Resource.Logo}"/>
+    </div>
+</aura:component>

@@ -1,0 +1,21 @@
+<apex:page showheader="false">
+    <style>
+        .verticalhorizontal {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+            height: 90vh;
+        }
+        .dos-splash-image {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    <div class="verticalhorizontal">
+
+            <img src="{!$Resource.DoDCRM}"/>
+       
+    </div>
+</apex:page>

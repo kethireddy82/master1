@@ -1,0 +1,13 @@
+<apex:page controller="PieChartController" title="Pie Chart">
+<apex:pageBlock >
+<apex:pageBlockSection title="Cases by Status">
+<apex:pageBlockSectionItem >
+<apex:chart data="{!CasesByStatus}" height="400" width="380">
+<apex:pieSeries labelField="id" dataField="cnt">
+<apex:chartLabel display="rotate" field="cnt"/>
+</apex:pieSeries>
+</apex:chart>
+</apex:pageBlockSectionItem>
+</apex:pageBlockSection>
+</apex:pageBlock>
+</apex:page>

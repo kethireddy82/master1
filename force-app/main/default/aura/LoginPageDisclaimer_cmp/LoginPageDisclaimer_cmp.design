@@ -1,0 +1,3 @@
+<design:component label="showCloseButton">
+	<design:attribute name="showCloseButton" label="showCloseButton"/>
+</design:component>

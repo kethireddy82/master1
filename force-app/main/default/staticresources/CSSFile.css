@@ -1,0 +1,48 @@
+<style type="text/css">
+	/* AGCO Red Branding */
+	.agco .slds-button--neutral, .agco .slds-button--neutral:hover{
+		color: #C00031 !important;
+	}
+	.agco .slds-button--brand{
+		background-color: #C00031 !important;
+		border-color: #850022 !important;
+	}
+	.agco .slds-button--brand:focus, .agco .slds-button--brand:hover{
+		background-color: #990027 !important;
+	}
+	.agco .slds-button--brand[disabled]{
+		background-color: #dedede !important;
+		border-color: #bebebe !important;
+	}
+	.agco .slds-tabs--default__item.slds-active:after, .agco .slds-tabs--default__item.slds-is-active:after, .agco .slds-tabs--default__item:hover:after{
+		background-color: #C00031 !important;
+	}
+	/* link - page header and tabs */
+	.agco .metricTable a, h1.slds-page-header__title a:focus, h1.slds-page-header__title a:hover, div.slds-tabs--default a:focus, div.slds-tabs--default a:hover{
+		color: #C00031 !important;
+	}
+	a.downloadLink, .downloadLink *{
+		color: #C00031 !important;
+	}
+
+	/* box shadow and outline */
+	.agco .slds-button:focus, .agco .slds-input:active, .agco .slds-input:focus{
+		border-color: #850022;
+		box-shadow: 0 0 3px #C00031 !important;
+	}
+	.agco button.slds-button.slds-section__title-action{
+		border-color: rgba(0, 0, 0, 0) !important;
+	}
+	input:focus, select:focus, textarea:focus, button:focus{
+		outline-color: #C00031 !important;
+	}
+
+	.slds-icon-standard-investment-account{
+		background-color: #C00031 !important;
+	}
+
+	/* loader */
+	.slds-spinner--brand:before, .slds-spinner--brand:after, .slds-spinner--brand *:before, .slds-spinner--brand *:after{
+		background-color: #C00031 !important;
+	}
+</style>

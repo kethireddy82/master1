@@ -1,0 +1,1443 @@
+<aura:component controller="Case_Controller" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,lightning:actionOverride" access="global" >
+    <aura:attribute name="records" type="Object[]" default="[]"/>
+    <aura:attribute name="contactList" type = "Contact[]" default="[]"/>
+	<aura:attribute name="contactPopup" type="Boolean" default="false"/>
+    <aura:attribute name = "caseFiledOnBehalfOfContact" type="Contact" default="{}"/>
+    <aura:attribute name="contactObj" type="Contact" default="{}"/>
+	<aura:attribute name="newContactObj" type="Contact" default="{}"/>
+	<aura:attribute name="newContactFirstName" type="String" default=""/>
+	<aura:attribute name="newContactLastName" type="String" default=""/>
+    <aura:attribute name="caseObj" type="Case" default="{}"/>
+    <aura:attribute name="spinner" type="Boolean" default="false"/>
+    <aura:attribute name="error1" type="Boolean" default="false"/>
+    <aura:attribute name="error2" type="Boolean" default="false"/>
+    <aura:attribute name="schoolList" type="Account[]" default="[]"/>
+    <aura:attribute name="selectedSchool" type="Account" default="{}"/>
+    <aura:attribute name="hideSubmitButton" type="Boolean" default="true"/>
+    <aura:attribute name="CaseIsSubmitted" type="Boolean" default="false"/>
+    <aura:attribute name="showAlertOnYes" type="Boolean" default="false"/>
+    <aura:attribute name="showChevron" type="Boolean" default="true"/>
+    <aura:attribute name="showConsentMessage" type="Boolean" default="true"/>
+    <aura:attribute name="issuesList" type="List" default="[]"/>
+    <aura:attribute name="fieldName" Description="API Name of Picklist Value" type="String" />
+    <aura:attribute name="myCAAStudent1" type="String" default=""/>
+    <aura:attribute name="myCAAStudent2" type="String" default=""/>
+    <aura:attribute name="educationalBenefitsList" type="List" default="[]"/>
+    <aura:attribute name="showAlert" type="Boolean" default="false"/>
+    <aura:attribute name="showComplainantInfo" type="Boolean" default="false"/>
+    <aura:attribute name="charsRemainingForTextArea1" type="Integer" default="1000"/>
+    <aura:attribute name="salutationValue" type="String" default=""/>
+    <aura:attribute name="lname" type="String" default=""/>
+    <aura:attribute name="street1" type="String" default=""/>
+    <aura:attribute name="telNo" type="String" default=""/>
+    <aura:attribute name="street2" type="String" default=""/>
+    <aura:attribute name="city" type="String" default=""/>
+    <aura:attribute name="state" type="String" default=""/>
+    <aura:attribute name="zip" type="String" default=""/>
+    <aura:attribute name="country" type="String" default=""/>
+    <aura:attribute name="email" type="String" default=""/>
+    <aura:attribute name="confirmEmail" type="String" default=""/>
+    <aura:attribute name="complainantName" type="String" default=""/>
+    <aura:attribute name="serviceAffiliation1" type="String" default=""/>
+    <aura:attribute name="serviceStatus" type="String" default=""/>
+    <aura:attribute name="sponsorServiceStatus" type="String" default=""/>
+    <aura:attribute name="branch1" type="String" default=""/>
+    <aura:attribute name="payGrade1" type="String" default=""/>
+    <aura:attribute name="age1" type="String" default=""/>
+    <aura:attribute name="serviceAffiliationForOther" type="String" default=""/>
+    <aura:attribute name="serviceStatusForOther" type="String" default=""/>
+    <aura:attribute name="complainantServiceStatus" type="String" default=""/>
+    <aura:attribute name="sponsorBatch" type="String" default=""/>
+    <aura:attribute name="complainantPayGrade" type="String" default=""/>
+    <aura:attribute name="complainantAge" type="String" default=""/>
+    <aura:attribute name="complaintStreet1" type="String" default=""/>
+    <aura:attribute name="complaintStreet2" type="String" default=""/>
+    <aura:attribute name="complaintCity" type="String" default=""/>
+    <aura:attribute name="complaintState" type="String" default=""/>
+    <aura:attribute name="complaintZip" type="String" default=""/>
+    <aura:attribute name="complaintCountry" type="String" default=""/>
+    <aura:attribute name="complaintTelephone" type="String" default=""/>
+    <aura:attribute name="complainantEmail1" type="String" default=""/>
+    <aura:attribute name="complainantEmail2" type="String" default=""/>
+    <aura:attribute name="schoolStreet1" type="String" default=""/>
+    <aura:attribute name="schoolStreet2" type="String" default=""/>
+    <aura:attribute name="schoolCity" type="String" default=""/>
+    <aura:attribute name="schoolState" type="String" default=""/>
+    <aura:attribute name="schoolZip" type="String" default=""/>
+    <aura:attribute name="schoolCountry" type="String" default=""/>
+    <aura:attribute name="levelOfStudy" type="String" default=""/>
+    <aura:attribute name="outOfPocketTuition" type="String" default=""/>
+    <aura:attribute name="governmentCredit" type="String" default=""/>
+    <aura:attribute name="educationName" type="String" default=""/>
+    <aura:attribute name="educationStreet1" type="String" default=""/>
+    <aura:attribute name="educationStreet2" type="String" default=""/>
+    <aura:attribute name="educationCity" type="String" default=""/>
+    <aura:attribute name="educationState" type="String" default=""/>
+    <aura:attribute name="educationZip" type="String" default=""/>
+    <aura:attribute name="educationCountry" type="String" default=""/>
+    <aura:attribute name="fname" type="String" default=""/>
+    <aura:attribute name="charsRemainingForTextArea2" type="Integer" default="1000"/>
+    <aura:attribute name="textArea1" type="String" default=""/>
+    <aura:attribute name="notListed" type="String" default="The person I want to file on behalf of is not listed"/>
+    <aura:attribute name="textArea2" type="String" default=""/>
+    <aura:attribute name="showFieldForMyself" type="Boolean" default="true"/>
+    <aura:attribute name="showServiceStatusPicklist" type="Boolean" default="true"/>
+    <aura:attribute name="showMYCAA" type="Boolean" default="false"/>
+    <aura:attribute name="showServiceStatusPicklistForOther" type="Boolean" default="true"/>
+    <aura:attribute name="showMYCAAForOther" type="Boolean" default="false"/>
+    <aura:attribute name="complainantNameOptions" type="String[]" default="[]"/>
+    <aura:attribute name="countryList" type="String[]" default="USA"/>
+    <aura:attribute name="outOfPocketTuitionValues" type="String[]" default="$0-$999,$1000-$4999,$5000-$9999,$10000-$14999"/>
+    <aura:attribute name="levelOfStudyValues" type="String[]" default="Primary education, Secondary education, Bachelors, Masters, Doctorate"/>
+    <aura:attribute name="stateList" type="String[]" default="Alabama,Alaska,Arizona,Arkansas,California,Colorado,Connecticut,Delaware,District Of Columbia,Florida,Georgia,Hawaii,Idaho,Illinois,Indiana,Iowa,Kansas,Kentucky,Louisiana,Maine,Maryland,Massachusetts,Michigan,Minnesota,Mississippi,Missouri,Montana,Nebraska,Nevada,New Hampshire,New Jersey,New Mexico,New York,North Carolina,North Dakota,Ohio,Oklahoma,Oregon,Pennsylvania,Rhode Island,South Carolina,South Dakota,Tennessee,Texas,Utah,Vermont,Virginia,Washington,West Virginia,Wisconsin,Wyoming"/>
+    <aura:attribute name="salutations" type="String[]" default="Mrs,Ms,Mr,Dr,E-1,E-2,E-3,E-4,E-5,E-6,E-7,E-8,E-9,W-1,W-2,W-3,W-4,W-5,O-1,O-2,O-3,O-4,O-5,O-6,O-7,O-8,O-9,O-10"/>
+    <aura:attribute name="serviceAffiliation" type="String[]" default="Service Member,Spouse or Family Member,Veteran"/>
+    <aura:attribute name="serviceStatuses" type="String[]" default="Active, National Guard, Reserve"/>
+    <aura:attribute name="branch" type="String[]" default="Army,Navy,Marines,Air Force,Coast Guard,VA NOAA(National Oceanic and Atmospheric Administration)/VA PHS(Public health Service)"/>
+    <aura:attribute name="payGrade" type="String[]" default="E-1,E-2,E-3,E-4,E-5,E-6,E-7,E-8,E-9,W-1,W-2,W-3,W-4,W-5,O-1,O-2,O-3,O-4,O-5,O-6,O-7,O-8,O-9,O-10"/>
+    <aura:attribute name="age" type="String[]" default="Less than 20 years old,20-29 years old,30-39 years old, 40-49 years old, 50-59 years old,60 years old and over, Do not wish to disclose"/>
+    <aura:attribute name="pageNo" type="String" default="page1"/>
+    <aura:attribute name="sectionName" type="String" default="contactAndComplainant"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <div class="container slds-grid" style="background-color:#E0E0E0">
+        <div class="slds-col">
+            <div class="slds-float_left slds-p-around_small" style="width:100%">
+                <div class="mainHeader">
+                    <img src="{!$Resource.Logo}" class="header-image"/>
+                    DoD Post Secondary Education Complaint Intake
+                </div>
+            </div>
+            <br/>
+            <div class="slds-p-around_small slds-align_absolute-center" style="width:97%;background-color:#FFFFFF">
+                <div class="container slds-grid">
+                    <div class="slds-col">
+                        <div class="slds-p-around_x-small slds-float_left">
+                            <b>DD Form</b> 2961, SEP 2013
+                        </div>
+                        <div class="slds-p-around_x-small slds-float_right">
+                            <b>OMB No.</b> 0704-0501 <b>RCS:</b>DD-P&amp;R(AR)2536
+                        </div>
+                        <aura:if isTrue="{!equals(v.pageNo,'page1')}">
+                            <div class="slds-grid slds-size_1-of-1">
+                                <p class="slds-p-around_x-small">
+                                    <b>AUTHORITY:</b> E.O. 13607, Establishing Principles of Excellence for Educational Instituitions Serving Service Members, Veterans, Spouse and Other Family Members; and DoD Instruction 1322.25, Voluntary Education Programs.
+                                </p>
+                            </div>
+                            <div class="slds-grid slds-size_1-of-1">
+                            	<p class="slds-p-around_x-small">
+                                    <b>PURPOSE: </b>To provide Uninformed Service Members, spouses and other family members the opportunity to file formal complaints when instituitions fail to follow the Principles of Excellence outlined in E.O. 13607 and DoD Instruction 1322.25.
+                                </p>
+                            </div>
+                            <div class="slds-grid slds-size_1-of-1">
+                            	<p class="slds-p-around_x-small">
+                                    <b>ROUTINE USE(S): </b>To the Federal Trade Commission Consumer Sentinel Network for access by the Departments of Veterans Affairs, Education. Justice.
+                                    and the Consumer Financial Protection Bureau for compliance with Executive Order 13607 and potential enforcement efforts. Information may be shared
+                                    with schools listed in a complaint to aid in the resolution of a case. The remaining routine use may be found in the applicable Privacy Act system of
+                                    records notice, DPR 44 DoD. DoD Postsecondary Education Complaint System (PECS), found at <br/>
+                                    <a href="http://dpcld.defense.gov/Privacy/SORNsindex/DODwideSORNArticleView/tabid/6797/Article/570751/dpr-44-dod.aspx"  target="_blank">http://dpcld.defense.gov/Privacy/SORNsindex/DODwideSORNArticleView/tabid/6797/Article/570751/dpr-44-dod.aspx</a>
+                                </p>
+                            </div>
+                            <div class="slds-grid slds-size_1-of-1">
+                            	<p class="slds-p-around_x-small">
+                                    <b>DISCLOSURE:</b> Voluntary. However, failure to provide the information requested may result in a delay in processing your complaint or the inability of
+									Federal agencies to address your complaint.
+                                </p>
+                            </div>
+                            <br/>
+                            <div class = "slds-align_absolute-center">
+                                <lightning:button variant="brand" label="Next" title="Next" onclick="{! c.goToPage2 }" />
+                            </div>
+                            <aura:if isTrue="{!v.showConsentMessage}">
+                                <div class="demo-only">
+                                    <section role="alertdialog" tabindex="0" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-modal_small slds-fade-in-open " aria-modal="true">
+                                        <div class="slds-modal__container">
+                                            <header class="slds-modal__header slds-theme_info">
+                                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                                                    <span class="slds-assistive-text">Close</span>
+                                                </button>
+                                                <h2 class="slds-text-heading_medium" id="prompt-heading-id">Notice and Consent Message</h2>
+                                            </header>
+                                            <div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper">
+                                                <p>
+                                                    You are accessing a U.S. Government (USG) Information System (IS) that is provided for USG-authorized use only. By using this IS (which
+													includes any device attached to this IS), you consent to the following conditions:
+                                                    <p class="slds-p-around_small">
+                                                    	<ul class="slds-list--dotted">
+                                                            <li>The USG routinely intercepts and monitors communications on this IS for purposes including, but not limited to, penetration testing,
+                                                                COMSEC monitoring, network operations and defense, personnel misconduct (PM), law enforcement (LE), and counterintelligence (CI)
+                                                                investigations
+                                                            </li>
+                                                            <li>
+                                                            	At any time, the USG may inspect and seize data stored on this IS.
+                                                            </li>
+                                                            <li>
+                                                            	Communications using, or data stored on, this IS are not private, are subject to routine monitoring, interception, and search, and may be
+																disclosed or used for any USG authorized purpose.
+                                                            </li>
+                                                            <li>
+                                                            	This IS includes security measures (e.g., authentication and access controls) to protect USG interests--not for your personal benefit or
+																privacy.
+                                                            </li>
+                                                            <li>
+                                                            	Notwithstanding the above, using this IS does not constitute consent to PM, LE or Cl investigative searching or monitoring of the content of
+                                                                privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and
+                                                                their assistants. Such communications and work product are private and confidential. See <a href="https://google.com" target="_blank">User Agreement</a> for details.
+                                                            </li>
+                                                        </ul>
+                                                    </p>
+                                                </p>
+                                                <p class="slds-p-around_small">
+                                                    By clicking OK you agree to the terms of the <a href="https://google.com" target="_blank">User Agreement</a>.
+                                                </p>
+                                            </div>
+                                            <footer class="slds-modal__footer slds-theme_default">
+                                                <div class="slds-p-around_x-small slds-align_absolute-center">
+                                                    <lightning:button variant="brand" label="OK" title="Ok" onclick="{!c.hideConsentMessage}"/>
+                                                </div>
+                                            </footer>
+                                        </div>
+                                    </section>
+                                    <div class="slds-backdrop slds-backdrop_open"></div>
+                                </div>
+                            </aura:if>
+                        </aura:if>
+                        <aura:if isTrue="{!equals(v.pageNo,'page2')}">
+                            <div class="slds-grid slds-size_1-of-1">
+                                <p class="slds-p-around_x-small">
+                                    You have accessed the Department of Defense (DoD) Postsecondary Education Complaint Intake. This is intended for students receiving Federal military
+                                    and veterans educational benefits to register complaints concerning the services you have received from educational institutions. Your complaint will be
+                                    tracked and responded to by one or more of the following Departments: Defense, Veterans Affairs, and Education.<span style="color:red"> To resolve your case we may share
+                                    the information you provide with the school referenced in your complaint.</span> The information you provide may also help to identify unlawful practices that
+                                    may be further investigated for possible enforcement action by the Department of Justice, the Consumer Financial Protection Bureau and other relevant
+                                    agencies. Please be advised that a representative from the aforementioned agencies may contact the complainant to discuss your grievance in greater
+                                    detail. If you were solely receiving Veterans benefits at the time you experienced your issue. Your complaint should be submitted through the VA Please
+                                    call VA toll free at 18008271000 or 1-888-442-4551 or go to <a href="https://afaems.langley.af.mil/pecs/vapecs.aspx" target="_blank">https://afaems.langley.af.mil/pecs/vapecs.aspx</a> for GI Bill contact information.
+                                </p>
+                            </div>
+                            <div class="slds-grid slds-size_1-of-1">
+                            	<p class="slds-p-around_x-small">
+									If you are receiving Federal military educational benefits (e.g. Tuition Assistance (TA) Program or MyCAA Program) and are experiencing an issue with
+                                    your Tuition Assistance (TA) Request Form or TA Authorization Voucher, you may want to first go to your Military Service automation system for
+                                    assistance. The homepages are as follows:
+                                    <br/>
+                                    <div class="slds-p-around_x-small">
+                                        Army: <a href="https//:google.com" target="_blank">Click Here</a>
+                                        <br/>
+                                        Navy: <a href="https://google.com" target="_blank">Click Here</a>
+                                        <br/>
+                                        Air Force: <a href="https://google.com" target="_blank">Click Here</a>
+                                        <br/>
+                                        Marine Corps: <a href="https://google.com" target="_blank">Click Here</a>
+                                        <br/>
+                                        MYCAA: <a href="https://google.com" target="_blank">Click Here</a>
+                                    </div>
+                                </p>
+                            </div>
+                            <div class="slds-grid slds-size_1-of-1">
+                            	<p class="slds-p-around_x-small">
+                                    The DoD Postsecondary Education Complaint Intake permits the DoD to gather a full understanding of your complaint. Please devote the necessary time to thoroughly describe your issue. Please review the  <a href="https://google.com" target="_blank">FAQ</a> to find the answers to commonly asked questions.
+                                </p>
+                            </div>
+                            <br/>
+                            <div class = "slds-align_absolute-center">
+                                <lightning:button variant="brand" label="Back" title="Back" onclick="{! c.goToPage1 }" />
+                                <lightning:button variant="brand" label="Next" title="Next" onclick="{! c.goToPage3 }" />
+                                <lightning:button label="Cancel" title="Cancel" onclick="{! c.cancel }" />
+                            </div>
+                        </aura:if>
+                        <aura:if isTrue="{!equals(v.pageNo,'page3')}">
+                            <div class="slds-grid slds-size_1-of-1 slds-border_bottom second-header">
+                                <div class = "slds-p-around_x-small">Veterans Benefits</div>
+                            </div>
+                            <div  class="slds-grid slds-size_1-of-1">
+                                <p class="slds-p-around_small">Were you seperated from the military and solely receiving Veterans benefits at the the time you experienced your issue?</p>
+                            </div>
+                            <div class = "slds-align_absolute-center">
+                                <lightning:button variant="brand" label="Yes" title="Yes" onclick="{! c.handleClick }" />
+                                <lightning:button variant="brand" label="No" title="No" onclick="{! c.showAlert }" />
+                                <lightning:button variant="brand" label="Back" title="Back" onclick="{! c.goToPage2 }" />
+                                <lightning:button label="Cancel" title="Cancel" onclick="{! c.cancel }" />
+                            </div>
+                            <aura:if isTrue="{!v.showAlert}">
+                                <div class="demo-only" style="height:24rem">
+                                    <section role="alertdialog" tabindex="0" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+                                        <div class="slds-modal__container">
+                                            <header class="slds-modal__header slds-theme_info slds-theme_alert-texture">
+                                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.hideAlert }">
+                                                    <span class="slds-assistive-text">Close</span>
+                                                </button>
+                                                <h2 class="slds-text-heading_medium" id="prompt-heading-id">Message from webpage</h2>
+                                            </header>
+                                            <div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper">
+                                                <p>
+                                                    Please be advised that by virtue of submission of this complaint,you are hereby agreeing to allow the content of your complaint
+                                                    to be shared with the school in question.
+                                                </p>
+                                            </div>
+                                            <footer class="slds-modal__footer slds-theme_default">
+                                                <div class="slds-p-around_x-small slds-float_right">
+                                                    <lightning:button variant="brand" label="OK" title="Ok" onclick="{!c.hideAlertAndRedirect}"/>
+                                                    <lightning:button label="Cancel" title="Cancel" onclick="{! c.hideAlert }" />
+                                                </div>
+                                            </footer>
+                                        </div>
+                                    </section>
+                                    <div class="slds-backdrop slds-backdrop_open"></div>
+                                </div>
+                            </aura:if>
+                            <aura:if isTrue="{!v.showAlertOnYes}">
+                                <div class="demo-only" style="height:24rem">
+                                    <section role="alertdialog" tabindex="0" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+                                        <div class="slds-modal__container">
+                                            <header class="slds-modal__header slds-theme_info slds-theme_alert-texture">
+                                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.hideAlert1 }">
+                                                    <span class="slds-assistive-text">Close</span>
+                                                </button>
+                                                <h2 class="slds-text-heading_medium" id="prompt-heading-id">Message from webpage</h2>
+                                            </header>
+                                            <div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper">
+                                                <p>
+                                                    You be navigated to the Veterans Affairs Principles of Excellence Complaint Intake Questionnaire.
+                                                </p>
+                                            </div>
+                                            <footer class="slds-modal__footer slds-theme_default">
+                                                <div class="slds-p-around_x-small slds-float_right">
+                                                    <lightning:button variant="brand" label="OK" title="Ok" onclick="{!c.hideAlertAndRedirect1}"/>
+                                                    <lightning:button label="Cancel" title="Cancel" onclick="{! c.hideAlert1 }" />
+                                                </div>
+                                            </footer>
+                                        </div>
+                                    </section>
+                                    <div class="slds-backdrop slds-backdrop_open"></div>
+                                </div>
+                            </aura:if>
+                        </aura:if>
+                        <aura:if isTrue="{!equals(v.pageNo,'page4')}">
+                            <div class="slds-grid slds-size_1-of-1 row">
+                                <div class="slds-col slds-p-around_x-small slds-size_1-of-2">
+                                    <div class="second-header slds-border_bottom">DS Logon Username/Password</div>
+                                    <div class="row slds-size_1-of-3">
+                                        <lightning:input name="userName" label="Username *" />
+                                        <lightning:input type="password" label="Password *" name="password"  />
+                                        <br/>
+                                        <lightning:button variant="brand" label="Login" title="Login" onclick="{!c.login}"/>
+                                    </div>
+                                    <br/>
+                                    <div class="slds-border_top slds-size_1-of-1">
+                                        <div class="slds-p-around_x-small slds-float_left">
+                                            Need a DS LOGON?
+                                        </div>
+                                        <div class="slds-p-around_x-small slds-float_right">
+                                            <lightning:button label="Register" title="Register" onclick="{! c.register }" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-size_1-of-1">
+                                        <div class="slds-p-around_x-small slds-float_left">
+                                            Have a DS LOGON activation letter?
+                                        </div>
+                                        <div class="slds-p-around_x-small slds-float_right">
+                                            <lightning:button label="Activate" title="Activate" onclick="{! c.activate }" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-p-around_x-small slds-size_1-of-2">
+                                    <div class="second-header slds-border_bottom">DS Logon CAC</div>
+                                    <div class="row slds-size_2-of-3">
+                                        <p>
+                                            Please insert your CAC, if applicable before attempting to login.
+                                        </p>
+                                        <br/>
+                                        <lightning:button variant="brand" label="Login" title="Login" onclick="{!c.login}"/>
+                                    </div>
+                                    <div class="slds-border_top slds-size_1-of-1">
+                                        <div class="slds-p-around_x-small slds-float_left">
+                                            Need to upgrade your DS LOGON?
+                                        </div>
+                                        <div class="slds-p-around_x-small slds-float_right">
+                                            <lightning:button label="Upgrade" title="Upgrade" onclick="{! c.upgrade }" />
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-size_1-of-1">
+                                        <div class="slds-p-around_x-small slds-float_left">
+                                            Need to manage your logon profile settings?
+                                        </div>
+                                        <div class="slds-p-around_x-small slds-float_right">
+                                            <lightning:button label="Manage" title="Manage" onclick="{! c.manage }" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <aura:if isTrue="{!equals(v.pageNo,'page5')}">
+                            <div class="slds-form slds-form_stacked slds-m-vertical--medium slds-grid slds-size_1-of-1 row slds-wrap">
+                                <aura:if isTrue="{!not(equals(v.sectionName,'summary'))}">
+                                    <br/>
+                                    <aura:if isTrue="{!v.showChevron}">
+                                        <div style="width:100%" class="slds-align_absolute-center">
+                                            <div class="chevron noaction">
+                                                <aura:iteration items="{!v.records}" var="item" indexVar="i"> 
+                                                    <a href="{!item.key}" class="{#item.cssClass}" style="{! 'width:'+item.width}" onclick="{!c.doNothing}">
+                                                        <aura:if isTrue="{!item.cssClass == 'visited'}">
+                                                            <div class="flipper">
+                                                                <div class="front"> 
+                                                                    <lightning:icon iconName="utility:check" size="x-small" variant="inverse"/>
+                                                                </div> 
+                                                                <div class="back">
+                                                                    {#item.val}
+                                                                </div>
+                                                            </div> 
+                                                            <aura:set attribute="else"> 
+                                                                {#item.val} 
+                                                            </aura:set> 
+                                                        </aura:if> 
+                                                    </a>
+                                                </aura:iteration> 
+                                            </div>
+                                        </div> 
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!v.spinner}">
+                                    <div aura:id="spinnerId" class="slds-spinner_container">
+                                        <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                                            <span class="slds-assistive-text">Loading...</span>
+                                            <div class="slds-spinner__dot-a"></div>
+                                            <div class="slds-spinner__dot-b"></div>
+                                        </div>
+                                    </div>
+                                </aura:if>
+                                <br/>
+                                <aura:if isTrue="{!equals(v.sectionName,'contactAndComplainant')}">
+									
+                                    <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                        <div class="second-header slds-border_bottom">Your Contact Information</div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                        <div class="slds-large-size--8-of-12 slds-medium-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                            <lightning:select name="select" label="Pay Grade / Salutation" required="true" value="{!v.salutationValue}" aura:id="contactAndComplainantForm">
+                                                <option text="--Select--" value=""></option>
+                                                <aura:iteration items="{!v.salutations}" var="salutation">
+                                                    <option text="{!salutation}"></option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                        <div class="slds-size_1-of-1 slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-form-element">
+                                            <lightning:input name="fname" aura:id="contactAndComplainantForm" label="First Name" required="true" value="{!v.fname}"/>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                        <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                            <lightning:input name="lname" aura:id="contactAndComplainantForm" label="Last Name" required="true" value="{!v.lname}"/>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                        <div class="slds-medium-size--4-of-7 slds-large-size--4-of-7 slds-size_1-of-1 slds-form-element">
+                                            <lightning:input aura:id="contactAndComplainantForm" name="street1" label="Street1" value="{!v.street1}"/>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                        <div class="slds-medium-size--4-of-7 slds-large-size--4-of-7 slds-size_1-of-1 slds-form-element">
+                                            <lightning:input aura:id="contactAndComplainantForm" name="street2" label="Street2" value="{!v.street2}"/>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                        <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                            <lightning:input name="city" aura:id="contactAndComplainantForm" label="City" value="{!v.city}"/>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                        <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                            <lightning:select name="select" label="State" aura:id="contactAndComplainantForm" value="{!v.state}">
+                                                <option text="--Select--" value=""></option>
+                                                <aura:iteration items="{!v.stateList}" var="state">
+                                                    <option text="{!state}"></option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                        <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                            <lightning:input name="zip" aura:id="contactAndComplainantForm" label="Zip" value="{!v.zip}"/>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                        <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                            <lightning:select name="select" label="Country" aura:id="contactAndComplainantForm" value="{!v.country}">
+                                                <option text="--Select--" value=""></option>
+                                                <aura:iteration items="{!v.countryList}" var="country">
+                                                    <option text="{!country}"></option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </div>
+                                    </div>      
+                                    <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                        <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                            <lightning:input name="telephone" aura:id="contactAndComplainantForm" label="Telephone(include area code)" value="{!v.telNo}"/>
+                                            <lightning:input type="checkbox" id="checkbox-unique-id-76" name="International Number" value="option" label="International Number"/>
+                                        </div>
+                                    </div>
+                                    <div class="slds-medium-size--1-of-3 slds-large-size--1-of-3"></div>
+                                    <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                        <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                            <lightning:input type="email" name="email1"  label="Email" required="true" value="{!v.email}" aura:id="contactAndComplainantForm"/>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                        <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                            <lightning:input type="email" aura:id="contactAndComplainantForm" name="email2" label="Confirm Email" required="true" value="{!v.confirmEmail}"/>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                        <div class="second-header slds-border_bottom">Filing Information</div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                        I am filing on behalf of*
+                                        <div class="switch-field">
+                                            <input type="radio" id="radio-three" name="switch-two" onclick="{!c.checkRadioButtonValue}" value="yes" checked="true"/>
+                                            <label for="radio-three">Myself</label>
+                                            <input type="radio" id="radio-five" name="switch-two" onclick="{!c.checkRadioButtonValue}" value="no" />
+                                            <label for="radio-five">Someone else</label>
+                                        </div>
+                                    </div>
+                                    <aura:if isTrue="{!not(v.showFieldForMyself)}">
+                                        <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                            <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                <lightning:select name="select" label="Complainant's Name" aura:id="contactAndComplainantForm" required="true" onchange="{!c.complainantNameChange}" value="{!v.complainantName}">
+                                                    <option text="--Select--" value=""></option>
+                                                    <aura:iteration items="{!v.contactList}" var="aff">
+                                                        <option text="{!aff.FirstName+' '+aff.LastName}" value="{!aff.Id}" selected="{!aff.Id == v.complainantName}"></option>
+                                                    </aura:iteration>
+													<option text="Create New Contact"></option>
+                                                    <option text="{!v.notListed}"></option>
+                                                </lightning:select>
+                                            </div>
+                                        </div>
+                                    </aura:if>
+                                    <aura:if isTrue="{!not(v.showComplainantInfo)}">
+                                        <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                            <div class="second-header slds-border_bottom">Complainant Information</div>
+                                        </div>
+                                        <aura:if isTrue="{!v.showFieldForMyself}">
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:select name="select" aura:id="contactAndComplainantForm" label="Your Service Affiliation" required="true" onchange="{!c.serviceAffiliationChange}" value="{!v.serviceAffiliation1}">
+                                                        <option text="--Select--" value=""></option>
+                                                        <aura:iteration items="{!v.serviceAffiliation}" var="aff">
+                                                            <option text="{!aff}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <aura:if isTrue="{!v.showMYCAA}">Is the complainant a MyCAA student?*
+                                                    <div class="switch-field">
+                                                        <input type="radio" id="radio-four" name="switch-four" value="yes" checked="true" onchange="{!c.setMyCAA1ToYes}"/>
+                                                        <label for="radio-four">Yes</label>
+                                                        <input type="radio" id="radio-six" name="switch-four" value="no" onchange="{!c.setMyCAA1ToNo}"/>
+                                                        <label for="radio-six">No</label>
+                                                    </div>
+                                                </aura:if>
+                                                <aura:if isTrue="{!v.showServiceStatusPicklist}">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:select name="select" label="Your Service Status" aura:id="contactAndComplainantForm" required="true" value="{!v.serviceStatus}">
+                                                            <option text="--Select--" value=""></option>
+                                                            <aura:iteration items="{!v.serviceStatuses}" var="status">
+                                                                <option text="{!status}"></option>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <aura:if isTrue="{!v.showMYCAA}">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:select name="select" label="Your Sponsor's Service Status" aura:id="contactAndComplainantForm" required="true" value="{!v.sponsorServiceStatus}">
+                                                            <option text="--Select--" value=""></option>
+                                                            <aura:iteration items="{!v.serviceStatuses}" var="aff">
+                                                                <option text="{!aff}"></option>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                </aura:if>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--2-of-3 slds-large-size--2-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:select name="select" aura:id="contactAndComplainantForm" label="{!v.showMYCAA == true?'Your Sponsor\'s Branch':'Your Branch'}" required="true" value="{!v.branch1}">
+                                                        <option text="--Select--" value=""></option>
+                                                        <aura:iteration items="{!v.branch}" var="status">
+                                                            <option text="{!status}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:select name="select" aura:id="contactAndComplainantForm" label="{!v.showMYCAA == true?'Your Sponsor\'s Pay Grade':'Your Pay Grade'}" required="true" value="{!v.payGrade1}">
+                                                        <option text="--Select--" value=""></option>
+                                                        <aura:iteration items="{!v.payGrade}" var="status">
+                                                            <option text="{!status}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:select name="select" label="{!v.showMYCAA == true?'Your Sponsor\'s Age':'Your Age'}" value="{!v.age1}" aura:id="contactAndComplainantForm">
+                                                        <option text="--Select--" value=""></option>
+                                                        <aura:iteration items="{!v.age}" var="aff">
+                                                            <option text="{!aff}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>
+                                            <aura:set attribute="else">
+											<aura:if isTrue="{!v.contactPopup}">
+												<div class="demo-only">
+													<section role="alertdialog" tabindex="0" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-modal_small slds-fade-in-open " aria-modal="true">
+														<div class="slds-modal__container">
+															<header class="slds-modal__header slds-theme_info">
+																<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+																	<span class="slds-assistive-text">Close</span>
+																</button>
+																<h2 class="slds-text-heading_medium" id="prompt-heading-id">New Contact</h2>
+															</header>
+															<div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper">
+																<div class="slds-grid">
+																<aura:if isTrue="{!v.spinner}">
+																	<div aura:id="spinnerId" class="slds-spinner_container">
+																		<div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+																			<span class="slds-assistive-text">Loading...</span>
+																			<div class="slds-spinner__dot-a"></div>
+																			<div class="slds-spinner__dot-b"></div>
+																		</div>
+																	</div>
+																</aura:if>
+																	<div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+																		<div class="slds-form-element">
+																			<lightning:input type="text" aura:id="newContactForm" value="{!v.newContactFirstName}"  label="First Name"/>
+																		</div>	
+																		<div class="slds-form-element">
+																			<lightning:input type="email" aura:id="newContactForm" value="{!v.complainantEmail1}"  label="Email"/>
+																		</div>
+																		<div class="slds-form-element">
+																			<lightning:select name="select" aura:id="newContactForm" label="Service status" value="{!v.complainantServiceStatus}">
+																				<option text="--Select--" value=""></option>
+																				<aura:iteration items="{!v.serviceStatuses}" var="status">
+																					<option text="{!status}" selected="{!status == v.complainantServiceStatus}"></option>
+																				</aura:iteration>
+																			</lightning:select>
+																		</div>
+																		<div class="slds-form-element">
+																			<lightning:select name="select" aura:id="newContactForm" label="Branch" value="{!v.sponsorBatch}" required="true">
+																				<option text="--Select--" value=""></option>
+																				<aura:iteration items="{!v.branch}" var="status">
+																					<option text="{!status}" selected="{!status == v.sponsorBatch}"></option>
+																				</aura:iteration>
+																			</lightning:select>
+																		</div>
+																		<div class="slds-form-element">
+																			<lightning:input aura:id="newContactForm" value="{!v.complaintStreet1}" label="Street 1"/>
+																		</div>
+																		<div class="slds-form-element">
+																			<lightning:input name="complainantcity" value="{!v.complaintCity}" aura:id="newContactForm" label="City"/>
+																		</div>
+																		<div class="slds-form-element">
+																			<lightning:input value="{!v.complaintZip}" aura:id="newContactForm" label="Zip"/>
+																		</div>
+																	</div>
+																	<div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+																		<div class="slds-form-element">
+																			<lightning:input type="text" aura:id="newContactForm" value="{!v.newContactLastName}"  label="Last Name" required="true"/>
+																		</div>	
+																		<div class="slds-form-element">
+																			<lightning:input name="telephone" aura:id="newContactForm" label="Telephone" value="{!v.complaintTelephone}"/>
+																		</div>
+																		<div class="slds-form-element">
+																			<lightning:select name="select" aura:id="newContactForm" label="Complainant's Age" value="{!v.complainantAge}">
+																				<option text="--Select--" value=""></option>
+																				<aura:iteration items="{!v.age}" var="aff">
+																					<option text="{!aff}" selected="{!aff == v.complainantAge}"></option>
+																				</aura:iteration>
+																			</lightning:select>
+																		</div>
+																		<div class="slds-form-element">
+																			<lightning:select name="select" aura:id="newContactForm" label="Pay Grade" value="{!v.complainantPayGrade}" required="true">
+																				<option text="--Select--" value=""></option>
+																				<aura:iteration items="{!v.payGrade}" var="status">
+																					<option text="{!status}" selected="{!status == v.complainantPayGrade}"></option>
+																				</aura:iteration>
+																			</lightning:select>
+																		</div>
+																		<div class="slds-form-element">
+																			<lightning:input aura:id="newContactForm" value="{!v.complaintStreet2}" label="Street 2"/>
+																		</div>
+																		<div class="slds-form-element">
+																		<lightning:select name="select" label="State" aura:id="newContactForm" value="{!v.complaintState}">
+																			<option text="--Select--" value=""></option>
+																			<aura:iteration items="{!v.stateList}" var="state">
+																				<option text="{!state}" value="{!state}" selected="{!state == v.complaintState}"></option>
+																			</aura:iteration>
+																		</lightning:select>
+																		</div>
+																		<div class="slds-form-element">
+																			<lightning:select name="select" label="Country" aura:id="newContactForm" value="{!v.complaintCountry}">
+																				<option text="--Select--" value=""></option>
+																				<aura:iteration items="{!v.countryList}" var="country">
+																					<option text="{!country}" selected = "{!country == v.complaintCountry}"></option>
+																				</aura:iteration>
+																			</lightning:select>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<footer class="slds-modal__footer slds-theme_default">
+																<div class="slds-p-around_x-small slds-align_right">
+																	<lightning:button variant="brand" label="Close" title="Close" onclick="{!c.hideContactPopup}"/>
+																	<lightning:button variant="brand" label="Submit" title="Submit" onclick="{!c.createContact}"/>
+																</div>
+															</footer>
+														</div>
+													</section>
+													<div class="slds-backdrop slds-backdrop_open"></div>
+												</div>
+											</aura:if>
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:select name="select" label="Complainant's Sponsors Service Affiliation" value="{!v.serviceAffiliationForOther}" aura:id="contactAndComplainantForm" required="true" onchange="{!c.serviceAffiliationChangeForOthers}">
+                                                            <option text="--Select--" value=""></option>
+                                                            <aura:iteration items="{!v.serviceAffiliation}" var="aff">
+                                                                <option text="{!aff}" selected="{!aff == v.serviceAffiliationForOther}"></option>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <aura:if isTrue="{!v.showMYCAAForOther}">
+                                                        Is the complainant a MyCAA student?*
+                                                        <div class="switch-field">
+                                                            <input type="radio" id="radio-four" name="switch-three" value="yes" checked="true" onchange="{!c.setMyCAA2ToYes}"/>
+                                                            <label for="radio-four">Yes</label>
+                                                            <input type="radio" id="radio-six" name="switch-three" value="no" onchange="{!c.setMyCAA2ToNo}"/>
+                                                            <label for="radio-six">No</label>
+                                                        </div>
+                                                    </aura:if>
+                                                    <aura:if isTrue="{!v.showServiceStatusPicklistForOther}">
+                                                        <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                            <lightning:select name="select" label="Complainant's Service Status" value="{!v.serviceStatusForOther}" aura:id="contactAndComplainantForm" required="true">
+                                                                <option text="--Select--" value=""></option>
+                                                                <aura:iteration items="{!v.serviceStatuses}" var="status">
+                                                                    <option text="{!status}" selected="{!status == v.serviceStatusForOther}"></option>
+                                                                </aura:iteration>
+                                                            </lightning:select>
+                                                        </div>
+                                                    </aura:if>
+                                                </div>
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <aura:if isTrue="{!v.showMYCAAForOther}">
+                                                        <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                            <lightning:select name="select" aura:id="contactAndComplainantForm" label="Complainant's Sponsors Service status" required="true" value="{!v.complainantServiceStatus}">
+                                                                <option text="--Select--" value=""></option>
+                                                                <aura:iteration items="{!v.serviceStatuses}" var="status">
+                                                                    <option text="{!status}" selected="{!status == v.complainantServiceStatus}"></option>
+                                                                </aura:iteration>
+                                                            </lightning:select>
+                                                        </div>
+                                                    </aura:if>
+                                                </div>
+                                                
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--2-of-3 slds-large-size--2-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:select name="select" aura:id="contactAndComplainantForm" label="Complainant's Sponsors Branch" required="true" value="{!v.sponsorBatch}">
+                                                            <option text="--Select--" value=""></option>
+                                                            <aura:iteration items="{!v.branch}" var="status">
+                                                                <option text="{!status}" selected="{!status == v.sponsorBatch}"></option>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:select name="select" aura:id="contactAndComplainantForm" label="Complainant's Sponsors Pay Grade" required="true" value="{!v.complainantPayGrade}">
+                                                            <option text="--Select--" value=""></option>
+                                                            <aura:iteration items="{!v.payGrade}" var="status">
+                                                                <option text="{!status}" selected="{!status == v.complainantPayGrade}"></option>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:select name="select" aura:id="contactAndComplainantForm" label="Complainant's Age" value="{!v.complainantAge}">
+                                                            <option text="--Select--" value=""></option>
+                                                            <aura:iteration items="{!v.age}" var="aff">
+                                                                <option text="{!aff}" selected="{!aff == v.complainantAge}"></option>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                                    <div class="slds-medium-size--4-of-7 slds-large-size--4-of-7 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:input aura:id="contactAndComplainantForm" value="{!v.complaintStreet1}" label="Complainant's Street1"/>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                                    <div class="slds-medium-size--4-of-7 slds-large-size--4-of-7 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:input aura:id="contactAndComplainantForm" value="{!v.complaintStreet2}" label="Complainant's  Street2"/>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:input name="complainantcity" value="{!v.complaintCity}" aura:id="contactAndComplainantForm" label="Complainant's City"/>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:select name="select" label="Complainant's State" aura:id="contactAndComplainantForm" value="{!v.complaintState}">
+                                                            <option text="--Select--" value=""></option>
+                                                            <aura:iteration items="{!v.stateList}" var="state">
+                                                                <option text="{!state}"></option>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:input value="{!v.complaintZip}" aura:id="contactAndComplainantForm" label="Complainant's Zip"/>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:select name="select" label="Complainant's Country" aura:id="contactAndComplainantForm" value="{!v.complaintCountry}">
+                                                            <option text="--Select--" value=""></option>
+                                                            <aura:iteration items="{!v.countryList}" var="country">
+                                                                <option text="{!country}" selected = "{!country == v.complaintCountry}"></option>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                </div>      
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:input name="telephone" aura:id="contactAndComplainantForm" label="Complainant's Telephone(include area code)" value="{!v.complaintTelephone}"/>
+                                                        <lightning:input type="checkbox" id="checkbox-unique-id-76" name="International Number" value="option" label="International Number"/>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-medium-size--1-of-3 slds-large-size--1-of-3"></div>
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:input type="email" aura:id="contactAndComplainantForm" value="{!v.complainantEmail1}"  label="Complainant's Email"/>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:input type="email" aura:id="contactAndComplainantForm" value="{!v.complainantEmail2}"  label="Confirm Email" required="true"/>
+                                                    </div>
+                                                </div>
+                                            </aura:set>
+                                        </aura:if>
+                                        
+                                        <aura:set attribute="else">
+                                            <div class="slds-notify slds-notify_alert  slds-theme_warning slds-col slds-p-around_x-small slds-size_1-of-1">
+                                                <p class="slds-p-around_x-small" style="color:red">
+                                                    <b>Cannot Submit Complaint</b> Please be advised that filing on behalf of another person is only allowed for authorized individuals who are listed in the DEERS account of the individual for which you are filing this complaint. If you feel this is in error, please contact the DEERS office. The individual you are filing on behalf of is required to update his or her DEERS with names of any individuals authorized to act on their behalf. 
+                                                </p>
+                                            </div>
+                                        </aura:set>
+                                    </aura:if>
+                                    <div class = "slds-p-around_x-small slds-size_1-of-1">
+                                        <lightning:button variant="brand" label="Back" title="Back" onclick="{!c.goBack}"/>
+                                        <lightning:button variant="brand" label="Next" title="Next" disabled="{!v.showComplainantInfo}" onclick="{!c.goToSection2}"/>
+                                        <lightning:button label="Cancel" title="Cancel" onclick="{!c.cancel}"/>
+                                    </div>
+                                    <div class = "slds-p-around_x-small slds-size_1-of-1">
+                                        <span style="color:red"><i>Providing optional data will assist in researching your complaint.</i></span>
+                                    </div>
+                                </aura:if>
+                                
+                                <!-- Section 2 Education benefits-->
+                                <!--<aura:if isTrue="{!equals(v.sectionName,'educationBenefits')}">-->
+                                <div class="{!equals(v.sectionName,'educationBenefits')?'slds-show':'slds-hide'}">
+                                    <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                        <div class="second-header slds-border_bottom">Education Benefits Currently Using</div>
+                                        <div class="slds-p-around_x-small">
+                                            <fieldset class="slds-form-element slds-size_1-of-1">
+                                                <legend class="slds-form-element__legend slds-form-element__label">
+                                                    Please check all that apply<abbr class="slds-required" title="required">*</abbr></legend>
+                                                <div class="slds-grid slds-wrap slds-form-element__control">
+                                                    <div class="slds-col">
+                                                        <legend class="slds-form-element__legend slds-form-element__label">Military Tuition Assistance (Title 10)</legend>
+                                                        <div class="slds-grid slds-wrap slds-form-element__control">
+                                                            <div class="slds-col">
+                                                                <div>
+                                                                    <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" label="Tuition Assistance (TA) for Active Duty Service Members or Reserve Component personnel in an active drilling status" name="militaryTuitionAssistance" id="checkbox-1" value="Tuition Assistance (TA) for Active Duty Service Members or Reserve Component personnel in an active drilling status"/>
+                                                                </div>
+                                                                <div>
+                                                                    <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="militaryTuitionAssistance" id="checkbox-2" label="Tuition Assistance AGR (TA) for Service members performing Active Guard and Reserve (AGR) duties" value="Tuition Assistance AGR (TA) for Service members performing Active Guard and Reserve (AGR) duties" />
+                                                                </div>
+                                                                <div>
+                                                                    <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="militaryTuitionAssistance" id="checkbox-3" label="Military Spouse Career Advancement Accounts (MyCAA)" value="Military Spouse Career Advancement Accounts (MyCAA)" />
+                                                                </div>
+                                                                <br/>
+                                                            </div>
+                                                        </div>
+                                                        <legend class="slds-form-element__legend slds-form-element__label">Other</legend>
+                                                        <div class="slds-grid slds-wrap slds-form-element__control">
+                                                            
+                                                            <div class="slds-col">
+                                                                <!---->
+                                                                <div class="slds-col">
+                                                                    <div>
+                                                                        <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="other" id="checkbox-4" label="Other Non-Military Federal Financial Aid" value="Other Non-Military Federal Financial Aid" />
+                                                                    </div>
+                                                                    <div>
+                                                                        <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="other" id="checkbox-5" label="Unsure" value="Unsure" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col">
+                                                        <legend class="slds-form-element__legend slds-form-element__label">GI Bill</legend>
+                                                        <div class="slds-grid slds-wrap slds-form-element__control">
+                                                            <div class="slds-col">
+                                                                <div>
+                                                                    <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="giBill" id="checkbox-6" label="Post-9/11 (CH 33)" value="Post-9/11 (CH 33)"/>
+                                                                </div>
+                                                                <div>
+                                                                    <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="giBill" id="checkbox-7" label="Montgomery (MGIB:CH 30)" value="Montgomery (MGIB:CH 30)" />
+                                                                </div>
+                                                                <div>
+                                                                    <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="giBill" id="checkbox-8" label="Reserve Educational Assistance program (REAP :CH 1607)" value="Reserve Educational Assistance program (REAP :CH 1607)" />
+                                                                </div>
+                                                                <div>
+                                                                    <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="giBill" id="checkbox-9" label="Select Reserve (SR : CH 1606)" value="Select Reserve (SR : CH 1606)"/>
+                                                                </div>
+                                                                <div>
+                                                                    <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="giBill" id="checkbox-10" label="Survivors &amp; Dependents (DEA : CH 35)" value="Survivors &amp; Dependents (DEA : CH 35" />
+                                                                </div>
+                                                                <div>
+                                                                    <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="giBill" id="checkbox-11" label="Voc Rehab (VR&amp;E: CH 31)" value="Voc Rehab (VR&amp;E: CH 31)" />
+                                                                </div>
+                                                                <div>
+                                                                    <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="giBill" id="checkbox-12" label="Veterans Retraining Assistance Program (VRAP)" value="Veterans Retraining Assistance Program (VRAP)" />
+                                                                </div>
+                                                                <div>
+                                                                    <lightning:input type="checkbox" aura:id="educationBenefitsIssuesList" name="giBill" id="checkbox-13" label="Tuition Assistance Top-Up" value="Tuition Assistance Top-Up" />
+                                                                </div>
+                                                                <br/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <aura:if isTrue="{!v.error1}">
+                                                <div class="slds-has-error slds-form-element__help">
+                                                    <span style="color:red">Please select atleast one value</span>
+                                                </div>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                        <div class="second-header slds-border_bottom">Describe your issue</div>
+                                        <div class="slds-p-around_x-small">
+                                            <fieldset class="slds-form-element slds-size_1-of-1">
+                                                <legend class="slds-form-element__legend slds-form-element__label">
+                                                    Which best describes your issue? (Select all that apply)<abbr class="slds-required" title="required">*</abbr></legend>
+                                                <div class="slds-grid slds-wrap slds-form-element__control">
+                                                    <div class="slds-col">
+                                                        <div>
+                                                            <lightning:input type="checkbox" label="Recruiting/Marketing Practices" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-1" value="Recruiting/Marketing Practice"/>
+                                                        </div>
+                                                        <div>
+                                                            <lightning:input type="checkbox" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-2" label="Accreditation" value="Accreditation" />
+                                                        </div>
+                                                        <div>
+                                                            <lightning:input type="checkbox" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-3" label="Financial Issues" value="Financial Issues" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col">
+                                                        <div>
+                                                            <lightning:input type="checkbox" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-4" label="Student Loans" value="Student Loans"/>
+                                                        </div>
+                                                        <div>
+                                                            <lightning:input type="checkbox" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-5" label="Post-graduation Job Opportunities" value="Post-graduation Job Opportunities" />
+                                                        </div>
+                                                        <div>
+                                                            <lightning:input type="checkbox" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-6" label="Change in degree plan/requirements" value="Change in degree plan/requirements" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col">
+                                                        <div>
+                                                            <lightning:input type="checkbox" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-7" label="Quality Of Education" value="Quality Of Education"/>
+                                                        </div>
+                                                        <div>
+                                                            <lightning:input type="checkbox" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-8" label="Grade policy" value="Grade policy" />
+                                                        </div>
+                                                        <div>
+                                                            <lightning:input type="checkbox" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-9" label="Release of Transcripts" value="Release of Transcripts" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-col">
+                                                        <div>
+                                                            <lightning:input type="checkbox" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-10" label="Transfer of Credits" value="Transfer of Credits"/>
+                                                        </div>
+                                                        <div>
+                                                            <lightning:input type="checkbox" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-11" label="Refund/Collection Issues" value="Refund/Collection Issues" />
+                                                        </div>
+                                                        <div>
+                                                            <lightning:input type="checkbox" aura:id="issueDescription" name="issueDescription" id="checkbox-unique-id-12" label="Other" value="Other" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <aura:if isTrue="{!v.error2}">
+                                                <div class="slds-has-error slds-form-element__help">
+                                                    <span style="color:red">Please select atleast one value</span>
+                                                </div>
+                                            </aura:if>
+                                        </div>
+                                    </div>
+                                    <div class = "slds-p-around_x-small slds-size_1-of-1">
+                                        <lightning:button variant="brand" label="Back" title="Back" onclick="{!c.goToSection1}"/>
+                                        <lightning:button variant="brand" label="Next" title="Next" onclick="{!c.goToSection3}"/>
+                                        <lightning:button label="Cancel" title="Cancel" onclick="{!c.cancel}"/>
+                                    </div>
+                                    <div class = "slds-p-around_x-small slds-size_1-of-1">
+                                        <span style="color:red"><i>Providing optional data will assist in researching your complaint.</i></span>
+                                    </div>
+                                    <!--</aura:if>-->
+                                </div>
+                                
+                                <aura:if isTrue="{!equals(v.sectionName,'complaint')}">
+                                    <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                        <div class="second-header slds-border_bottom">Complaint Information</div>
+                                        <div class="slds-p-around_x-small row">
+                                            <lightning:textarea name="input6" aura:id="complaintInfo" required="true" value="{!v.textArea1}" label="Describe what happened so we can better understand the issue. Please state what steps have you taken to first resolve this issue yourself" maxlength="1000" onkeyup="{!c.showChars1}"/>
+                                            <p>({!v.charsRemainingForTextArea1} / 1000 characters remaining)</p>
+                                        </div>
+                                        <div class="slds-p-around_x-small row">
+                                            <lightning:textarea aura:id="complaintInfo" name="input7" value="{!v.textArea2}" label="What do you think would be a fair resolution to your issue?" maxlength="1000" onkeyup="{!c.showChars2}" />
+                                            <p>({!v.charsRemainingForTextArea2} / 1000 characters remaining)</p>
+                                        </div>
+                                    </div>
+                                    <div class = "slds-p-around_x-small slds-size_1-of-1">
+                                        <lightning:button variant="brand" label="Back" title="Back" onclick="{!c.goBackToSection2}"/>
+                                        <lightning:button variant="brand" label="Next" title="Next" onclick="{!c.goToSection4}"/>
+                                        <lightning:button label="Cancel" title="Cancel" onclick="{!c.cancel}"/>
+                                    </div>
+                                </aura:if>
+                                
+                                
+                                <aura:if isTrue="{!equals(v.sectionName,'education')}">
+                                    <div class="slds-p-around_x-small slds-size_1-of-1">
+                                        <div class="second-header slds-border_bottom">School Information</div>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-1 slds-large-size--1-of-1 slds-size_1-of-1">
+                                                <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                    <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                        <lightning:select aura:id="schoolInfo" name="select" label="School" onchange="{!c.selectSchool}" required="true">
+                                                            <option text="--Select--" value=""></option>
+                                                            <aura:iteration items="{!v.schoolList}" var="salutation">
+                                                                <option text="{!salutation.Name}" value="{!salutation.Id}"></option>
+                                                            </aura:iteration>
+                                                        </lightning:select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--2-of-3 slds-large-size--2-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--5-of-7 slds-large-size--5-of-7 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:input aura:id="schoolInfo" name="schoolStreet1" label="Street1" value="{!v.schoolStreet1}" disabled="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--2-of-3 slds-large-size--2-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--5-of-7 slds-large-size--5-of-7 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:input aura:id="schoolInfo" name="schoolStreet2" label="Street2" value="{!v.schoolStreet2}" disabled="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:input aura:id="schoolInfo" label="City" value="{!v.schoolCity}" disabled="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+													<lightning:input aura:id="schoolInfo" label="State" value="{!v.schoolState}" disabled="true"/>
+                                                    <lightning:select class="slds-hide" name="select" label="State" aura:id="schoolInfo" value="{!v.schoolState}">
+                                                        <option text="--Select--" value=""></option>
+                                                        <aura:iteration items="{!v.stateList}" var="state">
+                                                            <option text="{!state}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:input name="zip" aura:id="schoolInfo" label="Zip" value="{!v.schoolZip}" disabled="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+													<lightning:input aura:id="schoolInfo" label="Country" value="{!v.schoolCountry}" disabled="true"/>
+                                                    <lightning:select class="slds-hide" name="select" label="Country" aura:id="schoolInfo" value="{!v.schoolCountry}">
+                                                        <option text="--Select--" value=""></option>
+                                                        <aura:iteration items="{!v.countryList}" var="country">
+                                                            <option text="{!country}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>  
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:select name="select" aura:id="schoolInfo" label="Level Of Study" value="{!v.levelOfStudy}" required="true">
+                                                        <option text="--Select--" value=""></option>
+                                                        <aura:iteration items="{!v.levelOfStudyValues}" var="salutation">
+                                                            <option text="{!salutation}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>  
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:select name="select" aura:id="schoolInfo" label="Out-Of-Pocket Tuition" value="{!v.outOfPocketTuition}">
+                                                        <option text="--Select--" value=""></option>
+                                                        <aura:iteration items="{!v.outOfPocketTuitionValues}" var="salutation">
+                                                            <option text="{!salutation}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>  
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:select name="select" aura:id="schoolInfo" label="Government Tuition Credit" value="{!v.governmentCredit}">
+                                                        <option text="--Select--" value=""></option>
+                                                        <aura:iteration items="{!v.outOfPocketTuitionValues}" var="salutation">
+                                                            <option text="{!salutation}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                        <div class="second-header slds-border_bottom">Education Center Information</div>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--2-of-3 slds-large-size--2-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--5-of-7 slds-large-size--5-of-7 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:input aura:id="schoolStreet1" name="schoolStreet1" label="Name" value="{!v.educationName}"/>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--2-of-3 slds-large-size--2-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--5-of-7 slds-large-size--5-of-7 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:input aura:id="schoolStreet1" name="schoolStreet1" label="Street1" value="{!v.educationStreet1}"/>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--2-of-3 slds-large-size--2-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--5-of-7 slds-large-size--5-of-7 slds-size_1-of-1slds-form-element">
+                                                    <lightning:input aura:id="schoolStreet2" name="schoolStreet2" label="Street2" value="{!v.educationStreet2}"/>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:input name="schoolCity" aura:id="schoolCity" label="City" value="{!v.educationCity}"/>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:select name="select" label="State" aura:id="state3" value="{!v.educationState}">
+                                                        <option text="--Select--" value=""></option>
+                                                        <aura:iteration items="{!v.stateList}" var="state">
+                                                            <option text="{!state}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:input name="zip" aura:id="zip" label="Zip" value="{!v.educationZip}"/>
+                                                </div>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <div class="slds-medium-size--8-of-12 slds-large-size--8-of-12 slds-size_1-of-1 slds-form-element">
+                                                    <lightning:select name="select" label="Country" aura:id="country4" value="{!v.educationCountry}">
+                                                        <option text="--Select--" value=""></option>
+                                                        <aura:iteration items="{!v.countryList}" var="country">
+                                                            <option text="{!country}"></option>
+                                                        </aura:iteration>
+                                                    </lightning:select>
+                                                </div>
+                                            </div>    
+                                        </div>
+                                    </div>
+                                    <div class = "slds-p-around_x-small slds-size_1-of-1">
+                                        <lightning:button variant="brand" label="Back" title="Back" onclick="{!c.goToSection3}"/>
+                                        <lightning:button variant="brand" label="Next" title="Next" onclick="{!c.goToSummary}"/>
+                                        <lightning:button label="Cancel" title="Cancel" onclick="{!c.cancel}"/>
+                                    </div>
+                                    <div class = "slds-p-around_x-small slds-size_1-of-1">
+                                        <span style="color:red"><i>Providing optional data will assist in researching your complaint.</i></span>
+                                    </div>
+                                </aura:if>
+                                
+                                <!--Summary Section-->
+                                <aura:if isTrue="{!equals(v.sectionName,'summary')}">
+                                    <div class="slds-p-around_x-small slds-size_1-of-1">
+                                        <div class="second-header">Summary</div>
+                                        <br/>
+                                        <div class="slds-box slds-theme--info slds-p-around_x-small slds-size_1-of-1">
+                                            <p>Please review your complaint before submitting. Use the back button on the page to make any necessary corrections.</p>
+                                        </div>
+                                        <br/>
+                                        <div class="second-header slds-border_bottom">Your Contact Information</div>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <p><b>Pay Grade/Salutation</b><br/>
+                                                    <ui:outputText value="{!v.salutationValue}"/></p>
+                                                <br/>
+                                                <p><b>Address</b><br/>
+                                                    <lightning:formattedAddress
+                                                                                street="{!v.street1 + ' ' + v.street2}"
+                                                                                city="{!v.city}"
+                                                                                country="{!v.country}"
+                                                                                province="{!v.state}"
+                                                                                postalCode="{!v.zip}"/>
+                                                </p>
+                                                <br/>
+                                                <p><b>Telephone</b><br/>
+                                                    <ui:outputText value="{!v.telNo}"/></p>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <p><b>Name</b><br/>
+                                                    <ui:outputText value="{!v.fname+' '+v.lname}"/></p>
+                                                <br/>
+                                                <p class="slds-hide"><b>Address</b><br/>
+                                                    <lightning:formattedAddress
+                                                                                street="{!v.street1 + ' ' + v.street2}"
+                                                                                city="{!v.city}"
+                                                                                country="{!v.country}"
+                                                                                province="{!v.state}"
+                                                                                postalCode="{!v.zip}"/>
+                                                </p>
+                                                <br/>
+                                                <p><b>Email</b><br/>
+                                                    <ui:outputText value="{!v.email}"/></p>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="second-header slds-border_bottom">Complainant Information</div>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <p><b>Filed on behalf on</b><br/>
+                                                    <ui:outputText value="{!equals(v.showFieldForMyself,true)?'Myself':'For Someone Else'}"/></p>
+                                                <br/>
+                                            </div>
+                                            <div class="{!v.showFieldForMyself == true?'slds-hide':'slds-show'}">
+                                                <p><b>Complainant's Name</b><br/>
+                                                    <ui:outputText value="{!v.caseFiledOnBehalfOfContact.FirstName+' '+ v.caseFiledOnBehalfOfContact.LastName}"/>
+                                                </p>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="second-header slds-border_bottom">Filing Information</div>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <p><b>Service Affiliation</b><br/>
+                                                    <ui:outputText value="{!equals(v.showFieldForMyself,true)?v.serviceAffiliation1:v.serviceAffiliationForOther}"/>
+                                                </p>
+                                                <br/>
+                                                <p><b>Branch</b><br/>
+                                                    <ui:outputText value="{!equals(v.showFieldForMyself,true)?v.branch1:v.sponsorBatch}"/>
+                                                </p>
+                                                <br/>
+                                                <p class="{!equals(v.showFieldForMyself,true)?'slds-hide':'slds-show'}"><b>Address</b><br/>
+                                                    <lightning:formattedAddress
+                                                                                street="{!v.complaintStreet1 + ' ' + v.complaintStreet2}"
+                                                                                city="{!v.complaintCity}"
+                                                                                country="{!v.complaintCountry}"
+                                                                                province="{!v.complaintState}"
+                                                                                postalCode="{!v.complaintZip}"/>
+                                                </p>
+                                                <br/>
+                                                <p class="{!equals(v.showFieldForMyself,true)?'slds-hide':'slds-show'}"><b>Telephone</b><br/>
+                                                    <ui:outputText value="{!v.complaintTelephone}"/>
+                                                </p>
+                                                <br/>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <aura:if isTrue="{!v.showFieldForMyself}">
+                                                    <aura:if isTrue="{!v.showMYCAA}">
+                                                        <p><b>Service Status</b><br/>
+                                                            <ui:outputText value="{!v.sponsorServiceStatus}"/>
+                                                        </p>
+                                                    </aura:if>
+                                                    <aura:if isTrue="{!v.showServiceStatusPicklist}">
+                                                        <p><b>Service Status</b><br/>
+                                                            <ui:outputText value="{!v.serviceStatus}"/>
+                                                        </p>
+                                                    </aura:if>
+                                                    <aura:set attribute="else">
+                                                        <aura:if isTrue="{!v.showMYCAAForOther}">
+                                                            <p><b>Service Status</b><br/>
+                                                                <ui:outputText value="{!v.complainantServiceStatus}"/>
+                                                            </p>
+                                                        </aura:if>
+                                                        <aura:if isTrue="{!v.showServiceStatusPicklistForOther}">
+                                                            <p><b>Service Status</b><br/>
+                                                                <ui:outputText value="{!v.serviceStatusForOther}"/>
+                                                            </p>
+                                                        </aura:if>
+                                                    </aura:set>
+                                                </aura:if>
+                                                <br/>
+                                                <p><b>Pay Grade</b><br/>
+                                                    <ui:outputText value="{!equals(v.showFieldForMyself,true)?v.payGrade1:v.complainantPayGrade}"/>
+                                                </p>
+                                                <br/>
+                                                <p class="slds-hide"><b>Address</b><br/>
+                                                    <lightning:formattedAddress
+                                                                                street="{!v.complaintStreet1 + ' ' + v.complaintStreet2}"
+                                                                                city="{!v.complaintCity}"
+                                                                                country="{!v.complaintCountry}"
+                                                                                province="{!v.complainState}"
+                                                                                postalCode="{!v.complaintZip}"/>
+                                                </p>
+                                                <br/>
+                                                <p class="{!equals(v.showFieldForMyself,true)?'slds-hide':'slds-show'}"><b>Email</b><br/>
+                                                    <ui:outputText value="{!v.complainantEmail1}"/>
+                                                </p>
+                                                <br/>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <aura:if isTrue="{!v.showFieldForMyself}">
+                                                    <aura:if isTrue="{!v.showMYCAA}">
+                                                        <p><b>MyCAA Student</b><br/>
+                                                            <ui:outputText value="{!v.myCAAStudent1}"/>
+                                                        </p>
+                                                    </aura:if>
+                                                    <aura:set attribute="else">
+                                                        <aura:if isTrue="{!v.showMYCAAForOther}">
+                                                            <p><b>MyCAA Student</b><br/>
+                                                                <ui:outputText value="{!v.myCAAStudent2}"/>
+                                                            </p>
+                                                        </aura:if>
+                                                    </aura:set>
+                                                </aura:if>
+                                                <br/>
+                                                <p><b>Age</b><br/>
+                                                    <ui:outputText value="{!equals(v.showFieldForMyself,true)?v.age1:v.complainantAge}"/>
+                                                </p>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                        <div class="second-header slds-border_bottom">Educational Benefits &amp; Issues</div>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                                <p><b>Education Benefits Currently Using</b><br/>
+                                                    <ul class="slds-list_dotted">
+                                                        <aura:iteration items="{!v.educationalBenefitsList}" var="item">
+                                                            <li><ui:outputText value="{!item}"/></li>
+                                                        </aura:iteration>
+                                                    </ul>
+                                                </p>
+                                                <br/>
+                                                <p><b>Describe Your Issue</b><br/>
+                                                    <ul class="slds-list_dotted">
+                                                        <aura:iteration items="{!v.issuesList}" var="item">
+                                                            <li><ui:outputText value="{!item}"/></li>
+                                                        </aura:iteration>
+                                                    </ul>
+                                                </p>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                        <div class="second-header slds-border_bottom">Complaint</div>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-p-around_x-small slds-size_1-of-1">
+                                                <p><b>Describe what happened so we can better understand the issue. Please state what steps you have taken to first resolve this issue.</b><br/>
+                                                    <ui:outputText value="{!v.textArea1}"/>
+                                                </p>
+                                                <br/>
+                                                <p><b>What do you think will be a fair resolution to your issue</b><br/>
+                                                    <ui:outputText value="{!v.textArea2}"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="second-header">Education</div>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <p><b>School</b><br/>
+                                                    <lightning:formattedAddress
+                                                                                street="{!v.schoolStreet1 + ' ' + v.schoolStreet2}"
+                                                                                city="{!v.schoolCity}"
+                                                                                country="{!v.schoolCountry}"
+                                                                                province="{!v.schoolState}"
+                                                                                postalCode="{!v.schoolZip}"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="slds-grid slds-wrap">
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <p><b>Level Of Study</b><br/>
+                                                    <ui:outputText value="{!v.levelOfStudy}"/>
+                                                </p>
+                                                <p><b>Education Center</b><br/>
+                                                    <lightning:formattedAddress
+                                                                                street="{!v.educationStreet1 + ' ' + v.educationStreet2}"
+                                                                                city="{!v.educationCity}"
+                                                                                country="{!v.educationCountry}"
+                                                                                province="{!v.educationState}"
+                                                                                postalCode="{!v.educationZip}"/>
+                                                </p>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <p><b>Out-Of-Pocket Tuition</b><br/>
+                                                    <ui:outputText value="{!v.outOfPocketTuition}"/>
+                                                </p>
+                                            </div>
+                                            <div class="slds-col slds-p-around_x-small slds-medium-size--1-of-3 slds-large-size--1-of-3 slds-size_1-of-1">
+                                                <p><b>Government Tuition Credit</b><br/>
+                                                    <ui:outputText value="{!v.governmentCredit}"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <aura:if isTrue="{!v.CaseIsSubmitted}">
+                                <div class="demo-only" style="height:24rem">
+                                    <section role="alertdialog" tabindex="0" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+                                        <div class="slds-modal__container">
+                                            <header class="slds-modal__header slds-theme_info slds-theme_alert-texture">
+                                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{! c.hideAlert }">
+                                                    <span class="slds-assistive-text">Close</span>
+                                                </button>
+                                                <h2 class="slds-text-heading_medium" id="prompt-heading-id">Message from webpage</h2>
+                                            </header>
+                                            <div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper">
+                                                <p>
+                                                   Your Case is succesfully submitted.
+                                                </p>
+                                            </div>
+                                            <footer class="slds-modal__footer slds-theme_default">
+                                                <div class="slds-p-around_x-small slds-float_right">
+                                                    <lightning:button variant="brand" label="OK" title="Ok" onclick="{!c.hideAlertAndRedirect}"/>
+                                                    <lightning:button label="Cancel" title="Cancel" onclick="{! c.hideAlert }" />
+                                                </div>
+                                            </footer>
+                                        </div>
+                                    </section>
+                                    <div class="slds-backdrop slds-backdrop_open"></div>
+                                </div>
+                            </aura:if>
+                                    <iframe src="/apex/CaptchaVFPage" height="120px" width="100%" style="border:0px;overflow:hidden" class="slds-p-around_x-small"/>
+                                    <div class = "slds-p-around_x-small slds-size_1-of-1">
+                                        <lightning:button variant="brand" label="Back" title="Back" onclick="{!c.goBackToSection4}"/>
+                                        <lightning:button variant="brand" label="Submit" title="Submit" disabled="{!v.hideSubmitButton}" onclick="{!c.submit}"/>
+                                    </div>
+                                </aura:if>
+                            </div>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+            <br/>
+        </div>
+    </div>
+</aura:component>

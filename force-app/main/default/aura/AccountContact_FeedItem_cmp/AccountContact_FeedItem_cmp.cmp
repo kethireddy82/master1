@@ -1,0 +1,207 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId,force:appHostable"
+                controller="Feed_PDFGenerator">
+    
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="objectType" type="string" />
+    <aura:attribute name="caseMesg" type="string" />
+    <aura:attribute name="feedtype" type="string" />
+    <aura:attribute name="startDate" type="date" />
+    <aura:attribute name="endDate" type="date" />
+    <aura:attribute name="isDisabled" type="Boolean" default="true" />
+    <aura:handler name="change" value="{!v.selectedLookUpRecord}" action="{!c.handleValueChange}"/>
+    <aura:attribute name="checkThis" type="Boolean" default="false" />
+    <aura:attribute type="sObject[]" name="latestCaseRecords" />
+    
+    <div class="container">
+        <div class="slds-page-header">
+            <div class="slds-grid">
+                <div class="slds-col slds-has-flexi-truncate">
+                    <div class="slds-media slds-no-space slds-grow">
+                        <div class="slds-media__figure">
+                            <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+                                <lightning:icon iconName="standard:feed" size="small" alternativeText="Indicates approval"/>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <nav>
+                                <ol class="slds-breadcrumb slds-line-height_reset">
+                                    <li class="slds-breadcrumb__item">
+                                        <span>Feed Items</span>
+                                    </li>
+                                </ol>
+                            </nav>
+                            <h1 class="slds-page-header__title slds-m-right_small slds-align-middle slds-truncate" title="Export Feed Items">Account/Contact Feed Items</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                    <div class="slds-button-group" role="group">
+                        <lightning:button variant="neutral" label="Export" disabled="{!v.isDisabled}" onclick="{!c.exportTOPDF}" />
+                        <lightning:button variant="neutral" label="Reset" onclick="{!c.resetPage}" />
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__detail-row">
+                <!--Section for select option-->
+                <div class="slds-grid">
+                    <!--Checkbox for Account/Contact-->
+                    <div class="slds-col slds-size--1-of-2">
+                        <div class="">
+                            <fieldset class="slds-form-element">
+                                <legend class="slds-form-element__legend slds-form-element__label" style="width:200px">Please select one option</legend>
+                                <div class="slds-form-element__control">
+                                    <label class="slds-radio ">
+                                        <ui:inputRadio aura:id="button1" name="clients" click="{!c.handleCheckAcc}" />
+                                        <span class="slds-radio--faux" style="border: 2px solid darkgray !important;"></span>
+                                        <span class="slds-form-element__label">Account</span>
+                                    </label>
+                                    <label class="slds-radio ">
+                                        <ui:inputRadio aura:id="button2" name="clients" click="{!c.handleCheckCont}" />
+                                        <span class="slds-radio--faux" style="border: 2px solid darkgray !important;"></span>
+                                        <span class="slds-form-element__label">Contact</span>
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <!--Section for search Lookup-->
+                    <div class="slds-col slds-size--1-of-2">
+                        <div class="" >
+                            <div aura:id="lookupAccount" class="toggleHide" style="width:200px">
+                                <c:customLookup aura:id="lookupAcc" objectAPIName="account" 
+                                                IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}" 
+                                                label="Account Name"/>
+                            </div>
+                            <div aura:id="lookupContact" class="toggleHide" style="width:200px" >
+                                <c:customLookup aura:id="lookupCont" objectAPIName="contact" 
+                                                IconName="standard:contact" selectedRecord="{!v.selectedLookUpRecord}" 
+                                                label="Contact Name"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="toggleHide" aura:id="selectFeed">
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size--1-of-2">
+                            <div style="padding: 2rem 2rem 0 0">
+                                <!--  <div class="" aura:id="selectDropDown">
+                                    <ui:inputSelect aura:id="levels" label="Contacts to Include" change="{!c.onSelectChange}">
+                                        <ui:inputSelectOption text="All" label="All" value="true"/>
+                                        <ui:inputSelectOption text="Only Contacts Associated to Account" label="Only Contacts Associated to Account"/>
+                                        <ui:inputSelectOption text="Contacts Not Associated to Account" label="Contacts Not Associated to Account"/>
+                                    </ui:inputSelect>  
+                                </div>  -->
+                                    <ui:inputDate aura:id="dateField" change="{!c.changeCaseTable}" label="Start Date" value="{!v.startDate}" displayDatePicker="true"/>
+                                    <ui:inputDate aura:id="dateField2" change="{!c.changeCaseTable}" label="End Date" value="{!v.endDate}" displayDatePicker="true"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size--1-of-2">
+                            <div style="padding: 2rem 0">
+                                <fieldset class="slds-form-element">
+                                    <legend class="slds-form-element__legend slds-form-element__label">Please select one Feed option</legend>
+                                    <div class="slds-form-element__control">
+                                        <label class="slds-radio ">
+                                            <ui:inputRadio aura:id="button1a" text="Attachments" name="feed" click="{!c.handleFeedItem}" />
+                                            <span class="slds-radio--faux" style="border: 2px solid darkgray !important;"></span>
+                                            <span class="slds-form-element__label">Attachments</span>
+                                        </label> 
+                                        <label class="slds-radio ">
+                                            <ui:inputRadio aura:id="button1a" text="ListEmail Message" name="feed" click="{!c.handleFeedItem}" />
+                                            <span class="slds-radio--faux" style="border: 2px solid darkgray !important;"></span>
+                                            <span class="slds-form-element__label">List Email Message</span>
+                                        </label>  
+                                        <label class="slds-radio ">
+                                            <ui:inputRadio aura:id="button1a" text="Email Message" name="feed" click="{!c.handleFeedItem}" />
+                                            <span class="slds-radio--faux" style="border: 2px solid darkgray !important;"></span>
+                                            <span class="slds-form-element__label">Email Message</span>
+                                        </label>  
+                                        <label class="slds-radio ">
+                                            <ui:inputRadio aura:id="button2a" text="Call Logs" name="feed" click="{!c.handleFeedItem}" />
+                                            <span class="slds-radio--faux" style="border: 2px solid darkgray !important;"></span>
+                                            <span class="slds-form-element__label">Call Logs</span>
+                                        </label>
+                                        <label class="slds-radio ">
+                                            <ui:inputRadio aura:id="button3a" text="Task" name="feed" click="{!c.handleFeedItem}" />
+                                            <span class="slds-radio--faux" style="border: 2px solid darkgray !important;"></span>
+                                            <span class="slds-form-element__label">Task</span>
+                                        </label>
+                                        <label class="slds-radio ">
+                                            <ui:inputRadio aura:id="button4a" text="Events" name="feed" click="{!c.handleFeedItem}" />
+                                            <span class="slds-radio--faux" style="border: 2px solid darkgray !important;"></span>
+                                            <span class="slds-form-element__label">Events</span>
+                                        </label>                          
+                                        <label class="slds-radio ">
+                                            <ui:inputRadio aura:id="button5a" text="Case Comments" name="feed" click="{!c.handleFeedItem}" />
+                                            <span class="slds-radio--faux" style="border: 2px solid darkgray !important;"></span>
+                                            <span class="slds-form-element__label">Case Comments</span>
+                                        </label>
+                                        <label class="slds-radio ">
+                                            <ui:inputRadio aura:id="button6a" text="All Feeds" name="feed" click="{!c.handleFeedItem}" />
+                                            <span class="slds-radio--faux" style="border: 2px solid darkgray !important;"></span>
+                                            <span class="slds-form-element__label">All Feeds</span>
+                                        </label>
+                                    </div>
+                                </fieldset>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 2rem 0">
+                        <aura:if isTrue="{! !empty(v.latestCaseRecords) }">
+                            <div style="background: #80808017;padding: 1rem;">
+                                <span>{!v.caseMesg}</span></div>
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer " style="1px solid rgb(217, 219, 221); ">
+                                <thead>
+                                    <tr class="slds-text-heading--label">
+                                        <th class="slds-is-sortable" scope="col">
+                                            <div class="slds-truncate" ></div>
+                                        </th>
+                                        <th class="slds-is-sortable" scope="col">
+                                            <div class="slds-truncate" >Case</div>
+                                        </th>
+                                        <th class="slds-is-sortable" scope="col">
+                                            <div class="slds-truncate" >Status</div>
+                                        </th>
+                                        <th class="slds-is-sortable" scope="col">
+                                            <div class="slds-truncate" >Category</div>
+                                        </th>
+                                        <th class="slds-is-sortable" scope="col">
+                                            <div class="slds-truncate" >Date Opened</div>
+                                        </th>
+                                        <th class="slds-is-sortable" scope="col">
+                                            <div class="slds-truncate" >Subject</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="data">
+                                    <aura:iteration items="{!v.latestCaseRecords}" var="case" indexVar="index">
+                                        <tr class="slds-hint-parent">
+                                            <th data-label="acc-name" role="row">
+                                                <a href="#" class="slds-truncate">{!index+1}</a>
+                                            </th>
+                                            <th data-label="acc-name" role="row">
+                                                <ui:outputURL value="{!'/'+case.Id}" label="{!case.CaseNumber}"/>
+                                            </th>
+                                            <th data-label="acc-name" role="row">
+                                                {!case.Status}
+                                            </th>
+                                            <th data-label="acc-name" role="row">
+                                                {!case.Origin}
+                                            </th>
+                                            <th data-label="acc-name" role="row">
+                                                <ui:outputDateTime value="{!case.CreatedDate}" class="slds-truncate"/>
+                                            </th>
+                                            <th data-label="acc-name" role="row">
+                                                <a href="#" class="slds-truncate">{!case.Subject}</a>
+                                            </th>
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                        </aura:if>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

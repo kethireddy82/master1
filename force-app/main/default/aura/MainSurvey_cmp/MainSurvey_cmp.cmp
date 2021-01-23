@@ -1,0 +1,10 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    
+    <aura:attribute name="stage" type="Map" default="{id:'id2', label:'Label 2'}" />
+    <aura:attribute name="progressIndicator" type="Aura.Component" />
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <div>
+        Helllo
+        
+    </div>
+</aura:component>

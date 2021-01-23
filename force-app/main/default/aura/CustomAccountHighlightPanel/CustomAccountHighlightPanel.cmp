@@ -1,0 +1,57 @@
+<!--
+Lightning Component : CustomAccountHighlightPanel
+-->
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId"  access="global">
+
+	<aura:attribute name="isSpinner" type="Boolean" /> 
+    <aura:attribute name="errorMessage" type="String" default="Loading..." />
+    <aura:attribute name="showFields" type="String[]" default="['Name','OPE_ID__c','On_Probation__c','MOU_Expiration_Date__c','Case_Indicator__c','Current_ICP__c','Enrolled_Students__c']"/>
+
+    <!--aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" /-->
+    <!--div class="slds-box"-->
+    <div class="slds-page-header slds-box">
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate">
+                <div class="slds-media slds-no-space slds-grow">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-case" title="Description of icon when needed">
+                            <lightning:icon iconName="standard:account" size="medium" alternativeText="Account"/>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <nav>
+                            <ol class="slds-breadcrumb slds-line-height_reset">
+                                <li class="slds-breadcrumb__item">
+                                    <span>Account</span>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-no-flex slds-grid slds-align-top">
+            </div>
+        </div>
+    
+        <div class="slds-grid slds-box slds-wrap slds-page-header__detail-row">
+        <lightning:recordForm aura:id="recordViewForm" 
+                                  objectApiName="Account"
+                                  columns="9"
+                             	  class="slds-truncate"
+                                  fields="{!v.showFields}"
+                                  recordId="{!v.recordId}"
+                                  mode="readonly"
+                                  onsuccess="{!c.onSuccess}"
+                                  onsubmit="{!c.onSubmit}"
+                                  onload="{!c.onLoad}"
+                                  onerror="{!c.onError}"
+                                  />  
+        </div>
+        
+    </div>
+
+    <aura:if isTrue="{!v.isSpinner}">
+        <lightning:spinner variant="brand"  size="large" />
+    </aura:if>
+</aura:component>

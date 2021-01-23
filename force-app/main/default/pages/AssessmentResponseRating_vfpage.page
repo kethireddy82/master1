@@ -1,0 +1,61 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="AssessmentResponseRating_Controller" renderAs="pdf">
+    <apex:includeLightning />
+    <head>
+    </head>
+    <body>
+        <div>
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th scope="col" width="10%" style="border: 1px solid #000000;">
+                            <div class="slds-truncate" title="No">No</div>
+                        </th>
+                        <th scope="col"  width="65%"  style="border: 1px solid #000000;">
+                            <div class="slds-truncate" title="Question ">Question </div>
+                        </th>
+                        <th scope="col"  width="15%"  style="border: 1px solid #000000;">
+                            <div class="slds-truncate" title="Response">Response</div>
+                        </th>
+                        <th scope="col"  width="10%"  style="border: 1px solid #000000;">
+                            <div class="slds-truncate" title="Rating">Rating</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!printDetails}" var="ques">
+                        <tr>
+                            <td data-label="No" style="border: 1px solid #000000;">
+                                <div class="slds-truncate" title="{!ques.no}">{!ques.no}</div>
+                            </td>
+                          <!--  <td data-label="Question" style="border: 1px solid #000000;">
+                                <div class="slds-truncate" title="{!ques.question}">{!ques.question}</div>
+                            </td>  -->
+                            <td data-label="No" style="border: 1px solid #000000">                         
+                                <div>
+                                    <apex:outputText value="{!ques.question}" escape="false" />
+                                </div>                        
+                            </td>
+                            
+                            <td data-label="Response" style="border: 1px solid #000000;">
+                                <div class="slds-truncate" style="display:{!IF(ques.multipleChoice != true, 'block','none')}">{!ques.response}</div>
+                                <div class="slds-truncate" style="display:{!IF(ques.multipleChoice == true, 'block','none')}">
+                                    <p>
+                                        <ul style="list-style-type: circle;">
+                                            <apex:repeat value="{!ques.responses}" var="res">
+                                                <li>{!res}</li>
+                                            </apex:repeat>
+                                    </ul>
+                                   </p>
+                            </div>
+                      
+                    </td>
+                    <td data-label="Rating" style="border: 1px solid #000000;">
+                        <div class="slds-truncate" title="{!ques.rating}">{!ques.rating}</div>
+                    </td>
+                </tr>
+        </apex:repeat>
+    </tbody>
+</table>
+</div>
+</body>
+</apex:page>

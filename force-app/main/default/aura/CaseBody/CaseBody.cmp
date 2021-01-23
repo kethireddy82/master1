@@ -1,0 +1,33 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"  access="global">  
+    <lightning:tabset selectedTabId="one">
+        <lightning:tab label="Details" id="one">
+            <lightning:card title="Case Detail" iconName="standard:case">
+        <p class="slds-p-horizontal_small">
+        <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Case">
+              <div class="slds-grid full forcePageBlockSectionRow">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:outputField fieldName="CaseNumber" />
+                    <lightning:outputField fieldName="Subject" />
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                     
+                    <lightning:outputField fieldName="ContactEmail"/>
+                </div>
+              </div>
+              <div class="slds-theme_default">
+                  <lightning:outputField fieldName="Description"/>
+              </div>
+        </lightning:recordViewForm>
+        </p>
+    </lightning:card>
+        </lightning:tab>
+        <lightning:tab label="Related" id="two">
+            <lightning:fileUpload label="Attach receipt"
+        name="fileUploader"
+        multiple="true"
+       
+        recordId="{!v.recordId}"
+          />
+        </lightning:tab>         
+    </lightning:tabset> 
+</aura:component>

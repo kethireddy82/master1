@@ -1,0 +1,37 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" controller="AssessmentScoringDownload_Controller">
+    <aura:attribute name="years" type="Years_For_Assessment_Scoring__c[]" default="[]"/>
+    <aura:attribute name="assessmentScoreRecords" type="Assessment_Scoring__c[]" default="[]"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:if isTrue="{!v.showSpinner}"> 
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+            <lightning:select name="select" label="Select a year" required="true" aura:id="yearPicklist">
+                <option text="None" value=""></option>
+                <aura:iteration items="{!v.years}" var="year">
+                    <option text="{!year.Name}" value="{!year.Name}"></option>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+        <div class="slds-col">
+            
+        </div>
+    </div>
+    <br/>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+            <lightning:button variant="brand" label="Download CSV" title="Download CSV" onclick="{! c.handleClick }" />
+        </div>
+        <div class="slds-col">
+            
+        </div>
+    </div>
+</aura:component>

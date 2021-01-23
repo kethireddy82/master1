@@ -1,0 +1,11 @@
+<aura:component >
+    <aura:attribute name="attachmentLst" type="List"/>
+    <aura:attribute name="assessmentId" type="string"/>     
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <p>        
+        Educational Institution Self-Assessment <br/>        
+        The purpose of this Educational Institution Self-Assessment is to confirm the institution’s commitment to excellence in educating military students. This assessment is part of a larger program to promote compliance with the Department of Defense (DoD) Voluntary Education Partnership Memorandum of Understanding (MOU) intended to create an educational environment for our Service members to excel. Completing this assessment will help the institution better meet the needs of our students and help the DoD provide the best educational opportunities possible for our Service members.
+        The questions in this self-assessment relate to the requirements set forth in the DoD Voluntary Education Partnership MOU and codified in DoD Instruction 1322.25, and will help the institution and the DoD understand the interactions between Service members and educational institutions. DoDI 1322.25 and further information on the MOU can be found at this link: https://www.dodmou.com.
+    </p>
+    <br/><br/>
+</aura:component>

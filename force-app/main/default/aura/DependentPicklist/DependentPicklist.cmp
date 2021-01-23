@@ -1,0 +1,72 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global"
+                controller="dependentPicklist_UpdateCtrl">
+    <!-- call doInit function on component load -->  
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    
+    <!-- aura attributes-->  
+    <aura:attribute name="listControllingValues" type="list" default="[]" description="to store controller field values"/>
+    <aura:attribute name="listDependingValues" type="list" description="to store dependent field values"/>
+
+ 
+    <aura:attribute name="depnedentFieldMap" type="map" description="map to store dependent values with controlling value"/>
+
+ 
+    <aura:attribute name="bDisabledDependentFld" type="boolean" default="true"/> 
+    
+    <aura:attribute name="objDetail" type="Case" default="{'sobjectType' : 'Case'}"/>
+    <aura:attribute name="controllingFieldAPI" type="string" default="Category__c" description="store field API name of Controller field"/>
+    <aura:attribute name="dependingFieldAPI" type="string" default="Subcategory__c" description="store field API name of dependent field"/>
+     <aura:registerEvent name="onChange" type="c:DependentControllingEvent"/>
+    <aura:registerEvent name="onChangeDependent" type="c:DependentPickListEvent"/>
+    <aura:attribute name="CategorySelected" type="boolean" default ="false"/>
+    <aura:attribute name="CategoryDescription" type="string" />
+    <aura:attribute name="IsCategoryNotFilled" type="boolean" default ="false"/>
+    <aura:method name="CategoryValidation" action="{!c.showValidation}" access="PUBLIC"/>
+    <!--Controller Field-->
+    <!--lightning:layoutItem size="12" padding="around-small"-->  
+    <!--aura:if isTrue="{!v.CategorySelected}">
+        <br/>
+                                <div style="color:red">
+                                    {!v.CategoryDescription}
+                                </div>
+                            </aura:if-->
+        <lightning:select name="controllerFld"
+                          value="{!v.objDetail.Category__c}"
+                          aura:id="conCountry"
+                          label="Category"
+                          onchange="{!c.onControllerFieldChange}">
+            <aura:iteration items="{!v.listControllingValues}" var="val">
+                <option value="{!val}">{!val}</option>
+            </aura:iteration>
+        </lightning:select>
+   <aura:if isTrue="{!v.IsCategoryNotFilled}">
+                                <div style="color:red;float: left">
+                                    Please select the Category
+                                </div>
+                                <br/>
+                            </aura:if>
+    <!--/lightning:layoutItem-->
+    
+    <!--Dependent Field-->
+   
+            <lightning:dualListbox name="dependentFld"
+                           label= "Sub Category"
+                           sourceLabel="Available"
+                           selectedLabel="Choosen"
+                           fieldLevelHelp="Sub Category of Case, select all that apply"
+                           options="{!v.listDependingValues}"
+                           onchange="{! c.handleChange }"
+        					disabled="{!v.bDisabledDependentFld}"/>
+        
+        <!--lightning:select name="dependentFld"
+                          value="{!v.objDetail.City__c}"
+                          label="City"
+                          disabled="{!v.bDisabledDependentFld}">
+            <aura:iteration items="{!v.listDependingValues}" var="val">
+                <option value="{!val}">{!val}</option>
+            </aura:iteration>
+        </lightning:select-->
+   
+    
+</aura:component>

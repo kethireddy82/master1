@@ -1,0 +1,21 @@
+<aura:component controller="ICPWebVerification_Controller" implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+	<aura:attribute name="attachmentList" type="ICPWebVerification_Controller.responseAttachs[]"/>
+    <aura:attribute name="documentId" type="Id" default=""/>
+    <aura:attribute name="readonly" type="boolean" default="false"/>
+    
+    <fieldset class="slds-form-element fieldClass">
+        <legend class="slds-form-element__label slds-text-title_caps">Attachment</legend>
+        <div class="slds-form-element__group">
+            <div class="slds-form-element__row">
+                <aura:if isTrue="{!v.readonly != true}">
+                    <lightning:fileUpload label="Upload File" multiple="true" 
+                                          accept="['.pdf', '.jpeg','.zip','.png','.rar','.jpg']"  
+                                          recordId="{!v.documentId}" 
+                                          aura:id="multifileUpload" 
+                                          onuploadfinished="{!c.handleUploadFinished}" />
+                </aura:if>
+            </div>
+        </div>
+        <c:attachmentViewer_cmp readonly="{!v.readonly}" attachmentLst="{!v.attachmentList}" isICPWebVerificationAttachment="true"/>
+    </fieldset>
+</aura:component>

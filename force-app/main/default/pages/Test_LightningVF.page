@@ -1,0 +1,18 @@
+<apex:page standardController="Account" sidebar="false" showHeader="false">
+    <apex:includeScript value="/lightning/lightning.out.js" />
+
+    <script>
+        $Lightning.use("c:Test_app", function() {
+            $Lightning.createComponent(
+                "c:MainSurvey_cmp",
+                {},
+                "lightning",
+                function(cmp) {
+                    console.log("Component created!");
+                });
+            });
+    </script>
+    <body >
+    <div id="lightning"></div>
+    </body>
+</apex:page>

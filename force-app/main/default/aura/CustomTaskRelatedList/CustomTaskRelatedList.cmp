@@ -1,0 +1,99 @@
+<aura:component controller="CustomTaskDisplayController" implements="forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="listOfTask" type="Task[]" default=""/>
+    <aura:attribute name="listOfTaskLimited" type="Task[]" default=""/>
+    <aura:attribute name="isError" type="Boolean" default="false"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="ErrorMessage" type="string" />
+    <aura:attribute name="startingRecordIndex" type="Integer" />
+    <aura:attribute name="lastRecordIndex" type="Integer"/>
+    <aura:attribute name="maxRecordToShow" type="Integer" default="5"/>
+    <aura:attribute name="totalNumberOfRecords" type="Integer"/>
+    <aura:attribute name="countOfTask" type="Integer" default=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.myAction}"/>
+    
+    <aura:if isTrue="{! v.countOfTask == null }">
+        <article class="slds-card">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    <div class="slds-media__figure">
+                    </div>
+                    <div class="slds-media__body slds-truncate">
+                        <h2>
+                            <a href="javascript:void(0);" class="slds-text-link--reset">
+                                <span class="slds-text-heading--small">You don't have any open Tasks</span>
+                            </a>
+                        </h2>
+                    </div>
+                </header>
+            </div>
+        </article>        
+    </aura:if>
+    
+    
+   <aura:if isTrue="{! v.countOfTask != null }">         
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                </div>
+                <div class="slds-media__body slds-truncate">
+                    <h2>
+                        <a href="javascript:void(0);" class="slds-text-link--reset">
+                            <span class="slds-text-heading--small">All Open Task(s) ({!v.countOfTask})</span>
+                        </a>
+                    </h2>
+                </div>
+            </header>
+        </div>
+        
+       
+        
+        <div class="slds-card__body">
+            <aura:iteration items="{!v.listOfTaskLimited}" var="taskObj" indexVar="i">
+                <div class="slds-card__body--inner slds-grid slds-wrap slds-grid--pull-padded">
+                    <div class="slds-tile slds-media slds-card__tile slds-p-horizontal--small slds-size--1-of-1 slds-hint-parent">
+                        <div class="slds-media__figure">
+                            <div class="slds-icon_container">
+                                <span class="slds-assistive-text">Task</span>
+                            </div>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-grid slds-grid--align-spread slds-has-flexi-truncate">
+                                <h3 class="slds-truncate" title="Subject"><a href="javascript:void(0);">{!taskObj.Subject}</a></h3>
+                            </div>
+                            <div class="slds-tile__detail slds-text-body--small">
+                                <dl class="slds-dl--horizontal">
+                                    <dt class="slds-dl--horizontal__label">
+                                        <span class="slds-truncate" title="Status">Status:</span>
+                                    </dt>
+                                    <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                        <span class="slds-truncate" title="{!taskObj.Status}">{!taskObj.Status}</span>
+                                    </dd>
+                                    <dt class="slds-dl--horizontal__label">
+                                        <span class="" title="Priority">Priority:</span>
+                                    </dt>
+                                    <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                        <span class="" title="{!taskObj.Priority}">{!taskObj.Priority}</span>
+                                    </dd>
+                                    <dt class="slds-dl--horizontal__label">
+                                        <span class="" title="Due Date">Due Date:</span>
+                                    </dt>
+                                    <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                                        <span class="" title="{!taskObj.ActivityDate}">{!taskObj.ActivityDate}</span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </aura:iteration>
+        </div>
+        <div class="slds-card__footer slds-align_absolute-center">
+            <lightning:button label="Previous" iconName="utility:chevronleft" iconPosition="left" disabled="{!v.startingRecordIndex == 0}"  onclick="{!c.previousList}" />
+            <lightning:button label="Next" iconName="utility:chevronright" iconPosition="right" disabled="{!v.lastRecordIndex >= v.totalNumberOfRecords-1}" onclick="{!c.nextList}" />
+        </div>
+    </article>
+         
+          </aura:if>
+</aura:component>

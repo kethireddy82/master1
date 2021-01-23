@@ -1,0 +1,18 @@
+<apex:page renderAs="advanced_pdf" >
+    <apex:includeLightning />
+
+    <div id="lightning" />
+
+    <script>
+        $Lightning.use("c:AttachmentPreviewApp", function() {
+          $Lightning.createComponent("c:AttachmentPreview",
+              { AttachmentId : "" },
+              "lightning",
+              function(cmp) {
+                console.log("button was created");
+                // do some stuff
+              }
+          );
+        });
+    </script>
+</apex:page>

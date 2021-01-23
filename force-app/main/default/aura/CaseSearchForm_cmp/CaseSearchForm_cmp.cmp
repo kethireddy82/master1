@@ -1,0 +1,60 @@
+<aura:component controller="CaseSearchController" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="showError" type="Boolean" default="false"/>
+    <aura:attribute name="errorMessage" type="String" default=""/>
+    <aura:registerEvent name="ClearSearchForm_event" type="c:ClearSearchForm_event"/>
+    <aura:registerEvent name="CaseResults_event" type="c:CaseResults_event"/>
+    <aura:if isTrue="{!v.showSpinner}"> 
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div class="slds-scope">
+        <!-- SCREEN SIZE OCCUPIED-->
+        <!--Create a collapsible section for basic search-->
+        <div class="slds-p-around--x-small">
+            
+            <div class="slds-show slds-p-around--x-small" aura:id="basicSearch">
+                <div class="slds-form slds-form_stacked slds-size_3-of-3 slds-m-vertical--medium" onkeyup="{!c.keyBoardEventHandler}">
+                    <div class="slds-grid slds-wrap">
+                        <!-- SLDS COLUMN 1-->
+                        <div class="slds-col">
+                            <!-- FORM ELEMENT 1-->
+                            <div class="slds-form-element">
+                                <lightning:input type="email"  aura:id="searchForm" class="slds-input_bare" 
+                                                 name="email3" placeholder="lynncoastguard@test.com" label="Email" messageWhenTypeMismatch="Please check the email id" 
+                                                 onchange="{!c.clearFormErrorOnValueChange}"/>
+                            </div> 
+                            <!-- /FORM ELEMENT 2-->
+                        </div>
+                        <div class="slds-col">
+                            <!-- FORM ELEMENT 3-->
+                            <div class="slds-form-element" >
+                                <lightning:input aura:id="searchForm" class="slds-input_bare" type="text" label="Case Number" name="case" 
+                                                 maxlength="14" placeholder="e.g., 00001164" pattern="[0-9]{8}" 
+                                                 messageWhenPatternMismatch="Please check the case number"
+                                                 onchange="{!c.clearFormErrorOnValueChange}"/>
+                            </div> 
+                            <!-- /FORM ELEMENT 3-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="slds-box_bare slds-box_x-small slds-text-align_center slds-m-around_x-small">
+        <lightning:button variant="neutral" iconName="utility:search" class="slds-button"  aura:id="search" type="submit" label="Search" onclick="{!c.searchDetailsOnButtonClick}" />
+        <lightning:button variant="neutral" iconName="utility:clear" class="slds-button"  aura:id="clear" type="reset" label="Clear" onclick="{!c.clearSearchForm }" />
+    </div> 
+    <aura:if isTrue="{!v.showError}">
+        <div class="slds-box_bare slds-box_x-small slds-text-align_center slds-m-around_x-small ">
+            <span class="slds-align_absolute-center slds-text-color_error" >{!v.errorMessage}</span>
+        </div>
+    </aura:if>
+    <!-- / SCREEN SIZE OCCUPIED-->
+</div>
+</aura:component>

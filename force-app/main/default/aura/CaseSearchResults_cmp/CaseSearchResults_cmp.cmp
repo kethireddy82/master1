@@ -1,0 +1,62 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="showCase" type="Boolean" default="false"/>
+    <aura:attribute name="showCaseDetails" type="Boolean" default="false"/>
+    <aura:handler event="c:CaseResults_event" action="{!c.setResult}"/>
+    <aura:attribute name="caseObject" type="Case" default="{}"/>
+    <aura:attribute name="steps" type="String[]" default="[]"/>
+    
+    <aura:handler event="c:ClearSearchForm_event" action="{!c.clearList}"/>
+    <aura:if isTrue="{!v.showCase}">
+        <div class="slds-grid slds-nowrap">
+            <table class="slds-table slds-table_bordered slds-table_resizable-cols slds-table_fixed-layout slds-max-medium-table_stacked" role="grid">
+                <thead>
+                    <tr class="slds-text-title_caps slds-line-height--reset">
+                        <th scope="col" class="slds-text-title_caps" width="125">
+                            <div class="slds-cell-shrink" title="Action">Action</div>
+                        </th>
+                        <th scope="col" class="slds-is-resizable slds-text-title_caps">
+                            <a href="javascript:void(0);" class="slds-th__action slds-text-link_reset" tabindex="0">
+                                <div class="slds-cell-shrink" title="Case Number">CaseNumber</div>
+                                <span class="slds-assistive-text" aria-live="assertive" aria-atomic="true"></span>
+                            </a>
+                        </th>
+                        <th scope="col" class="slds-is-sortable slds-is-resizable slds-text-title_caps">
+                            <a href="javascript:void(0);" class="slds-th__action slds-text-link_reset" tabindex="0">
+                                <div class="slds-cell-shrink" title="Subject">Subject</div>
+                                <span class="slds-assistive-text" aria-live="assertive" aria-atomic="true"></span>
+                            </a>
+                        </th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr class="slds-hint-parent">
+                        
+                        <td role="gridcell" scope="row" data-label="action">
+                                <lightning:button aura:id="viewButton" label="View"
+                                                      iconName="utility:new_window"
+                                                      iconPosition="left"
+                                                      variant="brand"
+                                                      type="submit" value="{!v.caseObject.Id}" onclick="{!c.viewCase}"/>
+                                    
+                            </td>
+                            
+                            <td role="gridcell" scope="row" data-label="Case Number">
+                                <div class="slds-grow slds-cell-wrap" title="{!v.caseObject.CaseNumber}">{!v.caseObject.CaseNumber}</div>
+                            </td>
+							<td role="gridcell" scope="row" data-label="Subject">
+                                <div class="slds-grow slds-cell-wrap" title="{!v.caseObject.Subject}">{!v.caseObject.Subject}</div>
+                            </td>                            
+                    </tr>
+                    
+                    <!--</aura:iteration>-->
+                </tbody>
+            </table>
+        </div>
+    </aura:if>
+    <br/>
+    
+    <aura:if isTrue="{!v.showCaseDetails}">
+        <c:CaseStatusProgressIndicator_cmp steps="{!v.steps}" recordId="{!v.recordId}" caseObject="{!v.caseObject}"/>
+    </aura:if>
+</aura:component>

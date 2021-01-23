@@ -1,0 +1,214 @@
+<aura:component controller="ICPWebVerificationNew_Controller" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="progressIndicator" type="Aura.Component" />
+    <aura:attribute name="dateValue" type="String" default=""/>
+    <aura:attribute name="accountName" type="String" default=""/>
+    <aura:attribute name="opeID" type="String" default=""/>
+    <aura:attribute name="userName" type="String" default=""/>
+    <aura:attribute name="currentPage" type="Integer" default="1"/>
+    <aura:attribute name="totalScore" type="Integer" default="0"/>
+    <aura:attribute name="totalMaxScore" type="Integer" default="0"/>
+    <aura:attribute name="normalizedScore" type="Decimal" default="0.00"/>
+    <aura:attribute name="parentRecordId" type="Id"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="showError" type="Boolean" default="false"/>
+    
+    <aura:attribute name="isOpenPopup" type="Boolean" default="false"/>
+    <aura:attribute name="listOfResponses" type="ICP_Web_Verification_Response__c[]" default="[]"/>
+    
+    <aura:handler event="c:BackendScoringEvent" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.isOpenPopup}">
+        <section aura:id="editdialog" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-modal_large slds-fade-in-open">
+            
+            <div class="slds-modal__container">
+                <aura:if isTrue="{!v.showSpinner}"> 
+                    <div aura:id="spinnerId" class="slds-spinner_container">
+                        <div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-is-relative" role="alert">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:if>
+                <div class="slds-modal__content slds-p-around--medium slds-grid  ">
+                    <div class="container">
+                        <div class="slds-page-header">
+                            <div class="slds-grid ">
+                                <div class="slds-col">
+                                    <div class="slds-media ">
+                                        <div class="slds-media__figure">
+                                            <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+                                                <lightning:icon iconName="standard:feed" size="small" alternativeText="Indicates approval"/>
+                                            </span>
+                                        </div>
+                                        <div class="slds-media__body">
+                                            <nav>
+                                                <ol class="slds-breadcrumb slds-line-height_reset">
+                                                    <li class="slds-breadcrumb__item">
+                                                        <span>Back End Scoring</span>
+                                                    </li>
+                                                </ol>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-grid">
+                            
+                            <aura:if isTrue="{!v.showError}">
+                                <div class="slds-text-align_center slds-text-color_error slds-text-heading_large" style="height:50%">
+                                    <p>The web verification has not been completed. Please complete the web verification to view the scores.</p>
+                                </div>
+                                <aura:set attribute="else">
+									<div class = "slds-grid slds-wrap">
+										<div class= "slds-col">
+                                        <p class="top-line">
+                                            <b><h1>Web Verification Checklist</h1></b>
+                                        </p><br/>
+                                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_striped slds-table_fixed-layout slds-max-medium-table_stacked" role="grid">
+											<thead>
+												<tr class="slds-line-height_reset">
+													<th scope="col">
+														<div title="Instituition Name">Institution Name</div>
+													</th>
+													<th scope="col">
+														<div title="OPEID">OPEID</div>
+													</th>
+													<th scope="col">
+														<div title="Compliance Analyst Name">Compliance Analyst Name</div>
+													</th>
+													<th scope="col">
+														<div title="Date">Date</div>
+													</th>
+												</tr>
+											</thead>
+                                            <tbody>
+												<tr class="slds-hint-parent">
+													<td role ="gridcell" data-label="Instituition Name">
+														<div class="slds-grow slds-cell-wrap" title="{!v.accountName}">{!v.accountName}</div>
+													</td>
+													<td role ="gridcell" data-label="OPEID">
+														<div class="slds-grow slds-cell-wrap" title="{!v.opeId}">{!v.opeId}</div>
+													</td>
+													<td role ="gridcell" data-label="Compliance Analyst Name">
+														<div class="slds-grow slds-cell-wrap" title="{!v.userName}">{!v.userName}</div>
+													</td>
+													<td role ="gridcell" data-label="Date">
+														<div class="slds-grow slds-cell-wrap" title="{!v.dateValue}">{!v.dateValue}</div>
+													</td>
+												</tr>
+											</tbody>
+                                        </table>
+										<br/>
+                                        <p class="top-line">
+                                            <b><h1>Questionnaires</h1></b>
+                                        </p><br/>
+                                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_striped slds-table_fixed-layout slds-max-medium-table_stacked" role="grid">
+                                            <thead>
+                                                <tr class="slds-line-height_reset">
+                                                    <th scope="col">
+                                                        <div title="Q#">Q#</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div title="Question text">Question Text</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div title="Possible Answers">Possible Answers</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div title="Answers"> Answers</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div title="Answers score"> Answers score</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div title="Question weight">Question weight</div>
+                                                    </th>
+                                                    <th scope="col">
+                                                        <div title="Question score">Question score</div>
+                                                    </th>
+                                                    <!--th scope="col">
+                                                        <div title="Max score">Max score</div>
+                                                    </th-->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <aura:iteration items="{!v.listOfResponses}" var="response">
+                                                    <tr class="slds-hint-parent">
+                                                        <td role ="gridcell" data-label="Q#">
+                                                            <div class="slds-grow slds-cell-wrap" title="{!response.Name}">{!response.Name}</div>
+                                                        </td>
+                                                        <td role ="gridcell" data-label="Question text">
+                                                            <div class="slds-grow slds-cell-wrap" title="{!response.Question__c}">{!response.Question__c}</div>
+                                                        </td>
+                                                        <td role ="gridcell" data-label="Possible Answers">
+                                                            <div class="slds-grow slds-cell-wrap" title="{!response.Picklist_options__c}">{!response.Picklist_options__c}</div>
+                                                        </td>
+                                                        <td role ="gridcell" data-label="Answers">
+                                                            <div class="slds-grow slds-cell-wrap" title="{!response.Yes_No__c}">{!response.Yes_No__c}</div>
+                                                        </td>
+                                                        <td role ="gridcell" data-label="Answers score">
+                                                            <div class="slds-grow slds-cell-wrap" title="{!response.Answer_Score__c}">{!response.Answer_Score__c}</div>
+                                                        </td>
+                                                        <td role ="gridcell" data-label="Question weight">
+                                                            <div class="slds-grow slds-cell-wrap" title="{!response.Question_Weight__c}">{!response.Question_Weight__c}</div>
+                                                        </td>
+                                                        <td role ="gridcell" data-label="Question score">
+                                                            <div class="slds-grow slds-cell-wrap" title="{!response.QuestionScore__c}">{!response.QuestionScore__c}</div>
+                                                        </td>
+                                                        <!--td role ="gridcell" data-label="Max score">
+                                                            <div class="slds-grow slds-cell-wrap" title="{!response.Max_Score__c}">{!response.Max_Score__c}</div>
+                                                        </td-->
+                                                    </tr>
+                                                </aura:iteration>
+                                            </tbody>
+                                        </table>
+                                        
+                                        <br/>
+										<table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_striped slds-table_fixed-layout slds-max-medium-table_stacked" role="grid">
+											<thead>
+												<tr class="slds-line-height_reset">
+													<th scope="col">
+														<div title="Total Score">Total Score</div>
+													</th>
+													<!--<th scope="col">
+														<div title="Max Score">Max Score</div>
+													</th>-->
+													<th scope="col">
+														<div title="Normalized Score">Normalized Score</div>
+													</th>
+												</tr>
+											</thead>
+                                            <tbody> 
+												<tr class="slds-hint-parent ">
+													<td role ="gridcell" data-label="Total Score">
+														<div class="slds-grow slds-cell-wrap" title="{!v.totalScore}">{!v.totalScore}</div>
+													</td>
+													<!--<td role ="gridcell" data-label="Max Score">
+														<div class="slds-grow slds-cell-wrap" title="{!v.totalMaxScore}">{!v.totalMaxScore}</div>
+													</td>-->
+													<td role ="gridcell" data-label="Normalized Score">
+														<div class="slds-grow slds-cell-wrap" title="{!v.normalizedScore}">{!v.normalizedScore}</div>
+													</td>
+												</tr>
+											</tbody>
+                                        </table>
+									</div>
+									</div>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button class="slds-button" label="Download as CSV" onclick="{!c.downloadCSV}"/>
+                    <lightning:button class="slds-button" label="Close" onclick="{!c.closeModal}"/>
+                </footer>
+            </div>
+            
+        </section>
+    </aura:if>
+    
+</aura:component>

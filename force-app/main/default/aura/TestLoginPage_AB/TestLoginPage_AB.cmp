@@ -1,0 +1,6 @@
+<aura:component implements="lightning:availableForFlowScreens" access="global" >
+	 <div id="sfdc_username_container" class="sfdc">
+                <span id="sfdc_user" class="login-icon" data-icon="a"></span>
+                <ui:inputText value="" aura:id="username" placeholder="{!v.usernameLabel}" keyup="{!c.onKeyUp}" class="input sfdc_usernameinput sfdc" label="{!v.usernameLabel}" labelClass="assistiveText"/>
+            </div>
+</aura:component>

@@ -1,0 +1,10 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:appHostable" access="global" >
+	<aura:attribute name="AttachmentId" type="String" />
+    <!--lightning:fileCard fileId="069r0000000ifSxAAI" description=""/><br/>
+    <lightning:fileCard fileId="069r0000000GSJcAAO" description=""/><br/>
+    <lightning:fileCard fileId="069r0000000HsDmAAK" description=""/><br/>
+    <lightning:fileCard fileId="069r0000000I1d0AAC" description=""/><br/>
+    <lightning:fileCard fileId="069r0000000Z3leAAC" description=""/-->
+    This is a test component
+    
+</aura:component>

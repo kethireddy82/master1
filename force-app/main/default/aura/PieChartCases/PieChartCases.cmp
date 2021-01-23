@@ -1,0 +1,5 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" controller="TaskManagerChart">
+  <!--  <ltng:require scripts="{!$Resource.Chartjs+ '/Chart.min.js'}"
+                  afterScriptsLoaded="{!c.scriptsLoaded}" /> -->
+    <canvas id="pie-chart" width="950" height="250"></canvas>
+ </aura:component>

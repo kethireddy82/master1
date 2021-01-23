@@ -1,0 +1,7 @@
+<aura:component>
+    <div>
+        <h2>Thank you !</h2>
+        <p>Your assessment is successfully completed. You will receive a confirmation email shortly.
+        </p>
+    </div>
+</aura:component>

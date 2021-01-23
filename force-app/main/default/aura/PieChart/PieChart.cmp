@@ -1,0 +1,28 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" controller="TaskManagerChart">
+    <ltng:require scripts="{!join(',',
+                           $Resource.ChartJS23)}"
+                  afterScriptsLoaded="{!c.scriptsLoaded}" />
+    <aura:attribute name="casesPresent" type="Integer" />
+       <aura:if isTrue="{!v.casesPresent == 0}">        
+        <!-- content renders if false -->
+        <div style="float: left;"> 
+            <article class="slds-card">
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                        <div class="slds-media__body slds-truncate">
+                            <h2>
+                                <a href="javascript:void(0);" class="slds-text-link--reset">
+                                    <span class="slds-text-heading--small">You don’t have any open Cases</span>
+                                </a>
+                            </h2>
+                        </div>
+                    </header>
+                </div>
+            </article>   
+        </div>  
+    </aura:if>
+    <div style="float: left;"> 
+        <canvas id="pie-chart" width="650" height="450"></canvas>
+    </div>     
+ 
+</aura:component>

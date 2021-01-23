@@ -1,0 +1,24 @@
+.THIS .slds-truncate {
+
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.THIS .slds-form-element__label {
+    float: none;
+}
+.THIS .slds-form-element__control{
+    padding-left: 0%;
+}
+
+.THIS .slds-border_bottom {
+    border-bottom: 0px solid rgb(212, 212, 212);
+}
+.THIS.slds-page-header {
+    background-color: rgb(76, 168, 249);
+}
+.THIS .slds-col {
+    padding-right: 0.75rem;
+    padding-left: 1.75rem;
+}

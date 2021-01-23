@@ -1,0 +1,16 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId"  access="global">
+    <div class="slds-box">
+        <lightning:recordForm aura:id="recordViewForm" 
+                                  objectApiName="Contact"
+                                  columns="2"
+                             	  class=""
+                                  recordId="{!v.recordId}"
+                                  mode="View"
+                                  layoutType="Full"
+                                  onsuccess="{!c.onSuccess}"
+                                  onsubmit="{!c.onSubmit}"
+                                  onload="{!c.onLoad}"
+                                  onerror="{!c.onError}"
+                                  />
+    </div>
+</aura:component>

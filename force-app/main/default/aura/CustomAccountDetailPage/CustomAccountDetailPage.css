@@ -1,0 +1,17 @@
+.THIS .slds-truncate {
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.THIS .slds-form-element__label {
+    float: none;
+    max-width: fit-content;
+}
+.THIS .slds-form-element__control{
+    padding-left: 0%;
+}
+.THIS.slds-form-element__static {
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+}

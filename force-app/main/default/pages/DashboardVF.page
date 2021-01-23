@@ -1,0 +1,5 @@
+<apex:page standardController="Case"  recordSetvar="cases"  >
+ 
+<analytics:reportChart developerName="AB" reportId="01Zr00000007z4v" size="small"></analytics:reportChart>
+ 
+</apex:page>

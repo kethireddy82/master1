@@ -1,0 +1,81 @@
+<aura:component >
+    <aura:attribute name="intiMethod" type="Survey_Controller.wrapperClass[]" />
+    <aura:attribute name="assessmentFinal" type="Assessment__c"/>
+    <lightning:accordion aura:id="accordion" >
+        <lightning:accordionSection name="A" label="Agreement">
+            <aura:set attribute="body">
+                <div class="slds-form slds-form_compound">
+                    <fieldset class="slds-form-element">
+                        <div class="slds-form-element__group">
+                            <div class="slds-form-element__row">
+                                <div class="slds-form-element slds-size_1-of-2">                                    
+                                    <lightning:input value="{!v.assessmentFinal.Name__c}" label="Name"
+                                                     required="true"/>
+                                </div>
+                                <div class="slds-form-element slds-size_1-of-2">                                    
+                                    <lightning:input value="{!v.assessmentFinal.Title__c}" label="Title"
+                                                     required="true"/>
+                                </div>
+                            </div>
+                            <div class="slds-form-element__row">
+                                <div class="slds-form-element slds-size_1-of-2">                                    
+                                    <lightning:input type="date" value="{!v.assessmentFinal.Date__c}" 
+                                                     required="true" name="date1" label="Date" />
+                                    
+                                </div>
+                                <div class="slds-form-element slds-size_1-of-2">
+                                    <lightning:input type="checkbox" checked="{!v.assessmentFinal.Is_certify__c}"
+                                                     label="I hereby certify the answers provided are accurate" required="true"/>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </aura:set>
+        </lightning:accordionSection>
+    </lightning:accordion>
+    <lightning:accordion aura:id="accordion2" >
+        <lightning:accordionSection name="B" label="Review Section">
+            <aura:set attribute="body">
+                <table class="slds-table_bordered slds-table_cell-buffer table" width="100%">
+                    <thead>
+                        <tr >
+                            <th scope="col" width="50%" style="border: 1px solid #000000;">
+                                <div  title="Question">Question</div>
+                            </th>
+                            
+                            <th scope="col" width="40%" style="border: 1px solid #000000;">
+                                <div  title="Response">Response</div>
+                            </th>
+                            <th scope="col" width="10%" style="border: 1px solid #000000;">
+                                <div  title="Last ModifiedBy">Last ModifiedBy</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.intiMethod}" var="ques" indexVar="index">
+                            <aura:if isTrue="{!ques.surveyQues.RecordType.Name == 'Questions'}"> 	
+                                <tr>
+                                    <td data-label="Question" style="border: 1px solid #000000;">
+                                        <!--  <div  title="Question">{!ques.surveyQues.Question__c}</div> -->
+                                          <ui:outputRichText class="slds-text-longform" value="{!ques.surveyQues.Question__c}"/>
+                                    </td>
+                                      <!--   <fieldset class="slds-form-element fieldClass">
+                                                             <ui:outputRichText class="slds-text-longform" value="{!ques.surveyQues.Question__c}"/>
+                                                            </fieldset>  -->
+                                       
+                                    <td data-label="Response" style="border: 1px solid #000000;">
+                                        <div  title="Response">{!ques.surveyResponse.Response__c}</div>
+                                    </td>
+                                    <td data-label="Last ModifiedBy" style="border: 1px solid #000000;"> 
+                                        <div  title="Last ModifiedBy">{!ques.lastModifiedByUserName}</div>
+                                    </td>
+                                </tr>
+                            </aura:if>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </aura:set>
+        </lightning:accordionSection>         
+    </lightning:accordion>
+</aura:component>

@@ -1,0 +1,12 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"/>
+    <div style="width: 100%;background-color: white;color: black; height: 120px; border-radius: 2px; border: none; margin: 0; padding: 15px 0px; font-weight:500; font-size: small; text-align: center;">
+    		<p>        
+        If you have any comments or questions regarding this Vo LEd Customer Relationship Management (CRM) Tool, please contact us at:<br/>
+        The Voluntary Education Office  <br/>
+        OASD Readiness (Force Education and Training)   <br/>
+        <i class="fa fa-envelope"></i> <lightning:icon iconName="utility:email" alternativeText="email" title="Image" />&nbsp;osd.pentagon.ousd-p-r.mbx.vol-edu-compliance@mail.mil <b>OR</b>  Click <a href="mailto:osd.pentagon.ousd-p-r.mbx.vol-edu-compliance@mail.mil">here </a>to email us <br/>   
+        <lightning:icon iconName="utility:dialing" alternativeText="email" title="Image" /> <i class="fa fa-phone" style="font-size:24px"></i> &nbsp; <a href="tel:1-703-614-7584">1-562-867-5309</a>
+    		</p>
+	</div>    
+</aura:component>

@@ -1,0 +1,1441 @@
+<aura:component controller="ICPWebVerificationNew_Controller" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+    <aura:attribute name="currentPage" type="Integer" default="1"/>
+    <aura:attribute name="parentRecordId" type="Id"/>
+    <aura:attribute name="isOpenPopup" type="Boolean" default="false"/>
+    <aura:attribute name="lastPage" type="Integer" default="7"/>
+    <aura:attribute name="icpWebVerificationObj" type="ICP_Web_Verification__c" default="{}"/>
+	<aura:attribute name="isOpen" type="Boolean" default="false"/>
+	<aura:attribute name="icpObject" type="Assessment__c" default="{}"/>
+	<aura:attribute name="readOnly" type="Boolean" default="false"/>
+	<aura:attribute name="currentQuestionNo" type="String" default="1"/>
+    <aura:attribute name="icpId" type="String" default=""/>
+    <aura:attribute name="icpYear" type="String" default=""/>
+	
+    <aura:attribute name="Question1URLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question2aURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question2bURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question2cURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question2dURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question2eURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question2fURLRequired" type="Boolean" default="false"/>
+    <aura:attribute name="Question3URLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question4aURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question4bURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question4cURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question4dURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question4eURLRequired" type="Boolean" default="false"/>
+    <aura:attribute name="Question5URLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question6aURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question6bURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question6cURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question6dURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question6eURLRequired" type="Boolean" default="false"/>
+    <aura:attribute name="Question6fURLRequired" type="Boolean" default="false"/>
+    <aura:attribute name="Question7URLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question8URLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question9URLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question10aURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question10bURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question10cURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question10dURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question10eURLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question11URLRequired" type="Boolean" default="false"/>
+	<aura:attribute name="Question12URLRequired" type="Boolean" default="false"/>
+    <aura:attribute name="Question13URLRequired" type="Boolean" default="false"/>
+    <aura:attribute name="Question14URLRequired" type="Boolean" default="false"/>
+    <aura:attribute name="Question15URLRequired" type="Boolean" default="false"/>
+    <aura:attribute name="Question16URLRequired" type="Boolean" default="false"/>
+	
+	<aura:attribute name="showQuestion2" type="Boolean" default="false"/>
+	<aura:attribute name="showQuestion4" type="Boolean" default="false"/>
+	<aura:attribute name="showQuestion6" type="Boolean" default="false"/>
+	<aura:attribute name="showQuestion8" type="Boolean" default="false"/>
+	<aura:attribute name="showQuestion10to12" type="Boolean" default="false"/>
+	
+    <aura:attribute name="record" type="ICP_Web_Verification__c" default="{'sobjectType':'ICP_Web_Verification__c', 'Name':'','Instituition_Name__c':'','OPEID__c':'','Compliance_Analyst_Name__c':''}"/>
+    <aura:attribute name="simpleRecord" type="ICP_Web_Verification__c" default="{'sobjectType':'ICP_Web_Verification__c', 'Name':'','Instituition_Name__c':'','OPEID__c':'','Compliance_Analyst_Name__c':''}"/>
+	<aura:attribute name="questionNo1" type="String" default="Does the institution have a military-specific web page or section of their website?"/>
+	<aura:attribute name="questionNo2a" type="String" default="DoD or Military Services’ insignias or logos?"/>
+	<aura:attribute name="questionNo2b" type="String" default="Content inaccurately stating or implying a special partnership between the institution and the DoD or Military Services?"/>
+	<aura:attribute name="questionNo2c" type="String" default="Embellished claims about the nature of otherwise legitimate partnerships?"/>
+	<aura:attribute name="questionNo2d" type="String" default="Content stating or implying the DoD or Military Services endorse the institution?"/>
+	<aura:attribute name="questionNo2e" type="String" default="Testimonies suggesting that a Military Service or commander endorses the institution?"/>
+	<aura:attribute name="questionNo2f" type="String" default="Testimonies featuring Service members in uniform with their rank or other insignia visible?"/>
+	<aura:attribute name="questionNo3" type="String" default="Does the institution mention the TA program on their website?"/>
+	<aura:attribute name="questionNo4a" type="String" default="Identify TA funds as a source of financial aid for active duty military?"/>
+	<aura:attribute name="questionNo4b" type="String" default="Explain the process of applying for TA?"/>
+	<aura:attribute name="questionNo4c" type="String" default="Direct prospective students to speak with an Educational Services Officer, military counselor, or their Service?"/>
+	<aura:attribute name="questionNo4d" type="String" default="Provide links to the respective Military Services’ education portals?"/>
+	<aura:attribute name="questionNo4e" type="String" default="Provide accurate information?"/>
+	<aura:attribute name="questionNo5" type="String" default="Does the institution have a page or a section for financial aid?"/>
+	<aura:attribute name="questionNo6a" type="String" default="Explain the financial aid application process?"/>
+	<aura:attribute name="questionNo6b" type="String" default="Have specific priority dates or a timeline for applying for financial aid?"/>
+	<aura:attribute name="questionNo6c" type="String" default="Contain a link to the Department of Education’s Federal Student Aid website?"/>
+	<aura:attribute name="questionNo6d" type="String" default="Have a link directing the student to the Free Application for Federal Student Aid (FAFSA)?"/>
+	<aura:attribute name="questionNo6e" type="String" default="Describes the different types of financial aid, directing the student to federal loans before private loans?"/>
+    <aura:attribute name="questionNo6f" type="String" default="Provide contact information for a qualified financial aid advisor(s)/office/department?"/>
+	<aura:attribute name="questionNo7" type="String" default="Does the institution have a Net Price Calculator?"/>
+	<aura:attribute name="questionNo8" type="String" default="Does the Net Price Calculator require contact information?"/>
+	<aura:attribute name="questionNo9" type="String" default="Does the institution have a page or section of their website for the cost of attendance?"/>
+	<aura:attribute name="questionNo10" type="String" default="If yes, does the institution’s cost of attendance page list the: 
+(amounts for 10a-10d may be listed either per credit, per semester or per year)"/>
+	<aura:attribute name="questionNo10a" type="String" default="Tuition?"/>
+	<aura:attribute name="questionNo10b" type="String" default="Estimated fees?"/>
+	<aura:attribute name="questionNo10c" type="String" default="Estimated price of books and other course materials?"/>
+	<aura:attribute name="questionNo10d" type="String" default="Rate for room and board?"/>
+	<aura:attribute name="questionNo10e" type="String" default="Total estimated yearly cost including both program, and other living expenses?"/>
+	<aura:attribute name="questionNo11" type="String" default="Does the institution require the user to disclose personal information before accessing the total cost of attendance?"/>
+	<aura:attribute name="questionNo12" type="String" default="Does the tuition listed on the website match the tuition information in the Voluntary Education Management Information System (VEMIS)?"/>
+	
+	<aura:attribute name="questionNo13" type="String" default="Does the institution have a page listing their institutional accreditation?"/>
+	<aura:attribute name="questionNo14" type="String" default="Does the institutional accrediting agency’s website verify the accreditation status of the institution?"/>
+	<aura:attribute name="questionNo15" type="String" default="Does the institution provide additional information on programmatic accreditation?"/>
+	<aura:attribute name="questionNo16" type="String" default="Does the institution disclose any conditions (state or agency limitations) or additional requirements (training, experience, or exams) required of students in specific programs to obtain credentials or licensure.
+Examples would be for Nursing, Architecture, Engineering. "/>
+	
+    <aura:attribute name="attachmentId" type="Id" default=""/>
+    <aura:attribute name="attachmentList" type="ICPWebVerification_Controller.responseAttachs[]"/>
+    <aura:attribute name="question1Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question2aAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question2bAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question2cAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question2dAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question2eAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question2fAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question3Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question4aAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question4bAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question4cAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question4dAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question4eAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question5Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question6aAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question6bAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question6cAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question6dAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question6eAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question6fAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+    <aura:attribute name="question7Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question8Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question9Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question10aAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question10bAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question10cAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question10dAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question10eAttachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question11Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question12Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question13Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question14Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question15Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	<aura:attribute name="question16Attachment" type="ICPWebVerification_Controller.responseAttachs[]" default="{}"/>
+	
+	<aura:attribute name="question1" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question2a" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question2b" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question2c" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question2d" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question2e" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question2f" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question3" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question4a" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question4b" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question4c" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question4d" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question4e" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question5" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question6a" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question6b" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question6c" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question6d" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question6e" type="ICP_Web_Verification_Response__c" default="{}"/>
+    <aura:attribute name="question6f" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question7" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question8" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question9" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question10a" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question10b" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question10c" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question10d" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question10e" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question11" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question12" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question13" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question14" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question15" type="ICP_Web_Verification_Response__c" default="{}"/>
+	<aura:attribute name="question16" type="ICP_Web_Verification_Response__c" default="{}"/>
+    <aura:attribute name="assessmentScoring" type="Assessment_Scoring__c" default="{}"/>
+	
+	<aura:attribute name="picklistOptions" type="String[]" default="['Yes','No','N/A']"/>
+    <aura:attribute name="accountName" type="String" default=""/>
+    <aura:attribute name="opeID" type="String" default=""/>
+    <aura:attribute name="userName" type="String" default=""/>
+    <aura:attribute name="dateValue" type="String" default=""/>
+    <aura:attribute name="progressIndicator" type="Aura.Component" />
+    <aura:attribute name="showHelpSection" type="Boolean" default="false"/>
+	<aura:attribute name="showMainSection" type="Boolean" default="true"/>
+	<aura:attribute name="sectionName" type="String" default=""/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+	
+	<aura:handler event="c:WebVerificationPopupOpen_Event" action="{!c.doInit}"/>
+	<aura:handler name="change" value="{!v.attachmentList}" action="{!c.onChildAttributeChange}"/>
+    
+	<aura:if isTrue="{!v.isOpenPopup}">
+		<section aura:id="editDialog" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-modal_large slds-fade-in-open">
+			<aura:if isTrue="{!v.showSpinner}"> 
+				<div aura:id="spinnerId" class="slds-spinner_container">
+					<div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-is-relative" role="alert">
+						<span class="slds-assistive-text">Loading</span>
+						<div class="slds-spinner__dot-a"></div>
+						<div class="slds-spinner__dot-b"></div>
+					</div>
+				</div>
+			</aura:if>
+			<aura:if isTrue="{!v.isOpen}">
+				<!--###### MODAL BOX Start######--> 
+				<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+					<div class="slds-modal__container">
+						<!-- ###### MODAL BOX HEADER Start ######-->
+						<header class="slds-modal__header">
+							<lightning:buttonIcon iconName="utility:close"
+												  onclick="{! c.closeModel }"
+												  alternativeText="close"
+												  variant="bare-inverse"
+												  class="slds-modal__close"/>
+							<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Attachments</h2>
+						</header>
+						<!--###### MODAL BOX BODY Part Start######-->
+						<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+							<c:ShowAttachments_cmp readonly="{!v.readOnly}"  attachmentList="{!v.attachmentList}" documentId="{!v.attachmentId}"/>
+						</div>
+						<!--###### MODAL BOX FOOTER Part Start ######-->
+						<footer class="slds-modal__footer">
+							<lightning:button variant="neutral" 
+											  label="Close"
+											  title="Close"
+											  onclick="{! c.closeModel }"/>
+						</footer>
+					</div>
+				</section>
+				<div class="slds-backdrop slds-backdrop_open"></div>
+				<!--###### MODAL BOX Part END Here ######-->
+			</aura:if>
+			<aura:if isTrue="{!v.showMainSection}">
+				<div class="slds-modal__container">
+					<div class="slds-modal__content slds-p-around--medium slds-grid slds-no-wrap ">
+						<div class="container">
+							<div class="slds-page-header">
+								<div class="slds-grid">
+									<div class="slds-col slds-has-flexi-truncate">
+										<div class="slds-media slds-no-space slds-grow">
+											<div class="slds-media__figure">
+												<span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+													<lightning:icon iconName="standard:feed" size="small" alternativeText="Indicates approval"/>
+												</span>
+											</div>
+											<div class="slds-media__body">
+												<nav>
+													<ol class="slds-breadcrumb slds-line-height_reset">
+														<li class="slds-breadcrumb__item">
+															<span>ICP Web Verification</span>
+														</li>
+													</ol>
+												</nav>
+												<h1 class="slds-page-header__title slds-m-right_small slds-align-middle slds-truncate" title="">
+													
+												</h1>
+											</div>
+										</div>
+									</div>
+									<div class="slds-col slds-no-flex slds-grid slds-align-top">
+										<div class="slds-button-group" role="group">
+											<aura:if isTrue="{!and(equals(v.currentPage,v.lastPage),v.readOnly!=true)}">
+												<lightning:button variant="brand" label="Submit" onclick="{!c.finalSubmit }" />
+											</aura:if>
+											<aura:if isTrue="{!equals(v.currentPage,1)}">
+												<lightning:button variant="brand" label="Previous" disabled="true" />
+												<aura:set attribute="else">
+													<lightning:button variant="brand" label="Previous" onclick="{!c.goToPrevious }" />
+												</aura:set>
+											</aura:if>
+											<aura:if isTrue="{!equals(v.currentPage,v.lastPage)}">
+												<lightning:button variant="brand" label="Next" disabled="true" />
+												<aura:set attribute="else">
+													<lightning:button variant="brand" label="Next" onclick="{!c.goToNext }" />
+												</aura:set>
+											</aura:if>
+										</div>
+									</div>
+								</div>
+								
+								<lightning:overlayLibrary aura:id="overlayLib"/>
+								<div class="slds-page-header__detail-row">
+									<div>
+										{!v.progressIndicator}
+									</div>
+								</div>
+							</div>
+							<div class="slds-grid">
+								<div class="slds-col">
+									<div class="{!equals(v.currentPage,1) ? 'slds-show' : 'slds-hide'}">
+										<p style="margin-left:20%;">
+											<img src="{!$Resource.MainHeader}"/>
+										</p>
+									</div>
+									<div class="{!equals(v.currentPage,2) ? 'slds-show' : 'slds-hide'}">
+										<p class="top-line">
+											<b><h1>Web Verification Instrument</h1></b>
+										</p>
+										<p>
+											<b>Purpose:</b>
+										</p>
+										<br/>
+										<p>
+											This Department of Defense (DoD) Voluntary Education Partnership Memorandum of Understanding (MOU) Compliance Program Web Verification Instrument is used to determine the availability and consistency of information available to military students who are interested in using Tuition Assistance (TA) funds for education. Educational institutions eligible to receive TA funds are required to follow the guidelines established by their MOU. 
+										</p>
+										<br/>
+										<p>
+											<b>Overview:</b>
+										</p>
+										<p>
+											The Web Verification Instrument is structured as a checklist and is broken into seven different sections. The checklist should take approximately 30-60 minutes to complete for each institution selected. Before starting the checklist, you should have knowledge of DoD and Military Services’ imagery, expressions and acronyms.
+										</p>
+										<br/>
+										<p>
+											Please note that institutions format their websites differently; therefore, you have to use personal judgment in order to search for the checklist items. If you have issues locating any particular item, you should use the search bar on the institution’s website. The following resources provide detailed information useful for the completion of the checklist.
+										</p>
+										<p>
+											<ul style="list-style-type: circle;">
+												<li><a href="https://dodmou.com/" target="_blank">DoD Voluntary Education Partnership MOU:</a></li>
+												<li><a href="http://www.dtic.mil/whs/directives/corres/pdf/553512p.pdf" target="_blank">DoD Branding and Trademark Licensing Program Implementation:</a></li>
+												<!--<li><a href="http://www.defense.gov/Portals/1/Documents/Trademarks/DOD%20Guide%20about%20use%20of%20seals%20logos%20insignia%20medals-16%20Oct%2015F.PDF" target="_blank">Important Information and Guidelines About the Use of Department of Defense Seals, Logos, Insignia, and Service Medals: </a></li>-->
+												<!--<li><a href="https://ifap.ed.gov/fsahandbook/attachments/1415FSAHdbkAppendicesInstReportingRerquirements4FSAPrgmsAppendixF.pdf" target="_blank">Institutional disclosure requirements for institutions receiving federal financial aid: </a></li>-->
+											</ul>
+										</p><br/>
+									</div>
+									<div class="{!equals(v.currentPage,3) ? 'slds-show' : 'slds-hide'}">
+										<p class="top-line">
+											<b><h1>Instructions</h1></b>
+										</p><br/>
+										<p style="color:red;"><b><i>The steps below list the actions to take in order to complete the Web Verification Checklist for the selected institutions.</i></b></p>
+										<p style="color:blue;"><b>Step 1:</b>&nbsp;&nbsp;&nbsp;Review the material listed in the Overview section </p>
+										<p style="color:blue;"><b>Step 2:</b>&nbsp;&nbsp;&nbsp;Fill out the “Institution Name,” “OPEID,” “Compliance Analyst Name,” and “Date” before starting the checklist</p>
+										<p style="color:blue;"><b>Step 3:</b>&nbsp;&nbsp;&nbsp;Use an internet search engine to locate the institution’s website</p>
+										<p style="color:blue;"><b>Step 4:</b>&nbsp;&nbsp;&nbsp;Go through the website and fill out the checklist</p>
+										<p style="color:blue;"><b>Step 5:</b>&nbsp;&nbsp;&nbsp;Select “Yes” from the drop-down box if the checklist item is found on the website and record the URL of the page where the checklist item is located in the “URL/Comments” column</p>
+										<p style="color:blue;"><b>Step 6:</b>&nbsp;&nbsp;&nbsp;Select “No” from the drop-down box if the checklist item cannot be found on the website</p>
+										<p style="color:blue;"><b>Step 7:</b>&nbsp;&nbsp;&nbsp;Select "N/A" from the drop-down box if the question does not apply</p>
+										<p style="color:blue;"><b>Step 8:</b>&nbsp;&nbsp;&nbsp;Record any thoughts or impressions for each checklist item in the “URL/Comments” column</p>
+										<p style="color:blue;"><b>Step 9:</b>&nbsp;&nbsp;&nbsp;Refer to Appendix A on page 6 for more information on how to complete each section of the checklist</p>
+										<br/>
+									</div>
+									<div class="{!equals(v.currentPage,4) ? 'slds-show' : 'slds-hide'}">
+										<p class="slds-align_absolute-center top-line">
+											<b><h1>Web Verification Checklist</h1></b>
+										</p><br/>
+										<table class="slds-table">
+											<tbody>
+												<tr>
+												  <th data-label="Instituition Name" scope="row" class="checklist-th">
+													<div class="slds-wrap" title="Instituition Name"><b>Instituition Name</b></div>
+												  </th>
+												  <td class="checklist-td">
+													<div class="slds-wrap">{!v.accountName}</div>
+												  </td>
+												</tr>
+												<tr>
+												  <th data-label="OPEID" scope="row" class="checklist-th">
+													  <div class="slds-wrap" title="OPEID"><b>OPEID</b></div>
+												  </th>
+												  <td class="checklist-td">
+													<div class="slds-wrap">{!v.opeId}</div>
+												  </td>
+												</tr>
+												<tr>
+												  <th data-label="Compliance Analyst Name" scope="row" class="checklist-th">
+													  <div class="slds-wrap" title="Compliance Analyst Name"><b>Compliance Analyst Name</b></div>
+												  </th>
+												  <td class="checklist-td">
+													<div class="slds-wrap">{!v.userName}</div>
+												  </td>
+												</tr>
+												<tr>
+												  <th data-label="Date" scope="row" class="checklist-th">
+													  <div class="slds-wrap" title="Date"><b>Date</b></div>
+												  </th>
+												  <td class="checklist-td">
+													<div class="slds-wrap">{!v.dateValue}</div>
+												  </td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<div class="{!equals(v.currentPage,5) ? 'slds-show' : 'slds-hide'}">
+										<p class="top-line">
+											<b><h1>Section 1: Recruiting, Marketing, &amp; Advertising 
+												<div style="display:inline-block;margin-right:10px" onclick="{!c.showHelpSection1}">
+													<lightning:icon iconName="utility:info_alt" size="x-small"/>
+												</div>
+											 </h1></b>
+										</p><br/>
+										<p>
+											<b>Instructions:</b> If the answer is “Yes” to the following items, provide the URL of the page where the content can be found. If the answer to item 1 is “No,” skip items 2-2f. If an item is found on another area of the website, it should also be recorded in this section. If the answer is “Yes” to item 3, provide the URL of the page where the content can be found. If the answer to item 3 is “No,” skip items 4-4e. 
+										</p><br/>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												<b>Item</b>
+											</div>
+											<div class="slds-size_2-of-12">
+												<b>Question</b>
+											</div>
+											<div class="slds-size_2-of-12">
+												<b>Yes/No</b>
+											</div>
+											<div class="slds-size_3-of-12">
+												<b>URL</b>
+											</div>
+											<div class="slds-size_3-of-12">
+												<b>Comments</b>
+											</div>
+											<div class="slds-size_1-of-12">
+												<b>Attachment</b>
+											</div>
+										</div>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												1
+											</div>
+											<div class="slds-size_2-of-12">
+												{!v.questionNo1}
+											</div>
+											<div class="slds-size_2-of-12">
+												<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question1.Yes_No__c}</div>
+												<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}" id="question1Dropdown" onchange="{!c.toggleQuestion2}">
+													<aura:iteration items="{! v.picklistOptions }" var="item">
+														<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+													</aura:iteration>
+												</select>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question1.URL__c}" rows="2" cols="4" required="{!v.showQuestion2}"/>
+											    <div class="{!v.Question1URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question1.Comment__c}" rows="2" cols="4"/>
+											</div>
+											<div class="slds-size_1-of-12">
+												&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question1.Id}" label="View" onclick="{!c.showQuestion1Attachment }" />
+											</div>
+										</div>
+										<div class="{!v.showQuestion2 ? 'slds-show' : 'slds-hide'}">
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													2
+												</div>
+												<div class="slds-size_5-of-12">
+													If yes, does the institution’s military page contain:
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													2a
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo2a}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question2a.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question2aDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!item!='Egregiously No' ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2a.URL__c}" rows="2" cols="4" required="{!v.showQuestion2}"/>
+													<div class="{!v.Question2aURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2a.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question2a.Id}" label="View" onclick="{!c.showQuestion2aAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													2b
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo2b}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question2b.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question2bDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!item!='Egregiously No' ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2b.URL__c}" rows="2" cols="4" required="{!v.showQuestion2}"/>
+													<div class="{!v.Question2bURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2b.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question2b.Id}" label="View" onclick="{!c.showQuestion2bAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													2c
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo2c}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question2c.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question2cDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!item!='Egregiously No' ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2c.URL__c}" rows="2" cols="4" required="{!v.showQuestion2}"/>
+													<div class="{!v.Question2cURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2c.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question2c.Id}" label="View" onclick="{!c.showQuestion2cAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													2d
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo2d}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question2d.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question2dDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!item!='Egregiously No' ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2d.URL__c}" rows="2" cols="4" required="{!v.showQuestion2}"/>
+													<div class="{!v.Question2dURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2d.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question2d.Id}" label="View" onclick="{!c.showQuestion2dAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													2e
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo2e}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question2e.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question2eDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!item!='Egregiously No' ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2e.URL__c}" rows="2" cols="4" required="{!v.showQuestion2}"/>
+													<div class="{!v.Question2eURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2e.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question2e.Id}" label="View" onclick="{!c.showQuestion2eAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													2f
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo2f}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question2f.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question2fDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!item!='Egregiously No' ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2f.URL__c}" rows="2" cols="4" required="{!v.showQuestion2}"/>
+													<div class="{!v.Question2fURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question2f.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question2f.Id}" label="View" onclick="{!c.showQuestion2fAttachment }" />
+												</div>
+											</div>
+										</div>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												3
+											</div>
+											<div class="slds-size_2-of-12">
+												{!v.questionNo3}
+											</div>
+											<div class="slds-size_2-of-12" >
+												<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question3.Yes_No__c}</div>
+												<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question3Dropdown" onchange="{!c.toggleQuestion4}">
+													<aura:iteration items="{! v.picklistOptions }" var="item">
+														<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+													</aura:iteration>
+												</select>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question3.URL__c}" rows="2" cols="4" required="{!v.showQuestion4}"/>
+												<div class="{!v.Question3URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question3.Comment__c}" rows="2" cols="4"/>
+											</div>
+											<div class="slds-size_1-of-12">
+												&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question3.Id}" label="View" onclick="{!c.showQuestion3Attachment }" />
+											</div>
+										</div>
+										<div class="{!v.showQuestion4 ? 'slds-show' : 'slds-hide'}">
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													4
+												</div>
+												<div class="slds-size_2-of-12">
+													If yes, does the institution’s TA page:
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													4a
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo4a}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question4a.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question4aDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question4a.URL__c}" rows="2" cols="4" required="{!v.showQuestion4}"/>
+													<div class="{!v.Question4aURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question4a.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question4a.Id}" label="View" onclick="{!c.showQuestion4aAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													4b
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo4b}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question4b.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question4bDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question4b.URL__c}" rows="2" cols="4" required="{!v.showQuestion4}"/>
+													<div class="{!v.Question4bURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question4b.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question4b.Id}" label="View" onclick="{!c.showQuestion4bAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													4c
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo4c}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question4c.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question4cDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question4c.URL__c}" rows="2" cols="4" required="{!v.showQuestion4}"/>
+													<div class="{!v.Question4cURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question4c.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question4c.Id}" label="View" onclick="{!c.showQuestion4cAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													4d
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo4d}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question4d.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question4dDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question4d.URL__c}" rows="2" cols="4" required="{!v.showQuestion4}"/>
+													<div class="{!v.Question4dURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question4d.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question4d.Id}" label="View" onclick="{!c.showQuestion4dAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													4e
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo4e}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question4e.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question4eDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!item!='Yes in Excess'? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question4e.URL__c}" rows="2" cols="4" required="{!v.showQuestion4}"/>
+													<div class="{!v.Question4eURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question4e.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question4e.Id}" label="View" onclick="{!c.showQuestion4eAttachment }" />
+												</div>
+											</div>
+										</div>
+										<br/>
+									</div>
+									<div class="{!equals(v.currentPage,6) ? 'slds-show' : 'slds-hide'}">
+										<p class="top-line">
+											<b><h1>Section 2: Financial Matters 
+												<div style="display:inline-block;margin-right:10px" onclick="{!c.showHelpSection2}">
+													<lightning:icon iconName="utility:info_alt" size="x-small"/>
+												</div>
+											</h1></b>
+										</p><br/>
+										<p>
+											<b>Instructions:</b> If the answer is “Yes” to item 5, provide the URL of the page where the content can be found. If the answer to item 5 is “No,” skip items 6-6e. If the answer is “Yes” to item 7, provide the URL in the “URL/Comments” column. If the answer to item 7 is “No,” skip item 8. If the answer is “Yes” to item 9, provide the URL of the page where the content can be found. If the answer to item 9 is “No,” skip items 10-12. 
+										</p><br/>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												<b>Item</b>
+											</div>
+											<div class="slds-size_2-of-12">
+												<b>Question</b>
+											</div>
+											<div class="slds-size_2-of-12">
+												<b>Yes/No</b>
+											</div>
+											<div class="slds-size_3-of-12">
+												<b>URL</b>
+											</div>
+											<div class="slds-size_3-of-12">
+												<b>Comments</b>
+											</div>
+											<div class="slds-size_1-of-12">
+												<b>Attachment</b>
+											</div>
+										</div>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												5
+											</div>
+											<div class="slds-size_2-of-12">
+												{!v.questionNo5}
+											</div>
+											<div class="slds-size_2-of-12" >
+												<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question5.Yes_No__c}</div>
+												<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question5Dropdown" onchange="{!c.toggleQuestion6}">
+													<aura:iteration items="{! v.picklistOptions }" var="item">
+														<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+													</aura:iteration>
+												</select>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question5.URL__c}" rows="2" cols="4" required="{!v.showQuestion6}"/>
+												<div class="{!v.Question5URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question5.Comment__c}" rows="2" cols="4"/>
+											</div>
+											<div class="slds-size_1-of-12">
+												&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question5.Id}" label="View" onclick="{!c.showQuestion5Attachment }" />
+											</div>
+										</div>
+										<div class="{!v.showQuestion6 ? 'slds-show' : 'slds-hide'}">
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													6
+												</div>
+												<div class="slds-size_2-of-12">
+													If yes, does the financial aid page:
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													6a
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo6a}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question6a.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question6aDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6a.URL__c}" rows="2" cols="4" required="{!v.showQuestion6}"/>
+													<div class="{!v.Question6aURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6a.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question6a.Id}" label="View" onclick="{!c.showQuestion6aAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													6b
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo6b}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question6b.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question6bDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6b.URL__c}" rows="2" cols="4" required="{!v.showQuestion6}"/>
+													<div class="{!v.Question6bURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6b.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question6b.Id}" label="View" onclick="{!c.showQuestion6bAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													6c
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo6c}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question6c.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question6cDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6c.URL__c}" rows="2" cols="4" required="{!v.showQuestion6}"/>
+													<div class="{!v.Question6cURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6c.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question6c.Id}" label="View" onclick="{!c.showQuestion6cAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													6d
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo6d} 
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question6d.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question6dDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6d.URL__c}" rows="2" cols="4" required="{!v.showQuestion6}"/>
+													<div class="{!v.Question6dURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6d.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question6d.Id}" label="View" onclick="{!c.showQuestion6dAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													6e
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo6e}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question6e.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question6eDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6e.URL__c}" rows="2" cols="4" required="{!v.showQuestion6}"/>
+													<div class="{!v.Question6eURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6e.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question6e.Id}" label="View" onclick="{!c.showQuestion6eAttachment }" />
+												</div>
+											</div>
+                                            <div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													6f
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo6f}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question6f.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question6fDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6f.URL__c}" rows="2" cols="4" required="{!v.showQuestion6}"/>
+													<div class="{!v.Question6fURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question6f.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question6f.Id}" label="View" onclick="{!c.showQuestion6fAttachment }" />
+												</div>
+											</div>
+										</div>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												7
+											</div>
+											<div class="slds-size_2-of-12">
+												{!v.questionNo7}
+											</div>
+											<div class="slds-size_2-of-12" >
+												<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question7.Yes_No__c}</div>
+												<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question7Dropdown" onchange="{!c.toggleQuestion8}">
+													<aura:iteration items="{! v.picklistOptions }" var="item">
+														<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+													</aura:iteration>
+												</select>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question7.URL__c}" rows="2" cols="4" required="{!v.showQuestion8}"/>
+												<div class="{!v.Question7URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question7.Comment__c}" rows="2" cols="4"/>
+											</div>
+											<div class="slds-size_1-of-12">
+												&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question7.Id}" label="View" onclick="{!c.showQuestion7Attachment }" />
+											</div>
+										</div>
+										<div class="{!v.showQuestion8 ? 'slds-show' : 'slds-hide'}">
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													8
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo8}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question8.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question8Dropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No')? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question8.URL__c}" rows="2" cols="4" required="{!v.showQuestion8}"/>
+													<div class="{!v.Question8URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question8.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question8.Id}" label="View" onclick="{!c.showQuestion8Attachment }" />
+												</div>
+											</div>
+										</div>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												9
+											</div>
+											<div class="slds-size_2-of-12">
+												{!v.questionNo9}
+											</div>
+											<div class="slds-size_2-of-12" >
+												<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question9.Yes_No__c}</div>
+												<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question9Dropdown" onchange="{!c.toggleQuestion10to12}">
+													<aura:iteration items="{! v.picklistOptions }" var="item">
+														<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+													</aura:iteration>
+												</select>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question9.URL__c}" rows="2" cols="4" required="{!v.showQuestion8to10}"/>
+												<div class="{!v.Question9URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question9.Comment__c}" rows="2" cols="4"/>
+											</div>
+											<div class="slds-size_1-of-12">
+												&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question9.Id}" label="View" onclick="{!c.showQuestion9Attachment }" />
+											</div>
+										</div>
+										<div class="{!v.showQuestion10to12 ? 'slds-show' : 'slds-hide'}">
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													10
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo10}
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													10a
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo10a}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question10a.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question10aDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question10a.URL__c}" rows="2" cols="4" required="{!v.showQuestion10to12}"/>
+													<div class="{!v.Question10aURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question10a.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question10a.Id}" label="View" onclick="{!c.showQuestion10aAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													10b
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo10b}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question10b.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question10bDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question10b.URL__c}" rows="2" cols="4" required="{!v.showQuestion10to12}"/>
+													<div class="{!v.Question10bURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question10b.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question10b.Id}" label="View" onclick="{!c.showQuestion10bAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													10c
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo10c}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question10c.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question10cDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question10c.URL__c}" rows="2" cols="4" required="{!v.showQuestion10to12}"/>
+													<div class="{!v.Question10cURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question10c.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question10c.Id}" label="View" onclick="{!c.showQuestion10cAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													10d
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo10d}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question10d.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question10dDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question10d.URL__c}" rows="2" cols="4" required="{!v.showQuestion10to12}"/>
+													<div class="{!v.Question10dURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question10d.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question10d.Id}" label="View" onclick="{!c.showQuestion10dAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													10e
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo10e}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question10e.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question10eDropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question10e.URL__c}" rows="2" cols="4" required="{!v.showQuestion10to12}"/>
+													<div class="{!v.Question10eURLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question10e.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question10e.Id}" label="View" onclick="{!c.showQuestion10eAttachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													11
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo11}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question11.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question11Dropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question11.URL__c}" rows="2" cols="4" required="{!v.showQuestion10to12}"/>
+													<div class="{!v.Question11URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question11.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question11.Id}" label="View" onclick="{!c.showQuestion11Attachment }" />
+												</div>
+											</div>
+											<div class="slds-grid">
+												<div class="inputType slds-size_1-of-12">
+													12
+												</div>
+												<div class="slds-size_2-of-12">
+													{!v.questionNo12}
+												</div>
+												<div class="slds-size_2-of-12" >
+													<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question12.Yes_No__c}</div>
+													<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question12Dropdown">
+														<aura:iteration items="{! v.picklistOptions }" var="item">
+															<option class="{!item!='Yes in Excess' ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+														</aura:iteration>
+													</select>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question12.URL__c}" rows="2" cols="4" required="{!v.showQuestion10to12}"/>
+													<div class="{!v.Question12URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+												</div>
+												<div class="slds-size_3-of-12">
+													<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question12.Comment__c}" rows="2" cols="4"/>
+												</div>
+												<div class="slds-size_1-of-12">
+													&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question12.Id}" label="View" onclick="{!c.showQuestion12Attachment }" />
+												</div>
+											</div>
+										</div>
+										<br/>
+									</div>
+									<div class="{!equals(v.currentPage,7) ? 'slds-show' : 'slds-hide'}">
+										<p class="top-line">
+											<b><h1>Section 3: Accreditation &amp; Credentialing Requirements
+												<div style="display:inline-block;margin-right:10px" onclick="{!c.showHelpSection3}">
+													<lightning:icon iconName="utility:info_alt" size="x-small"/>
+												</div>
+											</h1></b>
+										</p><br/>
+										<p>
+											<b>Instructions:</b>  If the answer is “Yes” to item 13, record the URL of the page where the content can be found in the “URL/Comments” column. If the accrediting agency is found, go to its website to verify the institution is currently accredited and record the URL of the accrediting agency’s website under item 14. For item 15 some institutions may not list the associations or agencies that accredit their academic programs on the same page as the institutional accreditation. Use the search bar on the institution’s website to search for programmatic accreditation.
+										</p><br/>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												<b>Item</b>
+											</div>
+											<div class="slds-size_2-of-12">
+												<b>Question</b>
+											</div>
+											<div class="slds-size_2-of-12">
+												<b>Yes/No</b>
+											</div>
+											<div class="slds-size_3-of-12">
+												<b>URL</b>
+											</div>
+											<div class="slds-size_3-of-12">
+												<b>Comments</b>
+											</div>
+											<div class="slds-size_1-of-12">
+												<b>Attachment</b>
+											</div>
+										</div>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												13
+											</div>
+											<div class="slds-size_2-of-12">
+												{!v.questionNo13}
+											</div>
+											<div class="slds-size_2-of-12" >
+												<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question13.Yes_No__c}</div>
+												<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question13Dropdown">
+													<aura:iteration items="{! v.picklistOptions }" var="item">
+														<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+													</aura:iteration>
+												</select>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question13.URL__c}" rows="2" cols="4" required="{!v.Question13URLRequired}"/>
+												<div class="{!v.Question13URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question13.Comment__c}" rows="2" cols="4"/>
+											</div>
+											<div class="slds-size_1-of-12">
+												&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question13.Id}" label="View" onclick="{!c.showQuestion13Attachment }" />
+											</div>
+										</div>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												14
+											</div>
+											<div class="slds-size_2-of-12">
+												{!v.questionNo14}
+											</div>
+											<div class="slds-size_2-of-12" >
+												<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question14.Yes_No__c}</div>
+												<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question14Dropdown">
+													<aura:iteration items="{! v.picklistOptions }" var="item">
+														<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+													</aura:iteration>
+												</select>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question14.URL__c}" rows="2" cols="4" required="{!v.Question14URLRequired}"/>
+												<div class="{!v.Question14URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question14.Comment__c}" rows="2" cols="4"/>
+											</div>
+											<div class="slds-size_1-of-12">
+												&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question14.Id}" label="View" onclick="{!c.showQuestion14Attachment }" />
+											</div>
+										</div>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												15
+											</div>
+											<div class="slds-size_2-of-12">
+												{!v.questionNo15}
+											</div>
+											<div class="slds-size_2-of-12" >
+												<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question15.Yes_No__c}</div>
+												<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question15Dropdown">
+													<aura:iteration items="{! v.picklistOptions }" var="item">
+														<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+													</aura:iteration>
+												</select>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question15.URL__c}" rows="2" cols="4" required="{!v.Question15URLRequired}"/>
+												<div class="{!v.Question15URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question15.Comment__c}" rows="2" cols="4"/>
+											</div>
+											<div class="slds-size_1-of-12">
+												&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question15.Id}" label="View" onclick="{!c.showQuestion15Attachment }" />
+											</div>
+										</div>
+										<div class="slds-grid">
+											<div class="inputType slds-size_1-of-12">
+												16
+											</div>
+											<div class="slds-size_2-of-12">
+												{!v.questionNo16}
+											</div>
+											<div class="slds-size_2-of-12" >
+												<div class="{!v.readOnly ? 'slds-size_10-of-12' : 'slds-hide'}"> {!v.question16.Yes_No__c}</div>
+												<select class="{!v.readOnly ? 'slds-hide' : 'slds-size_10-of-12'}"  id="question16Dropdown">
+													<aura:iteration items="{! v.picklistOptions }" var="item">
+														<option class="{!and(item!='Yes in Excess',item!='Egregiously No') ? 'slds-show' : 'slds-hide'}" value="{!item}">{!item}</option>
+													</aura:iteration>
+												</select>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question16.URL__c}" rows="2" cols="4" required="{!v.Question16URLRequired}"/>
+												<div class="{!v.Question16URLRequired ? 'slds-show' : 'slds-hide'}" style="color:red">Please enter URL</div>
+											</div>
+											<div class="slds-size_3-of-12">
+												<ui:inputTextArea readonly="{!v.readOnly}"  value="{!v.question16.Comment__c}" rows="2" cols="4"/>
+											</div>
+											<div class="slds-size_1-of-12">
+												&nbsp;&nbsp;<lightning:button variant="brand" value="{!v.question16.Id}" label="View" onclick="{!c.showQuestion16Attachment }" />
+											</div>
+										</div>
+										<br/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<footer class="slds-modal__footer">
+						<lightning:button class="slds-button_neutral" label="Cancel" onclick="{!c.closeModal}"/>
+					</footer>
+				</div>
+			</aura:if>
+			<aura:if isTrue="{!v.showHelpSection}">
+				<div class="slds-modal__container">
+					<header class="slds-modal__header">
+						<lightning:buttonIcon iconName="utility:close"
+											  onclick="{!c.closeHelpSection}"
+											  alternativeText="close"
+											  variant="bare-inverse"
+											  class="slds-modal__close"/>
+					</header>
+					<!--###### MODAL BOX BODY Part Start######-->
+					<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+						<aura:if isTrue="{!equals(v.sectionName,'section1')}">
+							<c:WebVerificationSection1HelpNew_cmp/>
+						</aura:if>
+						<aura:if isTrue="{!equals(v.sectionName,'section2')}">
+							<c:WebVerificationSection2HelpNew_cmp/>
+						</aura:if>
+						<aura:if isTrue="{!equals(v.sectionName,'section3')}">
+							<c:WebVerificationSection3HelpNew_cmp/>
+						</aura:if>
+					</div>
+					<!--###### MODAL BOX FOOTER Part Start ######-->
+					<footer class="slds-modal__footer">
+						<lightning:button variant="brand" 
+										  label="Close"
+										  title="Close"
+										  onclick="{!c.closeHelpSection}"/>
+					</footer>
+				</div>
+			</aura:if>
+		</section>
+        <div aura:id="overlay" class="slds-backdrop slds-backdrop--open"></div>
+	</aura:if>
+    
+</aura:component>

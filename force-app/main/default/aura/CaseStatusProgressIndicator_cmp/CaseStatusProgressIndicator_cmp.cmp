@@ -1,0 +1,27 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+	<!-- attributes -->
+    <aura:attribute name="steps" type="String[]" default="[]"/>
+    <aura:attribute name="recordId" type="String" default=""/>
+    <aura:attribute name="caseObject" type="Case" default="{}"/>
+  
+    <div class="slds-box">
+        <lightning:progressIndicator currentStep="{!v.caseObject.Status}" type="path" variant="base">
+            <aura:iteration items="{! v.steps }" var="step">
+                <lightning:progressStep label="{! step }" value="{! step }"/>
+            </aura:iteration>
+        </lightning:progressIndicator>
+        <br/>
+        <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Case">
+            <div class="slds-grid slds-gutters">
+            	<div class="slds-col">
+                	<lightning:outputField fieldName="CaseNumber" />
+                    <lightning:outputField fieldName="Category__c" />
+              	</div>
+              	<div class="slds-col">
+                	<lightning:outputField fieldName="Status" />
+                    <lightning:outputField fieldName="Subcategory__c" />
+              	</div>
+            </div>
+        </lightning:recordViewForm>
+   	</div>
+</aura:component>

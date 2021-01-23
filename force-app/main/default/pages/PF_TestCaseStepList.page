@@ -1,0 +1,11 @@
+<apex:page standardController="PF_TestCases__c" extensions="PF_EditTestCaseStepExtension">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockTable value="{!TestCaseSteps}" var="t">
+                <apex:column value="{!t.testCsWr.PF_Step_Number__c}"/>
+                <apex:column value="{!t.testCsWr.PF_Step_Description__c}"/>
+                <apex:column value="{!t.testCsWr.PF_Expected_Result__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,4 @@
+<aura:component controller="ICPWebVerification_Controller" implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:registerEvent name="appEvent" type="c:BackendScoringEvent"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+</aura:component>

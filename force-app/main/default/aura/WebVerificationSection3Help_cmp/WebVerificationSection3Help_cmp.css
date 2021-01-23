@@ -1,0 +1,12 @@
+.THIS table{
+    width: 100%;
+    margin: 20px;
+}
+
+.THIS .headers{
+    background: #ddd;
+}
+
+.THIS .mainheader{
+    background:#708090;
+}

@@ -1,0 +1,14 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="showCreateCase" type="Boolean" default="false"/>
+    <aura:attribute name="showSearchCase" type="Boolean" default="false"/>
+    <div class="slds-box_bare slds-box_x-small slds-text-align_center slds-m-around_x-small">
+        <lightning:button variant="neutral" iconName="utility:search" class="slds-button"  aura:id="search" type="submit" label="Search" onclick="{!c.searchCase}" />
+        <lightning:button variant="neutral" iconName="action:new_case" class="slds-button"  aura:id="clear" type="reset" label="Create Case" onclick="{!c.newCase }" />
+    </div>
+    <aura:if isTrue="{!v.showCreateCase}">
+        <c:VeteransBenefitsQuestion_cmp/>
+    </aura:if>
+    <aura:if isTrue="{!v.showSearchCase}">
+        <c:CaseSearch_cmp/>
+    </aura:if>
+</aura:component>

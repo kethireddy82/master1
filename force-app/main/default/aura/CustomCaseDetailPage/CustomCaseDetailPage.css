@@ -1,0 +1,12 @@
+.THIS.slds-truncate {
+    max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.THIS .slds-form-element__label {
+    float: none;
+}
+.THIS .slds-form-element__control{
+    padding-left: 0%;
+}

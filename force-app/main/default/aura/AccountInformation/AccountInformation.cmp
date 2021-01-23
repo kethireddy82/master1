@@ -1,0 +1,45 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="AccountInformationController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+    <aura:attribute name="usr" type="Account" />
+    <aura:attribute name="AccountAddress" type="string" />
+    <aura:attribute name="SigningAuthority" type="string" />
+    <div class="slds-section slds-is-open" aura:id="fruitsSection">
+        <!--section header-->
+        <h3 class="slds-section__title">
+            <button aria-controls="fruitsList" class="slds-button slds-section__title-action">
+                <span onclick="{!c.toggleSection}" data-auraId="fruitsSection">
+                    <lightning:icon iconName="utility:switch"
+                                    size="x-small"
+                                    class="slds-section__title-action-icon slds-button__icon_left"
+                                    alternativeText="button icon" 
+                                    />
+                </span>
+                <span class="slds-truncate" title="Account Information">Account Information</span>
+            </button>
+        </h3>
+        <!--section body-->
+        <div class="slds-section__content" id="fruitsList">
+            <table>
+  
+  <tr>
+      <td>
+          <label class="slds-form-element__label"> OPE ID:</label>
+          <ui:outputText title="School Address" value="{!v.usr.OPE_ID__c}" class="blue" /></td>
+      <td><label class="slds-form-element__label">School Address:</label> <ui:outputText title="School Address" value="{!v.AccountAddress}" class="blue" /></td>
+    <td><label class="slds-form-element__label">Compliance POC:</label><ui:outputText title="Compliance POC" value="{!v.usr.Compliance_POC__c}" class="blue"/></td>
+  </tr>
+                <tr>
+    
+      <td><label class="slds-form-element__label">DoD MOU POC:</label><ui:outputText title="DoD MOU POC" value="{!v.usr.DoD_MOU_POC__c}" class="blue"/></td>
+    <td><label class="slds-form-element__label">Signing Authority:</label><ui:outputText title="Signing Authority" value="{!v.SigningAuthority}" class="blue"/></td>
+  <td><label class="slds-form-element__label">Tuition Rate POC:</label><ui:outputText title="Tuition Rate POC" value="{!v.usr.Tuition_Rate_POC__c}" class="blue"/></td>
+                </tr>
+                 <tr>
+    
+      
+    
+  </tr>
+</table>
+        </div>
+    </div>	
+</aura:component>

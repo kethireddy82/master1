@@ -1,0 +1,60 @@
+<!--
+Lightning Component : CustomCaseHighlightPanel
+-->
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:hasRecordId"  access="global">
+    <aura:attribute name="cas" type="Case" />
+    <aura:attribute name="case" type="Case" />
+	<aura:attribute name="isSpinner" type="Boolean" /> 
+    <aura:attribute name="errorMessage" type="String" default="Loading..." />
+    <aura:attribute name="showFields" type="String[]" default="['CaseNumber']"/>
+    <aura:attribute name="caseObject" type="Case" default="{}"/>
+    <aura:attribute name="steps" type="String[]" default="[]"/>
+    <!--aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" /-->
+    <!--div class="slds-box"-->
+    <div class="slds-page-header slds-box">
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate">
+                <div class="slds-media slds-no-space slds-grow">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-case" title="Description of icon when needed">
+                            <lightning:icon iconName="standard:case" size="medium" alternativeText="Case"/>
+                        </span>
+                    </div>
+                    <div class="slds-media__body White">
+                        <nav>
+                            <ol class="slds-breadcrumb slds-line-height_reset">
+                                <li class="slds-breadcrumb__item">
+                                    <span>Case</span>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                
+            </div>
+        </div>
+    
+        <div class=" slds-page-header__detail-row">
+        <lightning:recordForm aura:id="recordViewForm" 
+                                  objectApiName="Case"
+                                  columns="6"
+                             	  class="slds-truncate"
+                                  fields="{!v.showFields}"
+                                  recordId="{!v.recordId}"
+                                  mode="readonly"
+                                  onsuccess="{!c.onSuccess}"
+                                  onsubmit="{!c.onSubmit}"
+                                  onload="{!c.onLoad}"
+                                  onerror="{!c.onError}"
+                                  />  
+        </div>
+        
+    </div>
+
+    <aura:if isTrue="{!v.isSpinner}">
+        <lightning:spinner variant="brand"  size="large" />
+    </aura:if>
+</aura:component>

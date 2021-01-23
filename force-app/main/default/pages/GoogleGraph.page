@@ -1,0 +1,105 @@
+<apex:page sidebar="false" showHeader="false" controller="AccountChartController">  
+   <html>  
+     <head>  
+       <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />  
+       <apex:slds />  
+       <apex:includeScript value="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"/>  
+       <style>  
+         .chart1{ width:450px; height:300px; border:1px solid rgb(216, 221, 230); border-radius:5px; }  
+         .chart2{position:absolute; width:470px; height:500px; border:1px solid rgb(216, 221, 230); border-radius:5px; }  
+       </style>  
+     </head>  
+     <body>  
+       <div class="slds">  
+         <div class="slds-page-header"><div class="slds-text-heading--large">Reporting Chart</div></div>  
+         <div class="slds-grid">  
+           <div class="slds-col slds-size--6-of-12" style="border:1px solid rgb(216, 221, 230); border-radius:5px; ">  
+             <canvas id="myChart" width="300" height="300"></canvas>  
+           </div>  
+           <div class="slds-col slds-size--6-of-12" style="border:1px solid rgb(216, 221, 230); border-radius:5px; ">  
+             <canvas id="myChart1" width="300" height="300"></canvas>  
+           </div>  
+         </div>  
+         <script>  
+         var ctx = document.getElementById("myChart");  
+         var array1=new Array();  
+         var array2=new Array();  
+         var LeadLabel=new Array();  
+         var LeadData=new Array();  
+         var AccountLabel=new Array();  
+         var AccountData=new Array();  
+         <apex:repeat value="{!Lead_Label}" var="ld">  
+           LeadLabel.push("{!ld}");  
+         </apex:repeat>  
+         <apex:repeat value="{!Lead_Data}" var="dt">  
+           LeadData.push("{!dt}");  
+         </apex:repeat>  
+         //('lead '+LeadData);  
+         <apex:repeat value="{!Account_Label}" var="al">  
+           AccountLabel.push("{!al}");  
+         </apex:repeat>  
+         <apex:repeat value="{!Account_Data}" var="ad">  
+           AccountData.push("{!ad}");  
+         </apex:repeat>  
+         <apex:repeat value="{!data}" var="d">  
+           array1.push("{!d}");  
+         </apex:repeat>  
+         <apex:repeat value="{!label}" var="l">  
+           array2.push("{!l}");  
+         </apex:repeat>  
+         var background_color=new Array();  
+         var border_color=new Array();  
+         for(var i=0 ; i<array1.length ; i++)  // Random colors
+         {  
+           var w,x,y,z;  
+           w = parseInt(Math.random()*255);  
+           x = parseInt(Math.random()*255);  
+           y = parseInt(Math.random()*255);  
+           z = Math.random();  
+           background_color.push('rgba('+w+','+x+','+y+','+z+')');  
+           border_color.push('rgba(0,0,0,1)');  
+         }  
+         var myChart = new Chart(ctx, {  
+           type: 'pie',  
+           data: {  
+             labels: array2,  
+             datasets: [{  
+               label: '# of Votes',  
+               data: array1,  
+               backgroundColor: background_color,  
+               borderColor: border_color,  
+               borderWidth: 1  
+             }]  
+           }  
+         });  
+         </script>  
+         <!--2nd Canvas--------------------->  
+         <script>  
+         var ctx = document.getElementById("myChart1");  
+         var myChart = new Chart(ctx, {  
+           type: 'bar',  
+           data: {  
+             labels: AccountLabel,  
+             datasets: [{  
+               label: '# of Account',  
+               data: AccountData,  
+               backgroundColor: background_color,  
+               borderColor: border_color,  
+               borderWidth: 1  
+             }]  
+           },  
+           options: {  
+             scales: {  
+               yAxes: [{  
+                 ticks: {  
+                   beginAtZero:true  
+                 }  
+               }]  
+             }  
+           }  
+         });  
+         </script>  
+       </div>  
+     </body>  
+   </html>  
+ </apex:page>

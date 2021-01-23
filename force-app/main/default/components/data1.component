@@ -1,0 +1,52 @@
+<apex:component controller="DatatableCntrl" >
+    
+     <head>  
+   <apex:includescript value="https://code.jquery.com/jquery-3.3.1.js"/>  
+   <apex:includescript value="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"/>  
+   <apex:includescript value="https://cdn.datatables.net/1.10.19/js/dataTables.material.min.js"/>  
+   <apex:stylesheet value="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css"/>  
+   <apex:stylesheet value="https://cdn.datatables.net/1.10.19/css/dataTables.material.min.css"/>  
+     
+   j$ = jQuery.noConflict();  
+   j$(document).ready( function () {  
+     var accTable = j$('[id$="accTable"]').DataTable({  //datatable 
+        columnDefs: [  
+     {  
+       targets: [ 0, 1, 2 ],  
+       className: 'mdl-data-table__cell--non-numeric'  
+     }  
+   ]  
+     });  
+   });  
+     
+   <style>  
+     div.dataTables_wrapper div.dataTables_filter {  
+     text-align: right;  
+     margin-right: 2%;  
+     /* border-radius: 2px; */  
+     /* height: 51px; */  
+   }  
+   </style>  
+ </head>  
+ <body>  
+   <table id="accTable" class="mdl-data-table" style="width:100%">  
+     <thead>  
+       <tr>  
+         <th>Name</th>  
+         <th>Billing State</th>  
+         <th>Website</th>  
+       </tr>  
+     </thead>  
+     <tbody>  
+       <apex:repeat value="{!accList}" var="acc">  
+         <tr>  
+           <td>{!acc.Status}</td>  
+           <td>{!acc.tasksubtype}</td>  
+           <td>{!acc.subject }</td>  
+         </tr>  
+       </apex:repeat>  
+     </tbody>  
+   </table>  
+ </body>  
+    
+</apex:component>

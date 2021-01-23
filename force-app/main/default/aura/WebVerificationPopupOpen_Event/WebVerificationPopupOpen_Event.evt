@@ -1,0 +1,5 @@
+<aura:event type="APPLICATION" description="Event template" >
+    <aura:attribute name="icpObject" type="Assessment__c" default="{}"/>
+    <aura:attribute name="readOnly" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" default=""/>
+</aura:event>

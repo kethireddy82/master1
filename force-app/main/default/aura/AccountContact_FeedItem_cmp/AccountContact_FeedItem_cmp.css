@@ -1,0 +1,12 @@
+.THIS .toggleHide {
+    display: none;
+}
+.THIS .toggleShow {
+    display: block;
+}
+.THIS .sectionPadding{
+    padding-bottom: 1.5rem;
+}
+.THIS .searchLoozkup {
+    width: 50%;
+}

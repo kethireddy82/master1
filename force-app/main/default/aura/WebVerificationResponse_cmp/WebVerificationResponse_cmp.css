@@ -1,0 +1,69 @@
+.THIS ul{
+    margin-left : 35px;
+}
+
+.THIS h1{
+    font-size : 1.5em;
+}
+
+.THIS .demo-only{
+    padding: 1rem;
+}
+
+.THIS p{
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
+.THIS .top-line{
+    padding-top: 1rem;
+}
+
+.THIS .container{
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    display: block;
+    overflow: auto;
+    border: 1px solid grey;
+}
+
+.THIS img{
+    width : 65%;
+    height: 40%;
+    padding-bottom: 1rem;
+}
+
+.THIS td {
+  border: 2px solid #000000;
+}
+.THIS DisplayError {
+  display: block;
+    color:red;
+}
+.THIS HideError {
+  display: none;
+}
+
+.THIS table{
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.THIS .checklist-th{
+    width: 15%;
+}
+
+.THIS .checklist-td{
+    width:80%;
+}
+
+.THIS .inputType{
+    padding-left: 1rem;
+    padding-right: 2rem;
+}
+
+.THIS .textArea{
+    margin-right: 1rem;
+}

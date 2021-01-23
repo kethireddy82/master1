@@ -1,0 +1,283 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+                controller="Survey_Controller" access="global">
+    
+    <aura:attribute name="stage" type="Map"  default="{id:'id1', Question:'Question1'}"/>
+    <aura:attribute name="progressIndicator" type="Aura.Component" />
+    <aura:attribute name="objClassController" type="Survey_Controller"/>
+    <aura:attribute name="intiMethod" type="Survey_Controller.wrapperClass[]" /> 
+    <aura:attribute name="assessmentResponseMap" type="Map" /> 
+    <aura:attribute name="assessmentList" type="Assessment__c[]"/>
+    <aura:attribute name="assessmentFinal" type="Assessment__c" 
+                    default="{'sObjectType':'Assessment__c','Name__c':'', 
+                             'Id':'','Is_certify__c' : false,'Status__c' : 'New',
+                             'Title__c':'','Date__c':''}"/>
+    <aura:attribute name="surveyAnswer" type="Assessment_Question__c"/>
+    <aura:attribute name="showQuestion" type="boolean" default="false"/>
+    <aura:attribute name="showAssessment" type="boolean" default="false"/> 
+    <aura:attribute name="userInfo" type="string"/>  
+    <aura:attribute name="showICP" type="boolean" default="true"/>
+    <aura:attribute name="surveyId" type="string"/>
+	<aura:attribute name="showFrame" type="Boolean" default="false"/>
+	<aura:attribute name="printURL" type="string" />
+	<aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+	
+	<aura:if isTrue="{!v.showFrame}">
+    	<iframe src="{!v.printURL}" frameborder="0" height="1px" width="1px"></iframe> 
+    </aura:if>
+    <aura:if isTrue="{!v.showSpinner}"> 
+		<div aura:id="spinnerId" class="slds-spinner_container">
+			<div class="slds-spinner--brand  slds-spinner slds-spinner--medium slds-is-relative" role="alert">
+				<span class="slds-assistive-text">Loading</span>
+				<div class="slds-spinner__dot-a"></div>
+				<div class="slds-spinner__dot-b"></div>
+			</div>
+		</div>
+	</aura:if>
+    <div>
+        <div class="container">
+            <div class="slds-page-header">
+                <div class="slds-grid">
+                    <div class="slds-col slds-has-flexi-truncate">
+                        <div class="slds-media slds-no-space slds-grow">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+                                    <lightning:icon iconName="standard:feed" size="small" alternativeText="Indicates approval"/>
+                                </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <nav>
+                                    <ol class="slds-breadcrumb slds-line-height_reset">
+                                        <li class="slds-breadcrumb__item">
+                                            <span>Survey</span>
+                                        </li>
+                                    </ol>
+                                </nav>
+                                <h1 class="slds-page-header__title slds-m-right_small slds-align-middle slds-truncate" title="">
+                                    <aura:if isTrue="{!(v.intiMethod[0].surverTakerInfo.Assessment__c != null)}">
+                                        {!v.intiMethod[0].surverTakerInfo.Assessment__r.Name}
+                                    </aura:if>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-no-flex slds-grid slds-align-top">
+                        <div class="slds-button-group" role="group">
+                            <aura:if isTrue="{!equals(v.stage.id, 'id'+(v.intiMethod.length+1))}">
+                                <lightning:button variant="brand" label="Submit" onclick="{!c.finalSubmit }" />
+                            </aura:if>
+                            <aura:if isTrue="{!equals(v.stage.id, 'id1')}">
+                                <lightning:button variant="brand" label="Previous" disabled="true" />
+                                <aura:set attribute="else">
+                                    <lightning:button variant="brand" label="Previous" onclick="{!c.goToPrevious }" />
+                                </aura:set>
+                            </aura:if>
+                            <aura:if isTrue="{!equals(v.stage.id, 'id'+(v.intiMethod.length+1))}">
+                                <lightning:button variant="brand" label="Next" disabled="true" />
+                                <aura:set attribute="else">
+                                    <lightning:button variant="brand" label="Next" onclick="{!c.goToNext }" />
+                                </aura:set>
+                            </aura:if>
+							<aura:if isTrue="{!equals(v.stage.id, 'id'+(v.intiMethod.length+1))}">
+								<lightning:button variant="brand" label="Export as PDF" onclick="{!c.printTableData }" />
+							</aura:if>
+                        </div>
+                    </div>
+                </div>
+                
+                <lightning:overlayLibrary aura:id="overlayLib"/>
+                <div class="slds-page-header__detail-row">
+                    <div>
+                        {!v.progressIndicator}
+                    </div>
+                </div>
+            </div>
+            <div class="demo-only">
+                <div class="slds-form slds-form_compound">
+                    <aura:if isTrue="{!v.showQuestion}">
+                        <!--
+                        <aura:if isTrue="{!equals(v.stage.id, 'id0')}">
+                            <c:Assessment_Banner_cmp />
+                            
+                            <div>
+                                <fieldset class="slds-form-element fieldClass">
+                                    <legend class="slds-form-element__label slds-text-title_caps">Attachment</legend>
+                                    <div class="slds-form-element__group">
+                                        <div class="slds-form-element__row">
+                                            <lightning:fileUpload label="Upload File" multiple="true" 
+                                                                  accept="['.pdf', '.jpeg','.zip','.png','.rar']"  
+                                                                  recordId="{!v.surveyId}" 
+                                                                  aura:id="multifileUpload" 
+                                                                  onuploadfinished="{!c.handleUploadFinished}" />
+                                        </div>
+                                    </div>
+                                    <c:showResponseAttachment_cmp attachmentLst="{!v.intiMethod[0].assessmentAttach}" />
+                                </fieldset>
+                            </div>
+                            <aura:set attribute="else">
+                            </aura:set>
+                        </aura:if>
+-->
+                        
+                        <aura:if isTrue="{!equals(v.stage.id, 'id'+(v.intiMethod.length+1))}">
+                            <c:ReviewSurvey_cmp intiMethod="{!v.intiMethod}" 
+                                                assessmentFinal="{!v.assessmentFinal}"/>
+                            <aura:set attribute="else">
+                                <aura:iteration items="{!v.intiMethod}" var="ques" indexVar="index">
+                                    <aura:if isTrue="{!equals(v.stage.id, 'id'+ques.questionOrder)}">
+                                        <aura:if isTrue="{!ques.surveyQues.RecordType.Name == 'Questions'}"> 	
+                                            <fieldset class="slds-form-element fieldClass">
+                                                <div class="slds-form-element__group">
+                                                    <div class="slds-form-element__row">
+                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                            
+                                                            <fieldset class="slds-form-element fieldClass">
+                                                                <ui:outputRichText class="slds-text-longform" value="{!ques.surveyQues.Question__c}"/>
+                                                            </fieldset> 
+                                                            
+                                                            <label class="slds-form-element__label" for="{!v.stage.id}" style="font-weight: bold;font-size: 1.1em;">
+                                                                <!-- {!ques.questionNo }. {!ques.surveyQues.Question__c} -->
+                                                                <aura:if isTrue="{!ques.surveyQues.Type__c == 'Single Select- Radio Button'}"> 	
+                                                                    Please select one response.
+                                                                </aura:if>
+                                                                <aura:if isTrue="{!ques.surveyQues.Type__c == 'Multi-Select- Radio Button'}"> 	
+                                                                    Please select all that applies.
+                                                                </aura:if>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="slds-form-element__row">
+                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                            <div>
+                                                                <aura:if isTrue="{!ques.surveyQues.Type__c == 'Free Text'}">
+                                                                    <ui:inputTextArea aura:id="{!ques.surveyQues.Id}" value="{!ques.surveyResponse.Response__c}" 
+                                                                                      rows="3" blur="{!c.ChangeInputArea}"/>
+                                                                </aura:if>
+                                                                <aura:if isTrue="{!ques.surveyQues.Type__c == 'Single Select- Radio Button'}"> 
+                                                                    <aura:iteration items="{!ques.surveyQuesChoice}" var="item" >
+                                                                        <lightning:input type="radio" label="{!item.label}" name="options" 
+                                                                                         value="{!item.value}" onchange="{!c.submitSingleResponse}"
+                                                                                         checked="{!item.Checked}"/>
+                                                                    </aura:iteration>
+                                                                </aura:if>
+                                                                <aura:if isTrue="{!ques.surveyQues.Type__c == 'Multi-Select- Radio Button'}">
+                                                                    <aura:iteration items="{!ques.surveyQuesChoice}" var="item" >
+                                                                        <lightning:input type="checkbox" label="{!item.label}" name="options" 
+                                                                                         value="{!item.value}" onchange="{!c.submitMultipleResponse}"
+                                                                                         checked="{!item.Checked}"/>
+                                                                    </aura:iteration>
+                                                                </aura:if>
+                                                                <aura:if isTrue="{!ques.surveyQues.Type__c == 'Single Select- Picklist'}">
+                                                                    <ui:inputSelect class="input-select" aura:id="quesId" change="{!c.submitSingleResponse}">
+                                                                        <ui:inputSelectOption text="" value=""/>
+                                                                        <aura:iteration items="{!ques.surveyQuesChoice}" var="option">
+                                                                            <ui:inputSelectOption text="{!option.label}" value="{!option.Checked}"/>
+                                                                        </aura:iteration>
+                                                                    </ui:inputSelect>
+                                                                </aura:if>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset class="slds-form-element fieldClass">
+                                                <legend class="slds-form-element__label slds-text-title_caps">Assessment Response Attachment</legend>
+                                                <div class="slds-form-element__group">
+                                                    <div class="slds-form-element__row">
+                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                            <lightning:fileUpload label="Upload File" multiple="true" 
+                                                                                  accept="['.pdf', '.jpeg','.zip','.png','.rar']"  
+                                                                                  recordId="{!ques.surveyResponse.Id}" 
+                                                                                  aura:id="responseAttach" 
+                                                                                  onuploadfinished="{!c.handleUploadFinished}" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <c:showResponseAttachment_cmp attachmentLst="{!ques.responseAttach}" stage="{!v.stage}" 
+                                                                              intiMethod="{!v.intiMethod}" attachType="responseAttach"/>
+                                            </fieldset>
+                                            <aura:set attribute="else">
+                                                <fieldset class="slds-form-element fieldClass">
+                                                     <ui:outputRichText class="slds-text-longform" value="{!ques.surveyQues.Static_Info__c}"/>
+                                                </fieldset>                                                
+                                            </aura:set>
+                                        </aura:if>
+                                         <aura:if isTrue="{!ques.surveyQues.Is_having_master_Attachment__c}">
+                                            <fieldset class="slds-form-element fieldClass">
+                                                <legend class="slds-form-element__label slds-text-title_caps">Assessment Attachment</legend>
+                                                <div class="slds-form-element__group">
+                                                    <div class="slds-form-element__row">
+                                                        <lightning:fileUpload label="Upload File" multiple="true" 
+                                                                              accept="['.pdf', '.jpeg','.zip','.png','.rar']"  
+                                                                              recordId="{!v.surveyId}" 
+                                                                              aura:id="masterAttach" 
+                                                                              onuploadfinished="{!c.handleUploadFinished}" />
+                                                    </div>
+                                                </div>
+                                                <c:showResponseAttachment_cmp attachmentLst="{!v.intiMethod[0].assessmentAttach}" stage="{!v.stage}"  
+                                                                              intiMethod="{!v.intiMethod}" attachType="masterAttach"/>
+                                             </fieldset>
+                                             <aura:set attribute="else">
+                                                 <aura:if isTrue="{!ques.surveyQues.RecordType.Name == 'Questions'}"> 
+                                                     <fieldset class="slds-form-element fieldClass">
+                                                         <legend class="slds-form-element__label slds-text-title_caps">Assessment Attachment</legend>
+                                                         <c:showResponseAttachment_cmp attachmentLst="{!v.intiMethod[0].assessmentAttach}" readonly="true"
+                                                                              intiMethod="{!v.intiMethod}" attachType="masterAttach" stage="{!v.stage}" />
+                                                     </fieldset>
+                                                 </aura:if>
+                                             </aura:set>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:iteration>
+                            </aura:set>
+                        </aura:if>
+                        <aura:set attribute="else">
+                            <div class="demo-only" style="height: 640px;">
+                                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                    <div class="slds-modal__container">
+                                        <header class="slds-modal__header">
+                                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Welcome User !</h2>
+                                        </header>
+                                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                            
+                                            <aura:if isTrue="{!v.showICP}">
+                                                <center><h3>Select one ICP to continue.</h3></center><br/>
+                                                <ul class="slds-list--vertical slds-has-cards--space">
+                                                    <aura:iteration items="{!v.objClassController.icpList}" var="icp" indexVar="index">
+                                                        <li class="slds-list__item">
+                                                            <ui:outputURL click="{!c.continueICP}" title="{!icp.Id}" 
+                                                                          label="{!icp.Name}" class="assessmentClass"/></li>
+                                                    </aura:iteration>
+                                                </ul>
+                                            </aura:if>                                            
+                                            <aura:if isTrue="{!v.showAssessment}">
+                                                <aura:if isTrue="{! empty(v.assessmentList)}">   
+                                                    <center><h3>No assessment assigned.</h3></center><br/>
+                                                    <aura:set attribute="else">
+                                                        <center><h3>Select one Assessment to continue.</h3></center><br/>
+                                                        <ul class="slds-list--vertical slds-has-cards--space">
+                                                            <aura:iteration items="{!v.assessmentList}" var="survey" indexVar="index">
+                                                                <li class="slds-list__item">
+                                                                    <ui:outputURL click="{!c.continueSurvey}" title="{!survey.Id}" 
+                                                                                  label="{!survey.Name}" class="assessmentClass"/></li>
+                                                            </aura:iteration>
+                                                        </ul>     
+                                                    </aura:set>
+                                                </aura:if>                                                
+                                            </aura:if>
+                                        </div>
+                                        <footer class="slds-modal__footer">         
+                                            <button class="slds-button slds-button_brand" disabled="{! !v.showAssessment}" onclick="{!c.backICP}">Back</button>
+                                            <button class="slds-button slds-button_brand" disabled="{!v.showAssessment}" onclick="{!c.backtohome}">Exit</button>
+                                        </footer>
+                                    </div>
+                                </section>
+                                <div class="slds-backdrop slds-backdrop_open"></div>
+                            </div>
+                        </aura:set> 
+                    </aura:if>
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

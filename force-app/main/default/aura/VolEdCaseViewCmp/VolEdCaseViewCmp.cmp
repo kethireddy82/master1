@@ -1,0 +1,81 @@
+<aura:component controller="CaseViewController" implements="force:hasRecordId,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+    <aura:attribute name="cse" type="Case" />
+          
+               
+        <div class="">
+           <div class="form">  
+               <table>
+                   <div data-aura-rendered-by="25:617;a">
+                                <h3 class="slds-section__title Center" data-aura-rendered-by="26:617;a">
+                                    <button class="slds-button slds-section__title-action" aria-expanded="false" aria-controls="section1" data-aura-rendered-by="27:617;a">
+                                        <span class="slds-align_absolute-center" title="Case Information" data-aura-rendered-by="28:617;a">Case Information</span>
+                                    </button>
+                                </h3>
+                            </div>
+               <div class="slds-grid slds-wrap slds-grid">
+					<div class="slds-size--12-of-12 slds-medium-size--2-of-12 slds-large-size--2-of-12 slds-p-around--medium">
+                        <td>Case Number:<lightning:helptext content="This is the case number" iconName="utility:info_alt"/> </td></div>
+                        <div class="slds-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 slds-p-around--medium">
+                        <td><lightning:formattedText aura:id="CaseNumber"  value="{!v.cse.CaseNumber}" /></td>
+					</div>
+					<div class="slds-size--12-of-12 slds-medium-size--2-of-12 slds-large-size--2-of-12 slds-p-around--medium">
+                        <td>RecordType: <lightning:helptext content="This is the Record Type" iconName="utility:info_alt"/></td></div>
+                        <div class="slds-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 slds-p-around--medium">
+                            <td><lightning:formattedText aura:id="RecordType"  value="{!v.cse.RecordType.Name}" /> </td>               		
+					</div>
+               </div>
+               <div class="slds-grid slds-wrap slds-grid">
+					<div class="slds-size--12-of-12 slds-medium-size--2-of-12 slds-large-size--2-of-12 slds-p-around--medium">
+						Subject: <lightning:helptext content="This is the case Subject" iconName="utility:help"/></div>
+                        <div class="slds-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 slds-p-around--medium">
+                            <lightning:formattedText aura:id="Subject"  value="{!v.cse.Subject}" />
+					</div>
+					<div class="slds-size--12-of-12 slds-medium-size--2-of-12 slds-large-size--2-of-12 slds-p-around--medium ">
+						Description: <lightning:helptext content="This is the Description" iconName="utility:info_alt"/></div>
+                        <div class="slds-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 slds-p-around--medium ">
+                            <lightning:formattedText aura:id="Description"  value="{!v.cse.Description}" />                		
+					</div>
+               </div>
+               <div class="slds-grid slds-wrap slds-grid">
+					<div class="slds-size--12-of-12 slds-medium-size--2-of-12 slds-large-size--2-of-12 slds-p-around--medium">
+                        Account: <lightning:helptext content="This is the Account" iconName="utility:info_alt"/></div>
+                        <div class="slds-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 slds-p-around--medium ">
+                            <a href="javascript:void(0)" onclick="{!c.navigateToAccount}" target="_blank">{!v.cse.Account.Name}</a>
+                        <!--lightning:formattedText aura:id="Account" linkify="true" value="{!v.cse.Account.Name}" onclick="myFunction()"/-->
+					</div>
+					<div class="slds-size--12-of-12 slds-medium-size--2-of-12 slds-large-size--2-of-12 slds-p-around--medium">
+						Contact: <lightning:helptext content="This is the Contact" iconName="utility:info_alt"/></div>
+                        <div class="slds-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 slds-p-around--medium">
+                            <a href="javascript:void(0)" onclick="{!c.navigateToContact}" target="_blank">{!v.cse.Contact.Name}</a>                		
+					</div>
+               </div>
+               <div class="slds-grid slds-wrap slds-grid">
+					<div class="slds-size--12-of-12 slds-medium-size--2-of-12 slds-large-size--2-of-12 slds-p-around--medium"> 
+						Status: <lightning:helptext content="This is the Status" iconName="utility:info_alt"/></div>
+                        <div class="slds-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 slds-p-around--medium">
+                            <lightning:formattedText aura:id="Status"  value="{!v.cse.Status}" />
+					</div>
+					<div class="slds-size--12-of-12 slds-medium-size--2-of-12 slds-large-size--2-of-12 slds-p-around--medium">
+						Origin: <lightning:helptext content="This is the Origin" iconName="utility:info_alt"/></div>
+                        <div class="slds-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 slds-p-around--medium">
+                            <lightning:formattedText aura:id="Origin"  value="{!v.cse.Origin}" />                		
+					</div>
+               </div>
+               <div class="slds-grid slds-wrap slds-grid">
+					<div class="slds-size--12-of-12 slds-medium-size--2-of-12 slds-large-size--2-of-12 slds-p-around--medium">
+						Type: <lightning:helptext content="This is the Type" iconName="utility:info_alt"/></div>
+                        <div class="slds-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 slds-p-around--medium">
+                            <lightning:formattedText aura:id="Type"  value="{!v.cse.Type}" />
+					</div>
+					<div class="slds-size--12-of-12 slds-medium-size--2-of-12 slds-large-size--2-of-12 slds-p-around--medium">
+						Category: <lightning:helptext content="This is the Category" iconName="utility:info_alt"/></div>
+                        <div class="slds-size--12-of-12 slds-medium-size--4-of-12 slds-large-size--4-of-12 slds-p-around--medium">
+                            <lightning:formattedText aura:id="Category"  value="{!v.cse.Category__c}" />                		
+					</div>
+               </div>
+               </table>
+            </div>
+        </div>
+    
+</aura:component>

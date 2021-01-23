@@ -1,0 +1,11 @@
+<aura:component controller="CaseStatusProgressIndicator_controller" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="steps" type="String[]" default="[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-p-around_xx-small">
+        <c:CaseSearchForm_cmp/>
+    </div>
+    <div class="slds-p-around_xx-small">
+    	<c:CaseSearchResults_cmp steps="{!v.steps}"/>
+    </div>
+</aura:component>

@@ -1,0 +1,44 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" controller="Survey_Controller" renderAs="pdf">
+    <head>
+    </head>
+    <body>
+        <div>
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th scope="col" width="65%" style="border: 1px solid #000000;">
+                            <div class="slds-truncate" title="Question ">Question</div>
+                        </th>
+                        <th scope="col" width="25%" style="border: 1px solid #000000;">
+                            <div class="slds-truncate" title="Response">Response</div>
+                        </th>
+                        <th scope="col" width="10%" style="border: 1px solid #000000;">
+                            <div class="slds-truncate" title="Last Modified By">Last Modified By</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!printDetails}" var="ques">
+                        <tr>
+                          <!--   <td data-label="Question" style="border: 1px solid #000000;"> 
+                                   <ui:outputRichText class="slds-text-longform" value="{!ques.question}"/> 	
+  										 <div class="slds-truncate" title="{!ques.question}">{!ques.question}</div> 
+                            </td>--> 
+                          <td data-label="Response" style="border: 1px solid #000000;">                          	 
+                                    <apex:outputText value="{!ques.question}" escape="false" />                               
+                          </td>
+                            <td data-label="Response" style="border: 1px solid #000000;">
+                                <div class="slds-truncate" title="{!ques.response}">
+                                    {!ques.response}
+                                </div>
+                            </td>
+                            <td data-label="Rating" style="border: 1px solid #000000;">
+                                <div class="slds-truncate" title="{!ques.user}">{!ques.user}</div>
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</apex:page>
